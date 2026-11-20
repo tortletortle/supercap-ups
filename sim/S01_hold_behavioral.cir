@@ -1,0 +1,18 @@
+* DC V1.2 - storage only, behavioral constant-power load, NOT regulator model
+* LTspice / ngspice syntax draft; not executed in this environment.
+.param Ccell=9 Rcell=0.075 Vcell=2.35 Eff=0.92 Epath=0.99
+C1 p1 0 {Ccell} IC={Vcell}
+R1 p1 n1 {Rcell}
+C2 p2 n1 {Ccell} IC={Vcell}
+R2 p2 n2 {Rcell}
+C3 p3 n2 {Ccell} IC={Vcell}
+R3 p3 n3 {Rcell}
+C4 p4 n3 {Ccell} IC={Vcell}
+R4 p4 pack {Rcell}
+* smooth current below 6V for numerical safety; only evaluate before first 7V crossing.
+Bload pack 0 I={12/(Eff*Epath*max(V(pack),6))}
+.tran 0.5m 4 0 0.5m UIC
+.meas TRAN t_hold WHEN V(pack)=7 FALL=1
+.meas TRAN v_at_1s FIND V(pack) AT=1
+.meas TRAN v_at_1p2s FIND V(pack) AT=1.2
+.end
