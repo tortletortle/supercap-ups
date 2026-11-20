@@ -1,0 +1,19 @@
+LTspice 26.1.1 for Windows
+Circuieol_90_hold.cir
+Start Time: Fri Nov 20 23:43:09 2026
+solver = Normal
+Maximum thread count: 20
+tnom = 27
+temp = 27
+method = trap
+AsciiRawFile = true
+Per .tran options, skipping operating point for transient analysis.
+Total elapsed time: 2.197 seconds.
+Total iterations: 18974
+
+Files loaded:
+eol_90_hold.cir
+
+t_hold_7v: V(pack)=7 AT 1.40996114253
+t_hold_8v: V(pack)=8 AT 0.627523380415
+pack_1p2s: V(pack)=7.2852561049 at 1.2

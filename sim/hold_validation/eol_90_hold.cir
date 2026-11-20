@@ -1,0 +1,16 @@
+* DC V1.2 | stress_EOL | boost eta=0.9 | behavioral hold
+C1 p1 0 6.3 IC=2.35
+R1 p1 n1 0.1125
+C2 p2 n1 6.3 IC=2.35
+R2 p2 n2 0.1125
+C3 p3 n2 6.3 IC=2.35
+R3 p3 n3 0.1125
+C4 p4 n3 6.3 IC=2.35
+R4 p4 pack 0.1125
+Vsense pack load 0
+Bload load 0 I=12/(0.9*0.99*max(V(load),6))
+.tran 0.5m 4 0 0.5m UIC
+.meas TRAN t_hold_7v WHEN V(pack)=7 FALL=1
+.meas TRAN t_hold_8v WHEN V(pack)=8 FALL=1
+.meas TRAN pack_1p2s FIND V(pack) AT=1.2
+.end

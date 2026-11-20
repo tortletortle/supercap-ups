@@ -10,5 +10,8 @@
 ## 验证状态
 V1.2 储能数值模型为研究基线，非芯片级 SPICE 或实测；转换效率、DC ESR、老化条件均为假设。供应链、器件级模型、保护电路、整机原理图、PCB 尚待验证。禁止将本基线视为已经通过比赛指标的最终设计。
 
-仿真源文件位于 sim/；运行 python sim/sweep.py 可生成 results.csv 和四组 trace CSV。行为网表 S01 未执行。
+原始仿真源文件位于 [sim/](sim/)；运行 `python sim/sweep.py` 可生成 `results.csv` 和四组波形 CSV。
+
+[V1.2 保持时间仿真报告](sim/hold_validation/dc_v1_2_hold_report.md)：S01 与 12 组扩展工况已在 LTspice 和 ngspice 跑通。7 V 截止时 12/12 组满足 1.2 s；8 V 截止对照中，EOL 最差保持 0.628 s。附波形图、结果表、网表、日志和复跑脚本。
+
 不纳入保密赛题原文以及未经授权的第三方工程包。
