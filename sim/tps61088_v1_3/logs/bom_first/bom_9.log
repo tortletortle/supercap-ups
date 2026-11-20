@@ -1,0 +1,18 @@
+LTspice 26.1.1 for Windows
+Circuit: C:\Users\tortl\Documents\Codex\2026-11-20\c-users-tortl-downloads-dc-v1\work\v13_switch\final_bom\cases\bom_9.cir
+Start Time: Sat Nov 21 01:28:02 2026
+Options:method=gear reltol=.003 trtol=7 gmin=1e-10 numdgt=7 threads=1 plotwinsize=0
+solver = Normal
+Maximum thread count: 1
+tnom = 27
+temp = 27
+method = Gear
+gmin = 1e-10
+reltol = 0.003
+trtol = 7
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+Direct Newton iteration succeeded in finding operating point.

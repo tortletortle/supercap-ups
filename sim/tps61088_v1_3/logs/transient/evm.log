@@ -1,0 +1,15 @@
+LTspice 26.1.1 for Windows
+Circuit: C:\Users\tortl\Documents\Codex\2026-11-20\c-users-tortl-downloads-dc-v1\work\lt_probe\evm.cir
+Start Time: Sat Nov 21 00:35:52 2026
+Options:plotwinsize=0
+C:\Users\tortl\Documents\Codex\2026-11-20\c-users-tortl-downloads-dc-v1\work\lt_probe\evm.cir(19): This sub-circuit cannot be instantiated because it contains these syntax errors:
+C:\Users\tortl\Documents\Codex\2026-11-20\c-users-tortl-downloads-dc-v1\work\ti61088\official\SLVMAU6\TPS61088_PSPICE_TRANS\TPS61088_TRANS.LIB(221): Unknown parameter
+V_U2_V3         U2_N167742470 PGND (2.35-6m)
+                                        ^^^^
+
+C:\Users\tortl\Documents\Codex\2026-11-20\c-users-tortl-downloads-dc-v1\work\ti61088\official\SLVMAU6\TPS61088_PSPICE_TRANS\TPS61088_TRANS.LIB(230): Unknown parameter
+V_U2_V4         U2_N16811707 PGND (1.48+6m)
+                                       ^^^^
+
+X1 0 boot comp en fb fsw ilim 0 nc0 nc1 0 ss sw sw sw sw vcc vin vout vout vout TPS61088_TRANS
+                                                                                ^^^^^^^^^^^^^^

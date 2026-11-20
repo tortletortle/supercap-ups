@@ -1,0 +1,5 @@
+vin_V,event,load_from_A,load_to_A,vout_min_V,vout_max_V,steady_ripple_mVpp,log_file,note
+7.0,load_step_up,0.5,1.0,11.776,11.939,36.4,../logs/transient/step7.log,约-0.162V偏差；稳态纹波满足100mVpp
+7.0,load_step_down,1.0,0.5,11.938,12.088,36.4,../logs/transient/step7.log,约+0.150V偏差；瞬态指标不满足100mV窗口
+9.4,load_step_up,0.5,1.0,11.795,11.939,37.0,../logs/transient/step9p4.log,约-0.144V偏差；稳态纹波满足100mVpp
+9.4,load_step_down,1.0,0.5,11.939,12.064,37.0,../logs/transient/step9p4.log,约+0.126V偏差；瞬态指标不满足100mV窗口

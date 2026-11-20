@@ -1,0 +1,39 @@
+LTspice 26.1.1 for Windows
+Circuit: C:\Users\tortl\Documents\Codex\2026-11-20\c-users-tortl-downloads-dc-v1\work\lt_transient\step7.cir
+Start Time: Sat Nov 21 00:48:24 2026
+Options:method=gear reltol=.003 trtol=7 gmin=1e-10 threads=2 plotwinsize=0
+solver = Normal
+Maximum thread count: 2
+tnom = 27
+temp = 27
+method = Gear
+gmin = 1e-10
+reltol = 0.003
+trtol = 7
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+Direct Newton iteration succeeded in finding operating point.
+Total elapsed time: 89.532 seconds.
+Total iterations: 6498196
+
+Files loaded:
+C:\Users\tortl\Documents\Codex\2026-11-20\c-users-tortl-downloads-dc-v1\work\lt_transient\step7.cir
+C:\Users\tortl\Documents\Codex\2026-11-20\c-users-tortl-downloads-dc-v1\work\lt_probe\TPS61088_LT.LIB
+
+t_en: V(en)=1.2 AT 0.000100399999982
+Measurement "t_10pct" FAIL'ed
+t_90pct: V(vout)=10.8 AT 0.0103500764324
+t_98pct: V(vout)=11.76 AT 0.0112587968805
+stepup_pre: AVG(V(vout))=11.9374420589 FROM 0.0133 TO 0.01349
+stepup_min: MIN(V(vout))=11.7761497498 FROM 0.0135 TO 0.0145
+full_vout: AVG(V(vout))=11.9391530978 FROM 0.0153 TO 0.0159
+full_ripple: PP(V(vout))=0.0363636016846 FROM 0.0153 TO 0.0159
+full_peak_i: MAX(I(L1))=2.80712723732 FROM 0.0153 TO 0.0159
+e_in: INTEG(-V(vin)*I(V1))=0.00723241405689 FROM 0.0153 TO 0.0159
+e_out: INTEG(V(vout)*I(VLOAD))=0.00716349185868 FROM 0.0153 TO 0.0159
+eta_pct: (100*e_out/e_in)=99.047037439
+stepdown_max: MAX(V(vout))=12.0883235931 FROM 0.016 TO 0.017
+stepdown_final: AVG(V(vout))=11.938041477 FROM 0.0173 TO 0.0175

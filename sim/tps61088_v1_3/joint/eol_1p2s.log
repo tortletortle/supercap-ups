@@ -1,0 +1,35 @@
+LTspice 26.1.1 for Windows
+Circuit: C:\Users\tortl\Documents\Codex\2026-11-20\c-users-tortl-downloads-dc-v1\work\evidence_native\lt_joint_behavior_load_v2\eol_1p2s.cir
+Start Time: Sat Nov 21 01:17:33 2026
+Options:method=gear reltol=.003 trtol=7 gmin=1e-10 numdgt=7
+solver = Normal
+Maximum thread count: 20
+tnom = 27
+temp = 27
+method = Gear
+gmin = 1e-10
+reltol = 0.003
+trtol = 7
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+Per .tran options, skipping operating point for transient analysis.
+Total elapsed time: 137.412 seconds.
+Total iterations: 9959383
+
+Files loaded:
+C:\Users\tortl\Documents\Codex\2026-11-20\c-users-tortl-downloads-dc-v1\work\evidence_native\lt_joint_behavior_load_v2\eol_1p2s.cir
+C:\Users\tortl\Documents\Codex\2026-11-20\c-users-tortl-downloads-dc-v1\work\lt_probe\TPS61088_LT.LIB
+
+vout_avg: AVG(V(OUT))=11.9387646174 FROM 0.015 TO 0.017
+vout_min: MIN(V(OUT))=11.9161775995 FROM 0.015 TO 0.017
+vout_max: MAX(V(OUT))=11.952752539 FROM 0.015 TO 0.017
+il_peak: MAX(I(L1))=2.73868267294 FROM 0.015 TO 0.017
+iin_avg: AVG(I(VSENSE))=1.65330868638 FROM 0.015 TO 0.017
+vsrc_avg: AVG(V(SRC))=7.28821684699 FROM 0.015 TO 0.017
+vin_avg: AVG(V(VIN))=7.28821684699 FROM 0.015 TO 0.017
+pin_avg: AVG(V(SRC)*I(VSENSE))=12.0495728168 FROM 0.015 TO 0.017
+pout_avg: AVG(V(OUT)*I(BLOAD))=11.9387646174 FROM 0.015 TO 0.017
+eta_avg: 100*pout_avg/pin_avg=99.0803972796

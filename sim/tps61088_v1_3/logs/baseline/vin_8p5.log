@@ -1,0 +1,41 @@
+LTspice 26.1.1 for Windows
+Circuit: C:\Users\tortl\Documents\Codex\2026-11-20\c-users-tortl-downloads-dc-v1\work\v13_switch\cases\vin_8p5.cir
+Start Time: Sat Nov 21 00:51:45 2026
+Options:method=gear reltol=.003 trtol=7 gmin=1e-10 numdgt=7 threads=1 plotwinsize=0
+solver = Normal
+Maximum thread count: 1
+tnom = 27
+temp = 27
+method = Gear
+gmin = 1e-10
+reltol = 0.003
+trtol = 7
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+Direct Newton iteration succeeded in finding operating point.
+Total elapsed time: 81.459 seconds.
+Total iterations: 5457221
+
+Files loaded:
+C:\Users\tortl\Documents\Codex\2026-11-20\c-users-tortl-downloads-dc-v1\work\v13_switch\cases\vin_8p5.cir
+C:\Users\tortl\Documents\Codex\2026-11-20\c-users-tortl-downloads-dc-v1\work\v13_switch\TPS61088_LT.LIB
+
+vin_avg: AVG(V(vin))=8.4971703982 FROM 0.016 TO 0.018
+avg_vout: AVG(V(vout))=11.9384261624 FROM 0.016 TO 0.018
+vmin: MIN(V(vout))=11.9157439875 FROM 0.016 TO 0.018
+vmax: MAX(V(vout))=11.9528455961 FROM 0.016 TO 0.018
+ripple: PP(V(vout))=0.0371016085306 FROM 0.016 TO 0.018
+peak_i: MAX(I(L1))=2.38156773656 FROM 0.016 TO 0.018
+peak_start: MAX(I(L1))=2.40255784141 FROM 0 TO 0.016
+iin_avg: AVG(-I(V1))=1.41480090268 FROM 0.016 TO 0.018
+iout_avg: AVG(I(VLOAD))=1 FROM 0.016 TO 0.018
+pin: AVG(-V(vin)*I(V1))=12.0213347829 FROM 0.016 TO 0.018
+pout: AVG(V(vout)*I(VLOAD))=11.9384261624 FROM 0.016 TO 0.018
+eff: 100*pout/pin=99.3103210087
+t_en: V(en)=1.2 AT 0.0001004
+t98: V(vout)=11.76 AT 0.0112590729213
+sw_t1: V(sw)=10 AT 0.00943549750088
+sw_t101: V(sw)=10 AT 0.00957419293397

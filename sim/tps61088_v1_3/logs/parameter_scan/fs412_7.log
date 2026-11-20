@@ -1,0 +1,43 @@
+LTspice 26.1.1 for Windows
+Circuit: C:\Users\tortl\Documents\Codex\2026-11-20\c-users-tortl-downloads-dc-v1\work\v13_switch\cases\fs412_7.cir
+Start Time: Sat Nov 21 00:56:50 2026
+Options:method=gear reltol=.003 trtol=7 gmin=1e-10 numdgt=7 threads=1 plotwinsize=0
+solver = Normal
+Maximum thread count: 1
+tnom = 27
+temp = 27
+method = Gear
+gmin = 1e-10
+reltol = 0.003
+trtol = 7
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+Direct Newton iteration succeeded in finding operating point.
+Total elapsed time: 79.480 seconds.
+Total iterations: 5140863
+
+Files loaded:
+C:\Users\tortl\Documents\Codex\2026-11-20\c-users-tortl-downloads-dc-v1\work\v13_switch\cases\fs412_7.cir
+C:\Users\tortl\Documents\Codex\2026-11-20\c-users-tortl-downloads-dc-v1\work\v13_switch\TPS61088_LT.LIB
+
+vin_avg: AVG(V(vin))=6.99654542268 FROM 0.016 TO 0.018
+avg_vout: AVG(V(vout))=11.9387611201 FROM 0.016 TO 0.018
+vmin: MIN(V(vout))=11.9110235949 FROM 0.016 TO 0.018
+vmax: MAX(V(vout))=11.9559464265 FROM 0.016 TO 0.018
+ripple: PP(V(vout))=0.0449228315383 FROM 0.016 TO 0.018
+peak_i: MAX(I(L1))=3.07845826099 FROM 0.016 TO 0.018
+peak_start: MAX(I(L1))=3.10377284958 FROM 0 TO 0.016
+iin_avg: AVG(-I(V1))=1.72728865764 FROM 0.016 TO 0.018
+iout_avg: AVG(I(VLOAD))=1 FROM 0.016 TO 0.018
+pin: AVG(-V(vin)*I(V1))=12.0840270359 FROM 0.016 TO 0.018
+pout: AVG(V(vout)*I(VLOAD))=11.9387611201 FROM 0.016 TO 0.018
+eff: 100*pout/pin=98.7978683323
+t_en: V(en)=1.2 AT 0.0001004
+t98: V(vout)=11.76 AT 0.0112605323227
+sw_t1: V(sw)=10 AT 0.00939861782163
+sw_t101: V(sw)=10 AT 0.00958321087444
+Measurement "sw_t5001" FAIL'ed
+Measurement "sw_t6001" FAIL'ed

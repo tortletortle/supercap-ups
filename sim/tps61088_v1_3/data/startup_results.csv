@@ -1,0 +1,4 @@
+vin_V,vout_before_en_V,t_en_s,t90_delay_ms,t98_delay_ms,definition,note
+7.0,6.855,0.0001004,10.846,11.231,delay_after_EN,EN前输出已被输入侧预充，不能使用绝对1.2V阈值
+8.5,8.342,0.0001004,10.990,11.257,delay_after_EN,EN前输出已被输入侧预充，不能使用绝对1.2V阈值
+9.4,9.235,0.0001004,11.078,11.280,delay_after_EN,EN前输出已被输入侧预充，不能使用绝对1.2V阈值

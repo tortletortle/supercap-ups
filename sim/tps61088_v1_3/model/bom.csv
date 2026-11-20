@@ -1,0 +1,10 @@
+role,manufacturer,mpn,distributor_code,qty_per_board,qty_suggested_samples,catalog_min_order_qty,listed_cny_per_unit,reference_cny_per_board,price_tier,evidence_date_cst,distributor_url,technical_evidence,status
+boost_ic,Texas Instruments,TPS61088RHLR,C87357,1,3,1,5.27,5.27,public_offer_quantity_unspecified,2026-11-21,https://item.szlcsc.com/88535.html,TI EVM SLVUAF2 Figure 7 and Table 3,prototype_candidate
+inductor,CENKER,CKST0603-3.3uH/M,C3002635,1,3,1,0.40,0.40,public_offer_quantity_unspecified,2026-11-21,https://item.szlcsc.com/3488142.html,CKST series vendor datasheet p9; DCR 23 typ 26 max mOhm at 25 C; Isat 9.5 A typical; Irms 6 A typical,prototype_candidate_verify_peak_limit
+output_mlcc,Murata,GRM32ER71E226KE15L,C21397,4,12,1,0.82,3.28,public_offer_quantity_unspecified,2026-11-21,https://item.szlcsc.com/22114.html,TI EVM Table 3; Murata 22 uF 25 V X7R 1210; verify 12 V biased capacitance,prototype_candidate_verify_dc_bias
+supercapacitor,HCCCap,HCAP-C 2R7 106,C397150,4,8,1,2.70,10.80,public_offer_quantity_unspecified,2026-11-21,https://item.szlcsc.com/379043.html,HCCCap HCAP-C 2R7 106 A/1 p3; DC ESR 65 mOhm at 0.2 A reference; AC ESR 50 mOhm at 1 kHz; life criterion ESR less than 2x initial,prototype_candidate_verify_dc_esr
+alternate_inductor,Sunlord,MWSA0503S-3R3MT,C408409,0,0,1,0.6637,0.00,public_offer_quantity_unspecified,2026-11-21,https://item.szlcsc.com/397761.html,distributor catalog; DCR 38 mOhm; Isat 6 A; rated 5.5 A,not_approved_as_drop_in
+inductor_comparison,CENKER,CKST0603-2.2uH/M,,0,,,,,not_quoted,2026-11-21,,CKST series vendor datasheet p9; DCR 15.5 typ 17.5 max mOhm; Isat 10 A typical; Irms 8 A typical,evaluate_if_sweep_supports
+inductor_comparison,CENKER,CKST0603-4.7uH/M,,0,,,,,not_quoted,2026-11-21,,CKST series vendor datasheet p9; DCR 34.5 typ 38 max mOhm; Isat 6.5 A typical; Irms 5 A typical,evaluate_if_sweep_supports
+input_decoupling_and_small_passives,,,,,,,,,not_quoted,2026-11-21,,,refine_after_schematic
+charger_mcu_protection_balancing_pcb_connectors,,,,,,,,,not_quoted,2026-11-21,,,outside_partial_cost
