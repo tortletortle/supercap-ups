@@ -67,6 +67,24 @@ class BuildMatrixTests(unittest.TestCase):
             self.assertEqual(rows[0]["minimum_headroom_pct"], "210.02")
             self.assertEqual(rows[-1]["minimum_headroom_pct"], "-13.57")
 
+    def test_crosscase_screen_includes_new_full_run_peak(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            self.run_generator(root)
+            with (root / "data" / "ti_ilim_crosscase_screen.csv").open(
+                newline="", encoding="utf-8"
+            ) as f:
+                rows = list(csv.DictReader(f))
+
+            self.assertEqual(len(rows), 6)
+            by_r = {int(row["rilim_kohm"]): row for row in rows}
+            self.assertEqual(by_r[174]["V1_4_round2_full_run_peak_A"], "3.421604")
+            self.assertEqual(by_r[174]["headroom_vs_V1_4_A"], "0.5175")
+            self.assertEqual(by_r[174]["headroom_vs_V1_4_pct"], "15.12")
+            self.assertEqual(by_r[220]["headroom_vs_V1_4_A"], "-0.9125")
+            self.assertEqual(by_r[220]["headroom_vs_V1_4_pct"], "-26.67")
+            self.assertIn("MAX_I_L1_0_26ms", by_r[174]["V1_4_round2_peak_source_case"])
+
     def test_repeated_generation_is_deterministic_and_readme_safe(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
