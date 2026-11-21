@@ -107,6 +107,7 @@ V1.3 原联合网表使用 112.5 mΩ/颗，不是采购文档采用的 EOL 压�
 
 - scripts/build_matrix.py：生成 TI 频率设定 CSV、FPWM 限流筛选 CSV、V1.3 启动边沿审计 CSV，以及 16 份 LTspice 测试网表。
 - tests/test_build_matrix.py：生成器回归测试，使用 Python 标准库和临时目录。
+- tests/test_fsw_internal.py：内部FSW分析回归测试，覆盖边沿迟滞、事件插值、RC ODE、RAW读取、探针网表一致性和分布对照。
 - data/ti_frequency_setpoints.csv：TI Eq. 2 的 RFSW 计算。
 - data/ti_ilim_screen.csv：TI Eq. 4 的限流候选初筛，保留绝对与百分比裕量。
 - data/ti_ilim_crosscase_screen.csv：同时对照 V1.3 与 V1.4 第二轮完整仿真峰值的限流裕量筛选。
@@ -117,7 +118,8 @@ V1.3 原联合网表使用 112.5 mΩ/颗，不是采购文档采用的 EOL 压�
 - [model_source_audit.md](model_source_audit.md)：TI 官方模型资源、现有模型身份和已完成的二进制比对记录。
 - diagnostics/freq_vin7_rfsw324k_fsw_probe.cir：仅增加 V(FSW)、I(RFSW) 保存量和测量的诊断副本，不计入 16 份矩阵，不替换原始基准网表。
 - diagnostics/freq_vin7_rfsw324k_internal_probe_50ns.cir、diagnostics/freq_vin7_rfsw324k_internal_probe_25ns.cir：直接保存 X1 内部定时节点的只读探针，分别用于原 50 ns Gear 基线复现和 25 ns 最大步长敏感性对照；尚未运行。
-- scripts/analyze_fsw_internal.py：对内部节点 RAW 做逐周期事件分解（PVIN交点、比较器输出、U5_TOFF 0.5V、GATE_L、复位、SW下降）、RC 充电积分和 50/25 ns 对照后处理。
+- scripts/ltspice_raw.py：独立的交错double RAW读取器，避免内部探针分析脚本继承绘图依赖。
+- scripts/analyze_fsw_internal.py：对内部节点 RAW 做逐周期事件分解；原始10V边沿测量与迟滞周期配对分离；显式报告漏检/重复/乱序事件；用实测SW(t)分段线性积分23pF/1MΩ ODE，并提供50/25ns统计分布对照。
 - [diagnostics/README.md](diagnostics/README.md)：说明 FSW 定时电流假设、等效定时电阻推算和诊断观察方法。 新增直接内部节点探针运行说明与验收目标。
 
 在仓库根目录运行：
@@ -130,7 +132,7 @@ V1.3 原联合网表使用 112.5 mΩ/颗，不是采购文档采用的 EOL 压�
 
     py -3 sim/tps61088_v1_4/scripts/build_matrix.py
 
-首轮暴露的三项生成器缺陷已在当前分支修复：VIN=7 V 网表命名统一为 vin7；脚本不再覆盖人工维护的 netlists/README.md；限流 CSV 恢复 minimum_headroom_pct。测试会检查 16 份网表、精确文件名、原限流 CSV 百分比字段、新旧峰值交叉筛选、重复生成一致性和 README 保护。
+首轮暴露的三项生成器缺陷已在当前分支修复：VIN=7 V 网表命名统一为 vin7；脚本不再覆盖人工维护的 netlists/README.md；限流 CSV 恢复 minimum_headroom_pct。测试会检查 16 份网表、精确文件名、原限流 CSV 百分比字段、新旧峰值交叉筛选、重复生成一致性和 README 保护。另有 10 项 FSW 分析/RAW 测试覆盖事件检测、RC积分、读取器和探针一致性；新增测试尚未在目标 Windows/LTspice 环境执行。
 
 然后在 LTspice 中运行 sim/tps61088_v1_4/netlists/ 下的网表。每份日志至少检查：
 
@@ -152,9 +154,10 @@ V1.3 原联合网表使用 112.5 mΩ/颗，不是采购文档采用的 EOL 压�
 | 130 mΩ + 60 mΩ EOL 行为级重算 | 完成；假设待实测 |
 | 16 份频率/限流 LTspice 测试输入 | 四份频率已运行；其中两份规定频率测量 FAIL；12 份限流待运行 |
 | 生成器回归测试 | 4 项；前三项已通过，新增交叉筛选测试待本地复跑 |
+| FSW分析与RAW读取回归测试 | 新增10项；尚未执行，需在目标Python环境运行 |
 | 首轮 7 V / RFSW 324 kΩ 频率基准 | 测量时序、调压、稳态纹波通过；实测 442.336 kHz，频偏 −10.844% 待定位 |
 | 官方模型资源二进制对照 | 两个官方 ZIP 实际取得；LIB 仅换行不同，统一后含全部 27 子电路一致 |
-| FSW 定时路径诊断 | 23pF/1MΩ 斜坡模型与既有波形相容；剩余频偏数值上高度指向比较器之后的 U5_TOFF 延迟链，尚待直接节点验证 |
+| FSW 定时路径诊断 | 旧版平均SW近似的23pF/1MΩ斜坡预测误差约0.100ns，但不是严格残差界；比较器输出RC纳入后U5_TOFF理想阶跃50%交点解析值约91.714ns；升级后的时变SW ODE分析器尚未对RAW运行，根因仍待直接节点验证 |
 | 直接内部节点探针与 50/25 ns Gear 敏感性对照 | 两份网表与逐周期后处理已准备；尚未运行，等待 LTspice 原始日志与 RAW |
 | 130 mΩ EOL 局部开关窗口 | 网表已生成；待运行 |
 | 连续 1.2 s 器件级联合仿真 | 未完成 |
