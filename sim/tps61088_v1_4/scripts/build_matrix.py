@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Build the V1.4 TPS61088 datasheet calculation CSVs and LTspice audit matrix."""
+"""Build the V1.4 TPS61088 calculation CSVs and LTspice audit matrix.
+
+The netlist README is deliberately user-maintained and is never generated or
+overwritten by this script. Use --root to build into an isolated directory.
+"""
 import argparse
 import csv
 from pathlib import Path
@@ -11,6 +15,7 @@ VIN_POINTS = (7.0, 7.5, 8.0, 8.5, 9.0, 9.4)
 RILIM_POINTS = (100, 160, 174, 180, 200, 220)
 FREQ_CASES = ((7.0, 324), (7.0, 510), (9.4, 324), (9.4, 517))
 ILIM_VINS = (7.0, 9.4)
+V1_3_STARTUP_PEAK_A = 2.90306045263
 OBS = (
     (324, 7.0, .00935581946186, .00950739245064, .0112016221142, "logs/bom_first/bom_7.log"),
     (324, 8.5, .00938894109488, .00952754372400, .0112052446606, "logs/bom_retry/bom_8p5.log"),
@@ -31,6 +36,14 @@ def fsw(r_ohm, vin):
 
 def ilim_fpwm(r_ohm):
     return 1_190_000 / r_ohm - 1.6
+
+
+def vin_label(vin):
+    """Match committed names: 7.0 -> '7', 9.4 -> '9p4'."""
+    value = float(vin)
+    if value.is_integer():
+        return str(int(value))
+    return f"{value:g}".replace(".", "p")
 
 
 def write_csv(path, rows):
@@ -96,19 +109,28 @@ def main():
     nets.mkdir(parents=True, exist_ok=True)
 
     write_csv(data / "ti_frequency_setpoints.csv", [
-        {"vin_V": f"{v:.1f}", "rfsw_for_500kHz_ohm": f"{rfreq(500e3,v):.2f}",
-         "frequency_with_324k_ohm_kHz": f"{fsw(324e3,v)/1e3:.3f}",
-         "rfsw_for_324kHz_ohm": f"{rfreq(324e3,v):.2f}"}
+        {"vin_V": f"{v:.1f}", "rfsw_for_500kHz_ohm": f"{rfreq(500e3, v):.2f}",
+         "frequency_with_324k_ohm_kHz": f"{fsw(324e3, v)/1e3:.3f}",
+         "rfsw_for_324kHz_ohm": f"{rfreq(324e3, v):.2f}"}
         for v in VIN_POINTS
     ])
-    write_csv(data / "ti_ilim_screen.csv", [
-        {"rilim_kohm": r, "ilim_typical_FPWM_A": f"{ilim_fpwm(r*1e3):.4f}",
-         "ilim_worst_case_screen_A": f"{ilim_fpwm(r*1e3)-1.3:.4f}",
-         "V1_3_startup_peak_A": "2.9031",
-         "minimum_headroom_A": f"{ilim_fpwm(r*1e3)-1.3-2.90306045263:.4f}",
-         "screen_only_not_a_release_decision": "true"}
-        for r in RILIM_POINTS
-    ])
+
+    ilim_rows = []
+    for r in RILIM_POINTS:
+        typical = ilim_fpwm(r * 1e3)
+        worst_case = typical - 1.3
+        headroom = worst_case - V1_3_STARTUP_PEAK_A
+        ilim_rows.append({
+            "rilim_kohm": r,
+            "ilim_typical_FPWM_A": f"{typical:.4f}",
+            "ilim_worst_case_screen_A": f"{worst_case:.4f}",
+            "V1_3_startup_peak_A": f"{V1_3_STARTUP_PEAK_A:.4f}",
+            "minimum_headroom_A": f"{headroom:.4f}",
+            "minimum_headroom_pct": f"{100 * headroom / V1_3_STARTUP_PEAK_A:.2f}",
+            "screen_only_not_a_release_decision": "true",
+        })
+    write_csv(data / "ti_ilim_screen.csv", ilim_rows)
+
     write_csv(data / "v1_3_startup_edge_observations.csv", [
         {"rfsw_kohm": r, "vin_V": v, "sw_t1_s": f"{t1:.12f}",
          "sw_t101_s": f"{t101:.12f}", "t98_s": f"{t98:.12f}",
@@ -120,23 +142,18 @@ def main():
 
     count = 0
     for vin, rfsw_k in FREQ_CASES:
-        name = f"freq_vin{str(vin).replace('.','p')}_rfsw{rfsw_k}k"
+        name = f"freq_vin{vin_label(vin)}_rfsw{rfsw_k}k"
         (nets / f"{name}.cir").write_text(deck(name, vin, rfsw_k, 100), encoding="ascii")
         count += 1
     for vin in ILIM_VINS:
         for rlim_k in RILIM_POINTS:
-            name = f"ilim_vin{str(vin).replace('.','p')}_rilim{rlim_k}k"
+            name = f"ilim_vin{vin_label(vin)}_rilim{rlim_k}k"
             (nets / f"{name}.cir").write_text(deck(name, vin, 324, rlim_k), encoding="ascii")
             count += 1
-    (nets / "README.md").write_text(
-        f"# V1.4 LTspice audit matrix\n\nGenerated {count} test decks by "
-        "py -3 sim/tps61088_v1_4/scripts/build_matrix.py. All decks use the V1.3 TI macro-model, "
-        "final-BOM passive values, MODE=0 (FPWM), and late switching-edge measurements. "
-        "These are unrun test inputs, not results.\n\n"
-        "Run the .cir files in LTspice. Compare freq_vin cases for RFSW response "
-        "and ilim_vin cases for current-limit behavior. Inspect V(sw) for ringing. "
-        "Confirm sw_t6001 and sw_t6101 occur after t98; if not, raise the edge "
-        "indices and transient stop time.\n", encoding="utf-8")
+
+    # README.md is intentionally not generated: it contains reviewed, human-
+    # maintained instructions and audit status. This script only owns CSVs
+    # and the 16 deterministic .cir test inputs.
     print(f"Generated {count} LTspice decks in {nets}")
 
 
