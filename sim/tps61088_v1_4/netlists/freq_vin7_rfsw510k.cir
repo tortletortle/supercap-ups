@@ -1,0 +1,42 @@
+* V1.4 audit case: freq_vin7_rfsw510k
+* TI TPS61088 macro-model. MODE=0 is forced PWM per TI datasheet.
+* This deck is a test input only; no simulation result is implied.
+.include ../../tps61088_v1_3/model/TPS61088_LT.LIB
+V1 source 0 7
+RS source vin 0.002
+VEN en 0 PWL(0 0 100u 0 101u 3)
+CIN vin 0 35u
+L1 vin sw 3.3u Rser=0.026
+CBOOT boot sw 100n
+CVCC vcc 0 4.7u
+CSS ss 0 47n
+RCOMP comp cm 21.5k
+CCOMP cm 0 13n
+CHF comp 0 100p
+RFSW fsw sw 510k
+RILIM ilim 0 100k
+RUP vout fb 1.076meg
+RDN fb 0 120k
+COUT vout 0 47u Rser=0.003
+VLOAD vout load 0
+BLOAD load 0 I=min(max(V(load)/10,0),1)
+X1 0 boot comp en fb fsw ilim 0 nc0 nc1 0 ss sw sw sw sw vcc vin vout vout vout TPS61088_TRANS
+.save V(vin) V(vout) V(sw) V(en) V(comp) V(ss) I(V1) I(L1) I(VLOAD)
+.options method=gear reltol=.003 trtol=7 gmin=1e-10 numdgt=7 threads=1 plotwinsize=0
+.tran 0 26m 0 50n
+.meas tran t90 WHEN V(vout)=10.8 RISE=1
+.meas tran t98 WHEN V(vout)=11.76 RISE=1
+* Late edge counts are intended to fall after soft-start; inspect V(sw) for ringing.
+.meas tran sw_t3001 WHEN V(sw)=10 RISE=3001
+.meas tran sw_t3101 WHEN V(sw)=10 RISE=3101
+.meas tran f_sw_khz PARAM 0.1/(sw_t3101-sw_t3001)
+.meas tran avg_vout AVG V(vout) FROM 24m TO 26m
+.meas tran ripple PP V(vout) FROM 24m TO 26m
+.meas tran peak_i MAX I(L1) FROM 24m TO 26m
+.meas tran peak_start MAX I(L1) FROM 0 TO 26m
+.meas tran iin_avg AVG (-I(V1)) FROM 24m TO 26m
+.meas tran iout_avg AVG I(VLOAD) FROM 24m TO 26m
+.meas tran pin_avg AVG (-V(vin)*I(V1)) FROM 24m TO 26m
+.meas tran pout_avg AVG (V(vout)*I(VLOAD)) FROM 24m TO 26m
+.meas tran eta_pct PARAM 100*pout_avg/pin_avg
+.end
