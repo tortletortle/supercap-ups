@@ -1,5 +1,6 @@
 * V1.4 diagnostic-only: direct TPS61088 internal timing-node probe (Gear 25 ns sensitivity)
-* No circuit elements, values, model contents, measurements or solver options changed.
+* No circuit elements, component values, model contents or measurements changed.
+* Only the saved vectors and .tran maximum step (25 ns) differ from the original baseline.
 * Hierarchical .save vectors are observations only; preserve original baseline separately.
 * TI TPS61088 macro-model. MODE=0 is forced PWM per TI datasheet.
 * This deck is a test input only; no simulation result is implied.
