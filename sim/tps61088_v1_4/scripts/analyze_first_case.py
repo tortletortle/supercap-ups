@@ -12,35 +12,10 @@ from pathlib import Path
 import re
 
 import numpy as np
+from ltspice_raw import load_raw
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-
-
-def load_raw(path):
-    with path.open('rb') as f:
-        header_bytes = f.read(65536)
-    offset = None
-    for ending in ('Binary:\n', 'Binary:\r\n'):
-        marker = ending.encode('utf-16le')
-        found = header_bytes.find(marker)
-        if found >= 0:
-            offset = found + len(marker)
-            break
-    if offset is None:
-        raise ValueError('No LTspice UTF-16 Binary marker')
-    header = header_bytes[:offset].decode('utf-16le')
-    nvars = int(re.search(r'No\. Variables:\s+(\d+)', header).group(1))
-    npoints = int(re.search(r'No\. Points:\s+(\d+)', header).group(1))
-    names = re.findall(r'^\s*\d+\s+([^\t\r\n]+)\t', header, re.M)
-    flags = re.search(r'Flags:\s+([^\r\n]+)', header).group(1)
-    if 'double' not in flags or 'fastaccess' in flags:
-        raise ValueError('This exporter requires interleaved double real RAW')
-    expected = offset + 8 * nvars * npoints
-    if path.stat().st_size != expected or len(names) != nvars:
-        raise ValueError(f'Incomplete or unsupported RAW: {path.stat().st_size} != {expected}')
-    a = np.memmap(path, mode='r', dtype='<f8', offset=offset, shape=(npoints, nvars))
-    return header, names, a
 
 
 def rising_times(t, y, level):
