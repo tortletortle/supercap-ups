@@ -1,0 +1,63 @@
+{
+  "method": "Same stored double samples and unchanged algorithm; only column contiguity differs.",
+  "window_s": [
+    0.024,
+    0.02402
+  ],
+  "raw_path": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\v14-internal-native\\freq_vin7_rfsw324k_internal_probe_50ns\\freq_vin7_rfsw324k_internal_probe_50ns.raw",
+  "runs": [
+    {
+      "label": "before",
+      "command": [
+        "py",
+        "-3",
+        "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\supercap-ups-repo\\sim\\tps61088_v1_4\\results\\fsw_internal_probe_session\\analyze_fsw_internal_before_contiguous.py",
+        "--raw",
+        "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\v14-internal-native\\freq_vin7_rfsw324k_internal_probe_50ns\\freq_vin7_rfsw324k_internal_probe_50ns.raw",
+        "--out",
+        "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\supercap-ups-repo\\sim\\tps61088_v1_4\\results\\fsw_internal_probe_session\\layout_equivalence\\before",
+        "--start",
+        "0.024",
+        "--end",
+        "0.02402",
+        "--max-step-ns",
+        "50"
+      ],
+      "exit_code": 0,
+      "source_sha256": "0146dfccb4045260c17c32f8283ebbd393b4468036d28222f5d815e86a3d3ac5",
+      "elapsed_wall_s": 17.030999999988126
+    },
+    {
+      "label": "after",
+      "command": [
+        "py",
+        "-3",
+        "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\supercap-ups-repo\\sim\\tps61088_v1_4\\scripts\\analyze_fsw_internal.py",
+        "--raw",
+        "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\v14-internal-native\\freq_vin7_rfsw324k_internal_probe_50ns\\freq_vin7_rfsw324k_internal_probe_50ns.raw",
+        "--out",
+        "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\supercap-ups-repo\\sim\\tps61088_v1_4\\results\\fsw_internal_probe_session\\layout_equivalence\\after",
+        "--start",
+        "0.024",
+        "--end",
+        "0.02402",
+        "--max-step-ns",
+        "50"
+      ],
+      "exit_code": 0,
+      "source_sha256": "1e45f4fed5a87c6104f569173f51e92579536ecfaeb721022750ad14fb452681",
+      "elapsed_wall_s": 2.562999999994645
+    }
+  ],
+  "output_checks": {
+    "fsw_internal_summary.json": {
+      "byte_equal": true,
+      "sha256": "497a7b52ee18c50de4684d4ab11a93ee83386229ef0f63da4fcadcd0509dbe52"
+    },
+    "fsw_internal_cycles.csv": {
+      "byte_equal": true,
+      "sha256": "68eebb6b44800e30f135fee0608d3422550eece64e4342264cb9a0bf089242b7"
+    }
+  },
+  "scope_limit": "Equivalence comparison covers this diagnostic window; final deliverables use full 24-26ms window."
+}

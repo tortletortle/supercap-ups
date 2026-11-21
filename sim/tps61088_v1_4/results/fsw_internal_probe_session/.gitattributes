@@ -1,0 +1,6 @@
+* -text whitespace=cr-at-eol
+*.png binary
+*.log -whitespace
+*.diff -whitespace
+input_deck.cir.txt -whitespace
+raw_header.txt -whitespace

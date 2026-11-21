@@ -10,7 +10,7 @@ This is a diagnostic-only duplicate of the first accepted electrical test point:
 - Gear, reltol=0.003, trtol=7, gmin=1e-10, one thread
 - 26 ms transient, 50 ns maximum step
 
-The power-stage components, circuit values, operating conditions, solver settings and original 6001/6101 frequency measurement are unchanged. The only additions are saved vectors and measurements for V(FSW) and I(RFSW). Do not replace the original baseline deck with this diagnostic copy.
+The round-two external probe leaves the power-stage components, circuit values, operating conditions, solver settings and original 6001/6101 frequency measurement unchanged. Its additions are saved vectors and measurements for V(FSW) and I(RFSW). The later direct internal-node probes are documented below. Do not replace the original baseline deck with these diagnostic copies.
 
 ## Completed round-two observation (2026-11-21)
 
@@ -53,16 +53,16 @@ From this directory on the Windows LTspice machine:
 
 The executable path is environment-specific. Preserve the original baseline log and RAW. Keep this diagnostic result in a separate folder and do not mix it with the 16-case matrix acceptance count.
 
-## Direct internal-node probe (prepared; not yet simulated)
+## Direct internal-node probe (completed 2026-11-21)
 
 The first timing analysis reconstructed U5_PVIN from external SW and a small internal divider network. That reconstruction is useful but conditional. The next experiment saves the actual internal nodes through LTspice hierarchical .save references; it does not add components or alter the macro-model.
 
-Prepared decks:
+Completed decks:
 
 - freq_vin7_rfsw324k_internal_probe_50ns.cir: original Gear / 50 ns maximum step.
 - freq_vin7_rfsw324k_internal_probe_25ns.cir: identical electrical deck and Gear settings, changing only maximum step to 25 ns.
 
-Both retain the original VIN=7 V, RFSW=324 kΩ, RILIM=100 kΩ, MODE=0, 26 ms transient, original 10 V threshold and RISE=6001/6101 measurements. The only netlist change is explicit saving of hierarchical nodes:
+Both retain the original VIN=7 V, RFSW=324 kΩ, RILIM=100 kΩ, MODE=0, 26 ms transient, original 10 V threshold and RISE=6001/6101 measurements. Their electrical parameters are identical; only their maximum timestep differs. Relative to the original 50-ns baseline, the 50-ns probe adds explicit saving of hierarchical nodes:
 
 - X1:U5_PVIN and X1:U5_N01584: actual comparator threshold and timing-capacitor voltage.
 - X1:U5_IFSW: internal FSW current-sense signal.
@@ -93,15 +93,19 @@ The analyzer emits per-cycle timing CSV and a JSON summary. It retains the origi
 4. **Logic and propagation delay:** separate comparator crossing, GATE_L transition, capacitor reset, and SW falling edge using directly saved nodes.
 5. **Numerical sensitivity:** compare the 50 ns and 25 ns Gear results. Compare distributions and event intervals, not sample-by-sample RAW values, because adaptive time grids differ.
 
-The 50 ns run should reproduce the original 442.336492 kHz result within numerical repeatability. The 25 ns run is a sensitivity check, not an expected exact target. Do not call the mechanism a unique root cause unless the directly observed node sequence and timestep comparison account for the remaining timing residual.
+The 50 ns run reproduced 442.336492352 kHz and all 11 common RAW vectors, including time and L1:flux, were double-for-double identical to the original baseline. The 25 ns run measured 441.757819237 kHz, a change of -0.578673115 kHz (-0.130821925%). Both LTspice runs and both final prescribed analysis commands exited 0. Output was approximately 11.9987 V / 1 A; ripple changed from 34.7006 to 29.5726 mVpp. Both original edge measurements occurred after t98 and before 26 ms. This is a two-point Gear sensitivity check, not proof of timestep convergence.
 
-No new LTspice run has been performed for these prepared decks yet. The 12-case RILIM matrix remains blocked pending this timing review and the updated current-limit screen.
+See the [Chinese experiment report](../results/fsw_internal_probe_session/实验报告.md), [50 ns summary](../results/fsw_internal_probe_50ns/fsw_internal_summary.json), [25 ns summary](../results/fsw_internal_probe_25ns/fsw_internal_summary.json), and [comparison](../results/fsw_internal_probe_25ns/fsw_internal_comparison.json). Full RAW files remain local with hashes in the session inventory.
 
-## New timing-budget hypothesis from existing data (not a new simulation)
+**Both internal analyses retain `warning`.** The original analyzer accepted 347 / 748 cycles and rejected 536 / 134. Independent unfiltered inspection found one comparator, TOFF, GATE and SW-falling event in every one of the 883 / 882 complete SW cycles. Each rejected comparator crossing shares the same adjacent RAW sample bracket with the capacitor/PVIN crossing; independent linear interpolation places the comparator slightly earlier, violating the analyzer's `comparator >= cap_cross` requirement and cascading into a TOFF pairing rejection. The original flags and outputs are preserved. Do not describe these flags as physical missing pulses or LTspice nonconvergence. The comparison uses different selected valid subsets, so its delay-median changes include selection effects. See the [unfiltered pairing evidence](../results/fsw_internal_probe_session/internal_probe_pairing_review.json).
 
-The current 883-cycle analysis gives a useful prioritization:
+Direct nodes confirm V(FSW)=V(U5_N01584) at every sample, internal IFSW agrees with -I(RFSW) to about 1.4e-13 A, and the directly saved threshold is approximately 1.73767 V. The measured-SW 23-pF / 1-MΩ ODE is consistent with the charging ramp, but this alone does not close the complete frequency budget. Do not call the mechanism a unique root cause or model defect. The 12-case RILIM matrix remains pending review; no BOM freeze or main merge is authorized by these results.
 
-- The previous constant-average-SW ramp estimate differed from the reconstructed ramp by about 0.100 ns on average. This is a compatibility check, not a rigorous residual bound; the updated analyzer now integrates measured SW(t) piecewise-linearly and must be run before treating the ramp residual as closed.
+## Historical timing-budget hypothesis from external data (unproven)
+
+The earlier external-node 883-cycle analysis gave the following prioritization. Preserve it as historical reasoning, not as a conclusion established by the direct probes:
+
+- The previous constant-average-SW ramp estimate differed from the reconstructed ramp by about 0.100 ns on average. This was a compatibility check, not a rigorous residual bound. The updated piecewise-linear measured-SW ODE has now been run, with direct ramp consistency evidence described in the new report; it does not close the whole frequency budget.
 - The reconstructed PVIN-threshold crossing to SW falling interval is 110.469 ns.
 - In the macro-model, R_U5_R9 = 90/0.693 Ω ≈ 129.870 Ω and C_U5_C7 = 1 nF. The comparator subcircuit also has a 1-Ω output resistor and a 1-nF output capacitor. Including this loading gives a two-pole ideal-step U5_TOFF 50% crossing of about 91.714 ns; the earlier 90.019-ns single-pole estimate omitted the comparator output network.
 - The 110.469 ns post-threshold interval exceeds the datasheet's 89 ns delay term by 21.469 ns. Multiplying by VOUT/VIN = 12/7 gives 36.804 ns of equivalent period contribution.
@@ -111,5 +115,5 @@ This numerical alignment makes the comparator-to-U5_TOFF-to-GATE_L-to-SW path th
 
 The RAW analyzer separates the direct events: PVIN crossing, comparator-output rise, U5_TOFF 0.5-V crossing, GATE_L rise, timing-capacitor reset, and SW falling. It also reports U5_TDELAY_SW and U5_TEND values. Use these event intervals to determine whether the modeled two-pole 91.714-ns comparator-output/TOFF network and the remaining logic/driver propagation explain the observed 110.469-ns reconstructed interval.
 
-Do not continue tuning the 23 pF / 1 MΩ ramp to explain this residual unless the direct-node data contradict the current charge-balance result.
+The new direct-node results do not establish the earlier 1.368-ns residual as a causal closure: event definitions, unresolved same-bracket ordering and valid-subset selection must be reviewed first. Do not tune the 23 pF / 1 MΩ ramp merely to force agreement with the datasheet frequency.
 

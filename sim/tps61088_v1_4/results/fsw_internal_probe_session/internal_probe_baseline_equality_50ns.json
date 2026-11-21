@@ -1,0 +1,111 @@
+{
+  "verified_utc": "2026-11-21T13:53:51.673380+00:00",
+  "baseline_raw": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\v14-first-case-native\\freq_vin7_rfsw324k.raw",
+  "baseline_raw_sha256": "7551601fea3f7f93ca93c0c71be42ce3e743ff49fcc965abde3c9bd8ad554cf2",
+  "current_raw": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\v14-internal-native\\freq_vin7_rfsw324k_internal_probe_50ns\\freq_vin7_rfsw324k_internal_probe_50ns.raw",
+  "current_raw_sha256": "b817d10d13cfc83027764796eafcf4e3bb8b0b05fbb420c68879417f051bc719",
+  "baseline_points": 2570310,
+  "current_points": 2570310,
+  "baseline_variables": [
+    "time",
+    "V(comp)",
+    "V(en)",
+    "V(ss)",
+    "V(sw)",
+    "V(vin)",
+    "V(vout)",
+    "I(L1)",
+    "I(V1)",
+    "I(VLOAD)",
+    "L1:flux"
+  ],
+  "current_variables": [
+    "time",
+    "V(comp)",
+    "V(en)",
+    "V(fsw)",
+    "V(ss)",
+    "V(sw)",
+    "V(vin)",
+    "V(vout)",
+    "V(x1:gate_l)",
+    "V(x1:mode_ok)",
+    "V(x1:ssend)",
+    "V(x1:u5_ifsw)",
+    "V(x1:u5_n01584)",
+    "V(x1:u5_n16903113)",
+    "V(x1:u5_pvin)",
+    "V(x1:u5_sel_toff)",
+    "V(x1:u5_tdelay_sw)",
+    "V(x1:u5_tend)",
+    "V(x1:u5_toff)",
+    "V(x1:u5_toff_sel)",
+    "V(x1:u5_toff_sel_1)",
+    "V(x1:u5_tsw)",
+    "I(L1)",
+    "I(RFSW)",
+    "I(V1)",
+    "I(VLOAD)",
+    "L1:flux"
+  ],
+  "common_vector_count": 11,
+  "baseline_vector_count": 11,
+  "all_common_vectors_identical": true,
+  "vectors": [
+    {
+      "vector": "i(l1)",
+      "all_samples_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "vector": "i(v1)",
+      "all_samples_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "vector": "i(vload)",
+      "all_samples_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "vector": "l1:flux",
+      "all_samples_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "vector": "time",
+      "all_samples_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "vector": "v(comp)",
+      "all_samples_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "vector": "v(en)",
+      "all_samples_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "vector": "v(ss)",
+      "all_samples_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "vector": "v(sw)",
+      "all_samples_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "vector": "v(vin)",
+      "all_samples_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "vector": "v(vout)",
+      "all_samples_equal": true,
+      "max_abs_difference": 0.0
+    }
+  ]
+}

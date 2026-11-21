@@ -113,9 +113,13 @@ class RawReaderTests(unittest.TestCase):
             )
             path.write_bytes(header.encode("utf-16le") + values.tobytes())
             decoded, names, raw = load_raw(path)
-            self.assertIn("Plotname: Transient Analysis", decoded)
-            self.assertEqual(names, ["time", "V(sw)"])
-            np.testing.assert_allclose(np.asarray(raw), values)
+            try:
+                self.assertIn("Plotname: Transient Analysis", decoded)
+                self.assertEqual(names, ["time", "V(sw)"])
+                np.testing.assert_allclose(np.asarray(raw), values)
+            finally:
+                # Windows cannot remove the temporary RAW while it is mapped.
+                raw._mmap.close()
 
     def test_rejects_fastaccess_raw(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -169,14 +173,14 @@ class DeckAndComparisonTests(unittest.TestCase):
             "raw_path": "baseline.raw",
             "run_parameters": {"rfsw_ohm": 324e3, "cfsw_f": 23e-12, "roff_ohm": 1e6},
             "cycle_accounting": {"complete_valid_cycles": 10},
-            "prescribed_edge_measurement": {"frequency_khz": 442.0},
+            "prescribed_edge_measurement": {"frequency_kHz": 442.0},
             "cycle_statistics": {"cross_to_sw_fall_s": stat(110e-9)},
         }
         current = {
             "raw_path": "fine.raw",
             "run_parameters": {"rfsw_ohm": 324e3, "cfsw_f": 23e-12, "roff_ohm": 1e6},
             "cycle_accounting": {"complete_valid_cycles": 10},
-            "prescribed_edge_measurement": {"frequency_khz": 441.0},
+            "prescribed_edge_measurement": {"frequency_kHz": 441.0},
             "cycle_statistics": {"cross_to_sw_fall_s": stat(111e-9)},
         }
         result = fsw.compare_summaries(current, baseline)

@@ -1,0 +1,436 @@
+{
+  "checker_sha256": "647c63dbca78e593342e54c8b0ffb6e32f02157e9dd966f3821bc30f5e2c1bdf",
+  "verified_utc": "2026-11-21T14:08:14.651542+00:00",
+  "method": "Independent RAW header/payload validation, own transition interpolation, own internal-event counts; no analyzer imports.",
+  "cases": [
+    {
+      "case_max_step_ns": 50,
+      "raw_path": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\v14-internal-native\\freq_vin7_rfsw324k_internal_probe_50ns\\freq_vin7_rfsw324k_internal_probe_50ns.raw",
+      "raw_bytes": 555189092,
+      "raw_sha256": "b817d10d13cfc83027764796eafcf4e3bb8b0b05fbb420c68879417f051bc719",
+      "raw_points": 2570310,
+      "raw_variables": [
+        "time",
+        "V(comp)",
+        "V(en)",
+        "V(fsw)",
+        "V(ss)",
+        "V(sw)",
+        "V(vin)",
+        "V(vout)",
+        "V(x1:gate_l)",
+        "V(x1:mode_ok)",
+        "V(x1:ssend)",
+        "V(x1:u5_ifsw)",
+        "V(x1:u5_n01584)",
+        "V(x1:u5_n16903113)",
+        "V(x1:u5_pvin)",
+        "V(x1:u5_sel_toff)",
+        "V(x1:u5_tdelay_sw)",
+        "V(x1:u5_tend)",
+        "V(x1:u5_toff)",
+        "V(x1:u5_toff_sel)",
+        "V(x1:u5_toff_sel_1)",
+        "V(x1:u5_tsw)",
+        "I(L1)",
+        "I(RFSW)",
+        "I(V1)",
+        "I(VLOAD)",
+        "L1:flux"
+      ],
+      "end_time_s": 0.026000000000000002,
+      "raw_10V_rise_count": 7408,
+      "independent_measurements": {
+        "t98": 0.011203663814394523,
+        "sw_t6001": 0.022816758694292654,
+        "sw_t6101": 0.023042830930540582,
+        "f_sw_khz": 442.33649235164063
+      },
+      "log_measurements": {
+        "t90": 0.0102964743364,
+        "t98": 0.0112036638144,
+        "sw_t6001": 0.0228167586943,
+        "sw_t6101": 0.0230428309305,
+        "f_sw_khz": 442.336492352,
+        "avg_vout": 11.9987436854,
+        "ripple": 0.0347005939526,
+        "peak_i": 2.80766432218,
+        "peak_start": 2.86496966994,
+        "iout_avg": 1.0,
+        "eta_pct": 98.8821426754
+      },
+      "csv_cycle_counts": {
+        "candidate_cycles": 884,
+        "complete_valid_cycles": 347,
+        "right_censored_cycles": 1,
+        "invalid_cycles": 536
+      },
+      "checks": {
+        "raw_sha256_matches_environment": true,
+        "original_log_sha256_matches_native": true,
+        "time_monotonic_and_finite": true,
+        "complete_26ms": true,
+        "point_count_matches_summary": true,
+        "all_requested_nodes_present": true,
+        "raw_log_timing_matches": true,
+        "original_timing_valid": true,
+        "raw_summary_frequency_matches": true,
+        "raw_summary_edge_count_matches": true,
+        "summary_timing_valid_matches": true,
+        "csv_cycle_counts_match_summary": true,
+        "all_valid_cycles_event_order_confirmed": true,
+        "all_valid_cycles_csv_event_times_confirmed": true,
+        "all_internal_events_single_per_valid_cycle": true,
+        "actual_cross_before_gate_0p2": true,
+        "predicted_cross_before_gate_0p2": true,
+        "baseline_common_raw_samples_identical": true
+      },
+      "all_checks_pass": true,
+      "internal_event_counts_per_valid_cycle": {
+        "pvin_cross": {
+          "1": 347
+        },
+        "comparator_rise": {
+          "1": 347
+        },
+        "toff_rise": {
+          "1": 347
+        },
+        "gate_rise_0p2": {
+          "1": 347
+        },
+        "gate_rise_0p5": {
+          "1": 347
+        },
+        "gate_rise_0p8": {
+          "1": 347
+        },
+        "cap_reset_fall": {
+          "1": 347
+        },
+        "sw_fall": {
+          "1": 347
+        }
+      },
+      "actual_pvin_cross_to_gate_ns": {
+        "gate_rise_0p2": {
+          "count": 347,
+          "min": 89.00443424636472,
+          "median": 97.98897211352187,
+          "max": 120.56347160893654,
+          "p05": 94.86650128891216,
+          "p95": 116.4775020715686
+        },
+        "gate_rise_0p5": {
+          "count": 347,
+          "min": 89.59442849426624,
+          "median": 98.58015989280821,
+          "max": 121.15468071491331,
+          "p05": 95.45768641164298,
+          "p95": 117.06913557660292
+        },
+        "gate_rise_0p8": {
+          "count": 347,
+          "min": 90.5193956075856,
+          "median": 99.50792136809162,
+          "max": 122.08247688119678,
+          "p05": 96.38544356191382,
+          "p95": 117.9976816999273
+        }
+      },
+      "predicted_rc_cross_to_gate_ns": {
+        "gate_rise_0p2": {
+          "count": 347,
+          "min": 88.99973638273883,
+          "median": 97.98035650529502,
+          "max": 120.54835036440225,
+          "p05": 94.86174963671546,
+          "p95": 116.47518809755618
+        },
+        "gate_rise_0p5": {
+          "count": 347,
+          "min": 89.58973063064035,
+          "median": 98.5715448188762,
+          "max": 121.13955947037903,
+          "p05": 95.45293475944628,
+          "p95": 117.06682160259052
+        },
+        "gate_rise_0p8": {
+          "count": 347,
+          "min": 90.5146977439597,
+          "median": 99.49930715805189,
+          "max": 122.06735563666248,
+          "p05": 96.38069190971709,
+          "p95": 117.9953677259149
+        }
+      },
+      "gate_voltage_at_actual_cross_V": {
+        "count": 347,
+        "min": -1.99782582484568e-48,
+        "median": 3.2320496965685385e-49,
+        "max": 4.1647392816430885e-48,
+        "p05": -2.288204190948099e-49,
+        "p95": 3.453657184209217e-48
+      },
+      "gate_voltage_at_predicted_cross_V": {
+        "count": 347,
+        "min": -1.9975789009181532e-48,
+        "median": 3.231835729776983e-49,
+        "max": 4.163975722787353e-48,
+        "p05": -2.2864778483864764e-49,
+        "p95": 3.4529557862893835e-48
+      },
+      "baseline_raw_comparison": {
+        "baseline_raw": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\v14-first-case-native\\freq_vin7_rfsw324k.raw",
+        "baseline_point_count": 2570310,
+        "common_vector_count": 11,
+        "baseline_vector_count": 11,
+        "vectors": [
+          {
+            "vector": "i(l1)",
+            "all_samples_equal": true,
+            "max_abs_difference": 0.0
+          },
+          {
+            "vector": "i(v1)",
+            "all_samples_equal": true,
+            "max_abs_difference": 0.0
+          },
+          {
+            "vector": "i(vload)",
+            "all_samples_equal": true,
+            "max_abs_difference": 0.0
+          },
+          {
+            "vector": "l1:flux",
+            "all_samples_equal": true,
+            "max_abs_difference": 0.0
+          },
+          {
+            "vector": "time",
+            "all_samples_equal": true,
+            "max_abs_difference": 0.0
+          },
+          {
+            "vector": "v(comp)",
+            "all_samples_equal": true,
+            "max_abs_difference": 0.0
+          },
+          {
+            "vector": "v(en)",
+            "all_samples_equal": true,
+            "max_abs_difference": 0.0
+          },
+          {
+            "vector": "v(ss)",
+            "all_samples_equal": true,
+            "max_abs_difference": 0.0
+          },
+          {
+            "vector": "v(sw)",
+            "all_samples_equal": true,
+            "max_abs_difference": 0.0
+          },
+          {
+            "vector": "v(vin)",
+            "all_samples_equal": true,
+            "max_abs_difference": 0.0
+          },
+          {
+            "vector": "v(vout)",
+            "all_samples_equal": true,
+            "max_abs_difference": 0.0
+          }
+        ]
+      },
+      "model_emission_coefficient_warning_count": 5,
+      "log_records_normal_gear": true,
+      "interpretation": "Checks verify sampled macro-model data, not silicon behavior or hardware efficiency."
+    },
+    {
+      "case_max_step_ns": 25,
+      "raw_path": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\v14-internal-native\\freq_vin7_rfsw324k_internal_probe_25ns\\freq_vin7_rfsw324k_internal_probe_25ns.raw",
+      "raw_bytes": 654022700,
+      "raw_sha256": "2d5b2ddbb5a9c27a25322143a426741cfbe1e01623c9ceeb9b7940481ab7e552",
+      "raw_points": 3027873,
+      "raw_variables": [
+        "time",
+        "V(comp)",
+        "V(en)",
+        "V(fsw)",
+        "V(ss)",
+        "V(sw)",
+        "V(vin)",
+        "V(vout)",
+        "V(x1:gate_l)",
+        "V(x1:mode_ok)",
+        "V(x1:ssend)",
+        "V(x1:u5_ifsw)",
+        "V(x1:u5_n01584)",
+        "V(x1:u5_n16903113)",
+        "V(x1:u5_pvin)",
+        "V(x1:u5_sel_toff)",
+        "V(x1:u5_tdelay_sw)",
+        "V(x1:u5_tend)",
+        "V(x1:u5_toff)",
+        "V(x1:u5_toff_sel)",
+        "V(x1:u5_toff_sel_1)",
+        "V(x1:u5_tsw)",
+        "I(L1)",
+        "I(RFSW)",
+        "I(V1)",
+        "I(VLOAD)",
+        "L1:flux"
+      ],
+      "end_time_s": 0.026000000000000002,
+      "raw_10V_rise_count": 7402,
+      "independent_measurements": {
+        "t98": 0.011199892537952465,
+        "sw_t6001": 0.02282674813535586,
+        "sw_t6101": 0.023053116511070774,
+        "f_sw_khz": 441.75781923681103
+      },
+      "log_measurements": {
+        "t90": 0.0102986364703,
+        "t98": 0.011199892538,
+        "sw_t6001": 0.0228267481354,
+        "sw_t6101": 0.0230531165111,
+        "f_sw_khz": 441.757819237,
+        "avg_vout": 11.998735082,
+        "ripple": 0.0295726201596,
+        "peak_i": 2.77227944217,
+        "peak_start": 2.84919523558,
+        "iout_avg": 1.0,
+        "eta_pct": 98.8711343407
+      },
+      "csv_cycle_counts": {
+        "candidate_cycles": 883,
+        "complete_valid_cycles": 748,
+        "right_censored_cycles": 1,
+        "invalid_cycles": 134
+      },
+      "checks": {
+        "raw_sha256_matches_environment": true,
+        "original_log_sha256_matches_native": true,
+        "time_monotonic_and_finite": true,
+        "complete_26ms": true,
+        "point_count_matches_summary": true,
+        "all_requested_nodes_present": true,
+        "raw_log_timing_matches": true,
+        "original_timing_valid": true,
+        "raw_summary_frequency_matches": true,
+        "raw_summary_edge_count_matches": true,
+        "summary_timing_valid_matches": true,
+        "csv_cycle_counts_match_summary": true,
+        "all_valid_cycles_event_order_confirmed": true,
+        "all_valid_cycles_csv_event_times_confirmed": true,
+        "all_internal_events_single_per_valid_cycle": true,
+        "actual_cross_before_gate_0p2": true,
+        "predicted_cross_before_gate_0p2": true
+      },
+      "all_checks_pass": true,
+      "internal_event_counts_per_valid_cycle": {
+        "pvin_cross": {
+          "1": 748
+        },
+        "comparator_rise": {
+          "1": 748
+        },
+        "toff_rise": {
+          "1": 748
+        },
+        "gate_rise_0p2": {
+          "1": 748
+        },
+        "gate_rise_0p5": {
+          "1": 748
+        },
+        "gate_rise_0p8": {
+          "1": 748
+        },
+        "cap_reset_fall": {
+          "1": 748
+        },
+        "sw_fall": {
+          "1": 748
+        }
+      },
+      "actual_pvin_cross_to_gate_ns": {
+        "gate_rise_0p2": {
+          "count": 748,
+          "min": 90.64265305350206,
+          "median": 98.96434380839148,
+          "max": 106.55829309549891,
+          "p05": 95.64749317656634,
+          "p95": 102.92800929640606
+        },
+        "gate_rise_0p5": {
+          "count": 748,
+          "min": 91.22943225511881,
+          "median": 99.58052930164607,
+          "max": 107.17453088546213,
+          "p05": 96.26365461770646,
+          "p95": 103.5442237068071
+        },
+        "gate_rise_0p8": {
+          "count": 748,
+          "min": 92.15101893014777,
+          "median": 100.52439752480936,
+          "max": 108.1183798289087,
+          "p05": 97.20753175995051,
+          "p95": 104.48808124910447
+        }
+      },
+      "predicted_rc_cross_to_gate_ns": {
+        "gate_rise_0p2": {
+          "count": 748,
+          "min": 90.65737903435345,
+          "median": 98.9790652321243,
+          "max": 106.57336112565585,
+          "p05": 95.6625428458896,
+          "p95": 102.9398318511468
+        },
+        "gate_rise_0p5": {
+          "count": 748,
+          "min": 91.2441582359702,
+          "median": 99.59525072537889,
+          "max": 107.18959891561907,
+          "p05": 96.27870428702973,
+          "p95": 103.55604626154785
+        },
+        "gate_rise_0p8": {
+          "count": 748,
+          "min": 92.16574491099917,
+          "median": 100.53911894854218,
+          "max": 108.13344785906564,
+          "p05": 97.22258142927376,
+          "p95": 104.49990380384521
+        }
+      },
+      "gate_voltage_at_actual_cross_V": {
+        "count": 748,
+        "min": -1.1317360547307844e-62,
+        "median": 9.354648089590922e-63,
+        "max": 3.5724841209752206e-62,
+        "p05": -6.408250982847736e-63,
+        "p95": 1.7030700222981205e-62
+      },
+      "gate_voltage_at_predicted_cross_V": {
+        "count": 748,
+        "min": -1.1324885183357374e-62,
+        "median": 9.358315047667802e-63,
+        "max": 3.5765103601639747e-62,
+        "p05": -6.416348509477833e-63,
+        "p95": 1.7041525527178094e-62
+      },
+      "baseline_raw_comparison": null,
+      "model_emission_coefficient_warning_count": 5,
+      "log_records_normal_gear": true,
+      "interpretation": "Checks verify sampled macro-model data, not silicon behavior or hardware efficiency."
+    }
+  ],
+  "comparison_delta_khz_expected": -0.5786731148295985,
+  "comparison_delta_khz_recorded": -0.5786731148295416,
+  "comparison_frequency_delta_matches": true,
+  "all_checks_pass": true
+}

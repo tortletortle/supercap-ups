@@ -1,0 +1,105 @@
+{
+  "source_commit": "ef1ba6702bce0dfb668501c733e8acaf4ae73abb",
+  "branch": "v1.4-audit-frequency-ilim",
+  "source_worktree_status": "M sim/tps61088_v1_4/scripts/analyze_fsw_internal.py\n M sim/tps61088_v1_4/tests/test_fsw_internal.py\n?? sim/tps61088_v1_4/results/fsw_internal_probe_25ns/\n?? sim/tps61088_v1_4/results/fsw_internal_probe_50ns/\n?? sim/tps61088_v1_4/results/fsw_internal_probe_session/\n?? sim/tps61088_v1_4/scripts/__pycache__/",
+  "os": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "simulator_path": "C:\\Users\\tortl\\AppData\\Local\\Programs\\ADI\\LTspice\\LTspice.exe",
+  "simulator_version": "26.1.1.0",
+  "simulator_sha256": "3c144a2b3ec6a30baac6761c502d99b95aaa40b947ff5eca25b8fbd80d68af72",
+  "model_path": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\supercap-ups-repo\\sim\\tps61088_v1_3\\model\\TPS61088_LT.LIB",
+  "model_sha256": "418466fbd205f9e9ec487bee1d9c1ada48858ff49eef67767e84706966fa1795",
+  "model_version": "TI ordinary TPS61088 Final 1.00 / 11MAY2015, compatibility expression edits retained",
+  "deck": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\supercap-ups-repo\\sim\\tps61088_v1_4\\diagnostics\\freq_vin7_rfsw324k_internal_probe_25ns.cir",
+  "deck_sha256": "d7a71d9bcbc52cd653a378d7b07d9ae7dc3bf0c5c0218fc411e5cd9e8fe69a92",
+  "max_step_ns": 25,
+  "native_directory": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\v14-internal-native\\freq_vin7_rfsw324k_internal_probe_25ns",
+  "started_utc": "2026-11-21T13:52:36.995466+00:00",
+  "command": [
+    "C:\\Users\\tortl\\AppData\\Local\\Programs\\ADI\\LTspice\\LTspice.exe",
+    "-b",
+    "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\supercap-ups-repo\\sim\\tps61088_v1_4\\diagnostics\\freq_vin7_rfsw324k_internal_probe_25ns.cir"
+  ],
+  "cwd": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\supercap-ups-repo\\sim\\tps61088_v1_4\\diagnostics",
+  "solver_expected": "Normal / Gear",
+  "analysis_script_sha256": "0146dfccb4045260c17c32f8283ebbd393b4468036d28222f5d815e86a3d3ac5",
+  "raw_reader_sha256": "03459f444661b52cbb38a5f53f83bf38c077243824925e48b252b1611632c20e",
+  "pid": 35940,
+  "finished_utc": "2026-11-21T13:58:47.042609+00:00",
+  "elapsed_wall_s": 370.047,
+  "exit_code": 0,
+  "deck_sha256_after_run": "d7a71d9bcbc52cd653a378d7b07d9ae7dc3bf0c5c0218fc411e5cd9e8fe69a92",
+  "native_files": [
+    {
+      "name": "freq_vin7_rfsw324k_internal_probe_25ns.db",
+      "bytes": 32768,
+      "sha256": "ee89641b00760e50ab122d65f7a3f19227cb4169832a1e8bcace25c5d8fb294d"
+    },
+    {
+      "name": "freq_vin7_rfsw324k_internal_probe_25ns.log",
+      "bytes": 2014,
+      "sha256": "2858191ce0b8f375e8e82a6adb9c23877a11e3c00d6ad8528cf664f4368a7954"
+    },
+    {
+      "name": "freq_vin7_rfsw324k_internal_probe_25ns.op.raw",
+      "bytes": 2290,
+      "sha256": "d39f8e2be8904a0dd90128ccefc024a0d916c94cbfc72414921763e1ec595da2"
+    },
+    {
+      "name": "freq_vin7_rfsw324k_internal_probe_25ns.raw",
+      "bytes": 654022700,
+      "sha256": "2d5b2ddbb5a9c27a25322143a426741cfbe1e01623c9ceeb9b7940481ab7e552"
+    }
+  ],
+  "raw_validation": {
+    "points": 3027873,
+    "variables": [
+      "time",
+      "V(comp)",
+      "V(en)",
+      "V(fsw)",
+      "V(ss)",
+      "V(sw)",
+      "V(vin)",
+      "V(vout)",
+      "V(x1:gate_l)",
+      "V(x1:mode_ok)",
+      "V(x1:ssend)",
+      "V(x1:u5_ifsw)",
+      "V(x1:u5_n01584)",
+      "V(x1:u5_n16903113)",
+      "V(x1:u5_pvin)",
+      "V(x1:u5_sel_toff)",
+      "V(x1:u5_tdelay_sw)",
+      "V(x1:u5_tend)",
+      "V(x1:u5_toff)",
+      "V(x1:u5_toff_sel)",
+      "V(x1:u5_toff_sel_1)",
+      "V(x1:u5_tsw)",
+      "I(L1)",
+      "I(RFSW)",
+      "I(V1)",
+      "I(VLOAD)",
+      "L1:flux"
+    ],
+    "start_s": 0.0,
+    "end_s": 0.026000000000000002,
+    "complete_interleaved_double": true
+  },
+  "analysis_command": [
+    "py",
+    "-3",
+    "sim/tps61088_v1_4/scripts/analyze_fsw_internal.py",
+    "--raw",
+    "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\v14-internal-native\\freq_vin7_rfsw324k_internal_probe_25ns\\freq_vin7_rfsw324k_internal_probe_25ns.raw",
+    "--out",
+    "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\supercap-ups-repo\\sim\\tps61088_v1_4\\results\\fsw_internal_probe_25ns",
+    "--max-step-ns",
+    "25",
+    "--compare-with",
+    "sim/tps61088_v1_4/results/fsw_internal_probe_50ns/fsw_internal_summary.json"
+  ],
+  "analysis_exit_code": 0,
+  "prior_analysis_note": "Initial comparison failed because baseline summary was not ready; circuit simulation and own summary/CSV succeeded.",
+  "analysis_script_sha256_at_analysis": "1e45f4fed5a87c6104f569173f51e92579536ecfaeb721022750ad14fb452681"
+}

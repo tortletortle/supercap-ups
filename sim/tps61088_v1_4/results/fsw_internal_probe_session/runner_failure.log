@@ -1,0 +1,13 @@
+Initial local orchestration failure after the 50 ns LTspice process completed:
+LTspice exit_code=0; original log and complete native RAW had already been archived.
+Traceback (most recent call last):
+  File "work/run_v14_internal.py", line 174, in <module>
+    main()
+  File "work/run_v14_internal.py", line 150, in main
+    raise RuntimeError('Missing requested saved vectors: ' + ', '.join(missing))
+RuntimeError: Missing requested saved vectors: vectors, are, observations, only;, preserve, original, baseline, separately.
+
+Cause: split('.save ', 1) matched a comment before the actual .save directive.
+Correction: find the first non-comment line beginning with .save; no circuit/model/RAW edit.
+Recovery command: py -3 work/resume_v14_internal_50ns.py
+This is an orchestration/post-processing failure, not a failed circuit simulation.

@@ -1,0 +1,19 @@
+test_committed_case_names_and_exact_count (test_build_matrix.BuildMatrixTests.test_committed_case_names_and_exact_count) ... ok
+test_crosscase_screen_includes_new_full_run_peak (test_build_matrix.BuildMatrixTests.test_crosscase_screen_includes_new_full_run_peak) ... ok
+test_limiter_csv_retains_percentage_column_and_values (test_build_matrix.BuildMatrixTests.test_limiter_csv_retains_percentage_column_and_values) ... ok
+test_repeated_generation_is_deterministic_and_readme_safe (test_build_matrix.BuildMatrixTests.test_repeated_generation_is_deterministic_and_readme_safe) ... ok
+test_first_between_is_half_open (test_fsw_internal.CrossingTests.test_first_between_is_half_open) ... ok
+test_hysteresis_suppresses_ringing_retrigger (test_fsw_internal.CrossingTests.test_hysteresis_suppresses_ringing_retrigger) ... ok
+test_linear_interpolation_and_direction (test_fsw_internal.CrossingTests.test_linear_interpolation_and_direction) ... ok
+test_50ns_and_25ns_decks_have_identical_electrical_netlists (test_fsw_internal.DeckAndComparisonTests.test_50ns_and_25ns_decks_have_identical_electrical_netlists) ... ok
+test_distribution_comparison_uses_medians (test_fsw_internal.DeckAndComparisonTests.test_distribution_comparison_uses_medians) ... ok
+test_reads_interleaved_double_raw (test_fsw_internal.RawReaderTests.test_reads_interleaved_double_raw) ... ok
+test_rejects_fastaccess_raw (test_fsw_internal.RawReaderTests.test_rejects_fastaccess_raw) ... ok
+test_capacitance_estimate_requires_reset_switch_off (test_fsw_internal.RcModelTests.test_capacitance_estimate_requires_reset_switch_off) ... ok
+test_piecewise_linear_integrator_matches_constant_input_solution (test_fsw_internal.RcModelTests.test_piecewise_linear_integrator_matches_constant_input_solution) ... ok
+test_predicted_threshold_crossing_matches_closed_form (test_fsw_internal.RcModelTests.test_predicted_threshold_crossing_matches_closed_form) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 0.824s
+
+OK

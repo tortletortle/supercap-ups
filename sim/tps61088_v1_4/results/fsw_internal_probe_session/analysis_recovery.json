@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "max_step_ns": 50,
+      "prior_attempt": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\supercap-ups-repo\\sim\\tps61088_v1_4\\results\\fsw_internal_probe_session\\analysis_prior_attempts\\50ns",
+      "final_analysis_source_sha256": "1e45f4fed5a87c6104f569173f51e92579536ecfaeb721022750ad14fb452681"
+    },
+    {
+      "max_step_ns": 25,
+      "prior_attempt": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\supercap-ups-repo\\sim\\tps61088_v1_4\\results\\fsw_internal_probe_session\\analysis_prior_attempts\\25ns",
+      "final_analysis_source_sha256": "1e45f4fed5a87c6104f569173f51e92579536ecfaeb721022750ad14fb452681"
+    }
+  ],
+  "same_optimized_analyzer_repeat_50ns_byte_identical": true,
+  "note": "Both final commands used full RAW and prescribed default window/edges. No LTspice rerun."
+}

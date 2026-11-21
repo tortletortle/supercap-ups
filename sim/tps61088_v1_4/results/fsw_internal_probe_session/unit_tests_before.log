@@ -1,0 +1,48 @@
+test_committed_case_names_and_exact_count (test_build_matrix.BuildMatrixTests.test_committed_case_names_and_exact_count) ... ok
+test_crosscase_screen_includes_new_full_run_peak (test_build_matrix.BuildMatrixTests.test_crosscase_screen_includes_new_full_run_peak) ... ok
+test_limiter_csv_retains_percentage_column_and_values (test_build_matrix.BuildMatrixTests.test_limiter_csv_retains_percentage_column_and_values) ... ok
+test_repeated_generation_is_deterministic_and_readme_safe (test_build_matrix.BuildMatrixTests.test_repeated_generation_is_deterministic_and_readme_safe) ... ok
+test_first_between_is_half_open (test_fsw_internal.CrossingTests.test_first_between_is_half_open) ... ok
+test_hysteresis_suppresses_ringing_retrigger (test_fsw_internal.CrossingTests.test_hysteresis_suppresses_ringing_retrigger) ... ok
+test_linear_interpolation_and_direction (test_fsw_internal.CrossingTests.test_linear_interpolation_and_direction) ... ok
+test_50ns_and_25ns_decks_have_identical_electrical_netlists (test_fsw_internal.DeckAndComparisonTests.test_50ns_and_25ns_decks_have_identical_electrical_netlists) ... ok
+test_distribution_comparison_uses_medians (test_fsw_internal.DeckAndComparisonTests.test_distribution_comparison_uses_medians) ... ok
+test_reads_interleaved_double_raw (test_fsw_internal.RawReaderTests.test_reads_interleaved_double_raw) ... ERROR
+test_rejects_fastaccess_raw (test_fsw_internal.RawReaderTests.test_rejects_fastaccess_raw) ... ok
+test_capacitance_estimate_requires_reset_switch_off (test_fsw_internal.RcModelTests.test_capacitance_estimate_requires_reset_switch_off) ... ok
+test_piecewise_linear_integrator_matches_constant_input_solution (test_fsw_internal.RcModelTests.test_piecewise_linear_integrator_matches_constant_input_solution) ... ok
+test_predicted_threshold_crossing_matches_closed_form (test_fsw_internal.RcModelTests.test_predicted_threshold_crossing_matches_closed_form) ... ok
+
+======================================================================
+ERROR: test_reads_interleaved_double_raw (test_fsw_internal.RawReaderTests.test_reads_interleaved_double_raw)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\tortl\AppData\Local\Programs\Python\Python312\Lib\shutil.py", line 633, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] ��һ����������ʹ�ô��ļ��������޷����ʡ�: 'C:\\Users\\tortl\\AppData\\Local\\Temp\\tmplzni66g8\\synthetic.raw'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\tortl\Documents\Codex\2026-11-20\c-users-tortl-downloads-dc-v1\work\supercap-ups-repo\sim\tps61088_v1_4\tests\test_fsw_internal.py", line 98, in test_reads_interleaved_double_raw
+    with tempfile.TemporaryDirectory() as temp:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tortl\AppData\Local\Programs\Python\Python312\Lib\tempfile.py", line 950, in __exit__
+    self.cleanup()
+  File "C:\Users\tortl\AppData\Local\Programs\Python\Python312\Lib\tempfile.py", line 954, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+  File "C:\Users\tortl\AppData\Local\Programs\Python\Python312\Lib\tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "C:\Users\tortl\AppData\Local\Programs\Python\Python312\Lib\shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tortl\AppData\Local\Programs\Python\Python312\Lib\shutil.py", line 635, in _rmtree_unsafe
+    onexc(os.unlink, fullname, err)
+  File "C:\Users\tortl\AppData\Local\Programs\Python\Python312\Lib\tempfile.py", line 909, in onexc
+    _os.unlink(path)
+PermissionError: [WinError 32] ��һ����������ʹ�ô��ļ��������޷����ʡ�: 'C:\\Users\\tortl\\AppData\\Local\\Temp\\tmplzni66g8\\synthetic.raw'
+
+----------------------------------------------------------------------
+Ran 14 tests in 0.799s
+
+FAILED (errors=1)

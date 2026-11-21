@@ -253,8 +253,8 @@ def compare_summaries(current, baseline):
             "current_p95": a["p95"] * scale,
             "baseline_p95": b["p95"] * scale,
         }
-    cur_freq = current.get("prescribed_edge_measurement", {}).get("frequency_khz")
-    base_freq = baseline.get("prescribed_edge_measurement", {}).get("frequency_khz")
+    cur_freq = current.get("prescribed_edge_measurement", {}).get("frequency_kHz")
+    base_freq = baseline.get("prescribed_edge_measurement", {}).get("frequency_kHz")
     return {
         "baseline_summary": baseline.get("raw_path"),
         "current_summary": current.get("raw_path"),
@@ -338,7 +338,9 @@ def main():
         )
 
     def vec(name):
-        return np.asarray(raw[:, idx[name]], dtype=float)
+        # np.interp otherwise copies the entire strided RAW column on each
+        # per-cycle lookup. One exact copy preserves samples and avoids this.
+        return np.array(raw[:, idx[name]], dtype=float, copy=True)
 
     t = vec("time")
     sw = vec("v(sw)")
