@@ -40,6 +40,33 @@ class CrossingTests(unittest.TestCase):
         self.assertEqual(fsw.first_between(events, 3.0, 4.0), 3.0)
         self.assertIsNone(fsw.first_between(events, 2.0, 2.0))
 
+    def test_crossing_details_reports_sample_bracket_width(self):
+        t = np.array([0.0, 25e-9, 50e-9])
+        y = np.array([0.0, 0.937361542, 1.0])
+        events, widths = fsw.crossings_with_brackets(t, y, 0.5, "rise")
+        self.assertEqual(len(events), 1)
+        self.assertAlmostEqual(widths[0], 25e-9, places=18)
+
+    def test_same_bracket_comparator_edge_does_not_reject_input_to_toff_chain(self):
+        # A comparator-output 0.5-V interpolation may fall just before the
+        # smooth input crossing when both events occupy the same RAW bracket.
+        paired = fsw.pair_cycle_events(
+            cycle_start=0.0,
+            cycle_limit=2.0,
+            input_cross=1.0,
+            comparator_rises=np.array([0.995]),
+            toff_rises=np.array([1.0917]),
+            gate_rises=np.array([1.0948]),
+            cap_reset_falls=np.array([1.0950]),
+            sw_falls=np.array([1.1094]),
+        )
+        self.assertLess(paired["comparator"], 1.0)
+        self.assertEqual(paired["toff"], 1.0917)
+        self.assertEqual(paired["gate"], 1.0948)
+        self.assertEqual(paired["reset"], 1.0950)
+        self.assertEqual(paired["sw_fall"], 1.1094)
+        self.assertTrue(paired["event_order_valid"])
+
 
 class RcModelTests(unittest.TestCase):
     def test_piecewise_linear_integrator_matches_constant_input_solution(self):
