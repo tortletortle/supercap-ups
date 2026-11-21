@@ -27,9 +27,9 @@ X1 0 boot comp en fb fsw ilim 0 nc0 nc1 0 ss sw sw sw sw vcc vin vout vout vout 
 .meas tran t90 WHEN V(vout)=10.8 RISE=1
 .meas tran t98 WHEN V(vout)=11.76 RISE=1
 * Late edge counts are intended to fall after soft-start; inspect V(sw) for ringing.
-.meas tran sw_t3001 WHEN V(sw)=10 RISE=3001
-.meas tran sw_t3101 WHEN V(sw)=10 RISE=3101
-.meas tran f_sw_khz PARAM 0.1/(sw_t3101-sw_t3001)
+.meas tran sw_t6001 WHEN V(sw)=10 RISE=6001
+.meas tran sw_t6101 WHEN V(sw)=10 RISE=6101
+.meas tran f_sw_khz PARAM 0.1/(sw_t6101-sw_t6001)
 .meas tran avg_vout AVG V(vout) FROM 24m TO 26m
 .meas tran ripple PP V(vout) FROM 24m TO 26m
 .meas tran peak_i MAX I(L1) FROM 24m TO 26m
