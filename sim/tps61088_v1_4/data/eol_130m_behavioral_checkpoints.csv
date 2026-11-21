@@ -1,0 +1,4 @@
+eta_boost_assumed,path_eff_assumed,cell_capacitance_F,cell_esr_ohm,path_resistance_ohm,pack_ocv_at_1p2s_V,cell_ocv_at_1p2s_V,pack_terminal_before_path_at_1p2s_V,converter_vin_at_1p2s_V,input_current_at_1p2s_A,hold_to_7V_pack_terminal_s,hold_to_7V_converter_vin_s
+0.90,0.99,6.3,0.13,0.06,8.070859,2.017715,7.062645,6.946313,1.938872,1.276500,1.163300
+0.92,0.99,6.3,0.13,0.06,8.107559,2.026890,7.131452,7.018825,1.877128,1.326800,1.213400
+0.95,0.99,6.3,0.13,0.06,8.158761,2.039690,7.226818,7.119286,1.792198,1.402300,1.288600
