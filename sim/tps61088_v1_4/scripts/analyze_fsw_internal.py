@@ -425,9 +425,12 @@ def main():
         reset = first_between(cap_reset_fall, reset_start, cycle_limit)
 
         predicted_cross = None
-        if down is not None:
+        # The 1-Mohm path is valid only while GATE_L is low. Stop the RC
+        # prediction at the observed gate turn-on, not after the capacitor reset.
+        rc_end = gate_on if gate_on is not None else down
+        if rc_end is not None and rc_end > up:
             predicted_cross = predict_rc_crossing(
-                t, sw, pvin, cap, up, down,
+                t, sw, pvin, cap, up, rc_end,
                 args.rfsw_ohm, args.roff_ohm, args.cfsw_f,
             )
 
