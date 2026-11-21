@@ -1,11 +1,12 @@
 * V1.4 EOL 1.2-s checkpoint: 4S 6.3F, 130mOhm/cell, 60mOhm path
 * Prebias from behavioral constant-power model at eta_boost=92%, path eta=99%.
 * 18-ms local switching window only; NOT a continuous 1.2-s switching simulation.
+* Input decoupling starts precharged to the battery open-circuit voltage before EN; this avoids an unrelated empty-input-cap inrush in this prebiased checkpoint.
 .include ../../tps61088_v1_3/model/TPS61088_LT.LIB
 VSENSE SRC VIN 0
 RPATH N4 SRC 0.06
-CIN VIN 0 35u
-CINHF VIN 0 100n
+CIN VIN 0 35u IC=8.107558690853
+CINHF VIN 0 100n IC=8.107558690853
 L1 VIN LD 3.3u
 RLD LD SW 0.026
 CBOOT BOOT SW 100n
