@@ -1,0 +1,65 @@
+{
+  "started_utc": "2026-11-21T06:43:59.889109+00:00",
+  "source_commit": "8bca353d8cc7301a6189c695c3d249d64da70247",
+  "branch": "v1.4-audit-frequency-ilim",
+  "initial_status": "clean",
+  "os": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "simulator_path": "C:\\Users\\tortl\\AppData\\Local\\Programs\\ADI\\LTspice\\LTspice.exe",
+  "simulator_version": "26.1.1.0",
+  "simulator_sha256": "3c144a2b3ec6a30baac6761c502d99b95aaa40b947ff5eca25b8fbd80d68af72",
+  "model_version": "TI TPS61088 TRANSIENT Final 1.00, 11MAY2015, PSpice 16.2.0.p001",
+  "model_sha256": "418466fbd205f9e9ec487bee1d9c1ada48858ff49eef67767e84706966fa1795",
+  "model_path": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\supercap-ups-repo\\sim\\tps61088_v1_3\\model\\TPS61088_LT.LIB",
+  "deck_sha256": "1dcda7583c0bcf3d6a893ab50df044a7ab62ec26d7d832d33399d5b6e1a8ff0a",
+  "simulator_command": [
+    "C:\\Users\\tortl\\AppData\\Local\\Programs\\ADI\\LTspice\\LTspice.exe",
+    "-b",
+    "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\supercap-ups-repo\\sim\\tps61088_v1_4\\netlists\\freq_vin7_rfsw324k.cir"
+  ],
+  "cwd": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\supercap-ups-repo\\sim\\tps61088_v1_4\\netlists",
+  "generator_command": [
+    "py",
+    "-3",
+    "sim/tps61088_v1_4/scripts/build_matrix.py"
+  ],
+  "generator_cwd": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\v14-generator-exact",
+  "generator_note": "Run in isolated source copy; 8 VIN=7 filenames gain p0; same 16 circuits after name normalization; README differs; source preserved.",
+  "simulator_pid": 39952,
+  "finished_utc": "2026-11-21T06:47:50.251600+00:00",
+  "elapsed_s": 230.094,
+  "exit_code": 0,
+  "deck_sha256_after_run": "1dcda7583c0bcf3d6a893ab50df044a7ab62ec26d7d832d33399d5b6e1a8ff0a",
+  "log_sha256": "b0090d6e1660313d439d720734f8a7311b22495e3b7293109ac23b71bdaabe19",
+  "native_files_local": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\v14-first-case-native",
+  "native_files": [
+    {
+      "name": "freq_vin7_rfsw324k.db",
+      "bytes": 32768,
+      "sha256": "9084abc9cfadc0ddbf3c6e99c4ed9acf2e70a31b104bb8ed0ad306be3d553484"
+    },
+    {
+      "name": "freq_vin7_rfsw324k.log",
+      "bytes": 1971,
+      "sha256": "b0090d6e1660313d439d720734f8a7311b22495e3b7293109ac23b71bdaabe19"
+    },
+    {
+      "name": "freq_vin7_rfsw324k.op.raw",
+      "bytes": 1252,
+      "sha256": "5f459902b4b6683ac08dba04d65bbd025685c6e2561d29e6f7b480238674564e"
+    },
+    {
+      "name": "freq_vin7_rfsw324k.raw",
+      "bytes": 226188502,
+      "sha256": "7551601fea3f7f93ca93c0c71be42ce3e743ff49fcc965abde3c9bd8ad554cf2"
+    }
+  ],
+  "analysis_environment": {
+    "numpy": "2.5.3",
+    "matplotlib": "3.11.2",
+    "export_script": "sim/tps61088_v1_4/scripts/analyze_first_case.py"
+  },
+  "official_model_archive_local_sha256": "39f724accc32b8930e06c9f7a979fef5e3163ccd1e2ac027e10f546e7d624ce1",
+  "model_adaptation_verified_against_local_official_archive": true,
+  "official_lib_original_sha256": "27a088f856aaaf4219a494582fba73a801650d7bae09b5b7fd77023c791ebdf0"
+}
