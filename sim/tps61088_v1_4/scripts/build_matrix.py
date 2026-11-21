@@ -129,14 +129,14 @@ def main():
             (nets / f"{name}.cir").write_text(deck(name, vin, 324, rlim_k), encoding="ascii")
             count += 1
     (nets / "README.md").write_text(
-        f"# V1.4 LTspice audit matrix\n\\nGenerated {count} test decks by "
+        f"# V1.4 LTspice audit matrix\n\nGenerated {count} test decks by "
         "py -3 sim/tps61088_v1_4/scripts/build_matrix.py. All decks use the V1.3 TI macro-model, "
         "final-BOM passive values, MODE=0 (FPWM), and late switching-edge measurements. "
-        "These are unrun test inputs, not results.\\n\\n"
+        "These are unrun test inputs, not results.\n\n"
         "Run the .cir files in LTspice. Compare freq_vin cases for RFSW response "
         "and ilim_vin cases for current-limit behavior. Inspect V(sw) for ringing. "
         "Confirm sw_t3001 and sw_t3101 occur after t98; if not, raise the edge "
-        "indices and transient stop time.\\n", encoding="utf-8")
+        "indices and transient stop time.\n", encoding="utf-8")
     print(f"Generated {count} LTspice decks in {nets}")
 
 
