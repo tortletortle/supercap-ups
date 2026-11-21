@@ -127,6 +127,8 @@ def main():
     cap_minus_pvin_rise = crossings(t, cap - pvin, 0.0, "rise")
     cap_reset = crossings(t, cap, CAP_RESET_V, "fall")
     gate_rise = crossings(t, gate, 0.5, "rise")
+    comparator_rise = crossings(t, comparator_out, 0.5, "rise")
+    toff_rise = crossings(t, toff, 0.5, "rise")
     vout_98 = crossings(t, vout, 11.76, "rise")
 
     rows = []
@@ -141,6 +143,8 @@ def main():
         if cross is None:
             continue
         reset = first_between(cap_reset, cross, down)
+        comp_on = first_between(comparator_rise, cross, down)
+        toff_on = first_between(toff_rise, comp_on if comp_on is not None else cross, down)
         gate_on = first_between(gate_rise, cross, down)
 
         q = (t >= up + 30e-9) & (t <= down - 30e-9)
@@ -167,10 +171,16 @@ def main():
             "sw_high_s": down - up,
             "pvin_cross_s": cross,
             "sw_rise_to_pvin_cross_s": cross - up,
+            "cross_to_comparator_output_rise_s": comp_on - cross if comp_on is not None else None,
+            "comparator_output_rise_to_u5_toff_0p5V_s": toff_on - comp_on if toff_on is not None and comp_on is not None else None,
+            "cross_to_u5_toff_0p5V_s": toff_on - cross if toff_on is not None else None,
             "cross_to_gate_l_rise_s": gate_on - cross if gate_on is not None else None,
+            "u5_toff_0p5V_to_gate_l_rise_s": gate_on - toff_on if gate_on is not None and toff_on is not None else None,
+            "gate_l_rise_to_cap_reset_0p5V_s": reset - gate_on if reset is not None and gate_on is not None else None,
             "cross_to_cap_reset_0p5V_s": reset - cross if reset is not None else None,
             "cross_to_sw_fall_s": down - cross,
             "cap_reset_to_sw_fall_s": down - reset if reset is not None else None,
+            "comparator_output_rise_to_sw_fall_s": down - comp_on if comp_on is not None else None,
             "pvin_at_cross_V": vth,
             "cap_at_sw_rise_V": v0,
             "sw_high_pre_cross_avg_V": sw_avg,
