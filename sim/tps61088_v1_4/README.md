@@ -4,7 +4,7 @@
 
 ## 本轮目的
 
-V1.4 不改变 V1.3 主功率拓扑。它纠正参数解释和联合网表配置差异，并生成下一轮可复跑的 LTspice 测试输入。初始提交包含计算、审计记录和待运行网表；现已完成第一份 `freq_vin7_rfsw324k.cir` 的实际 LTspice 仿真，其余 15 份待运行。
+V1.4 不改变 V1.3 主功率拓扑。它纠正参数解释和联合网表配置差异，并生成下一轮可复跑的 LTspice 测试输入。初始提交包含计算、审计记录和待运行网表；现已完成第一份 freq_vin7_rfsw324k.cir 的实际 LTspice 仿真，其余 15 份待运行。
 
 [第一轮实际仿真报告](results/first_case/实验报告.md)：原网表收敛完成，实际开关频率 442.336492 kHz，较理论 496.137217 kHz 低 10.843920%；输出 11.998744 V / 1 A，稳态纹波 34.700594 mVpp，电感稳态/全程峰值 2.807664 / 2.864970 A。原规定测量时序通过；频偏根因和实际效率仍待确认。附原日志、窗口全部采样、PNG、CSV、版本和哈希，RAW 大文件保留本地。
 
@@ -80,18 +80,26 @@ V1.3 原联合网表使用 112.5 mΩ/颗，不是采购文档采用的 EOL 压�
 ## 4. V1.4 文件与运行方式
 
 - scripts/build_matrix.py：生成 TI 频率设定 CSV、FPWM 限流筛选 CSV、V1.3 启动边沿审计 CSV，以及 16 份 LTspice 测试网表。
+- tests/test_build_matrix.py：生成器回归测试，使用 Python 标准库和临时目录。
 - data/ti_frequency_setpoints.csv：TI Eq. 2 的 RFSW 计算。
-- data/ti_ilim_screen.csv：TI Eq. 4 的限流候选初筛。
+- data/ti_ilim_screen.csv：TI Eq. 4 的限流候选初筛，保留绝对与百分比裕量。
 - data/v1_3_startup_edge_observations.csv：原始日志的早期 SW 边沿与 t98 对照。
 - data/eol_130m_behavioral_checkpoints.csv、data/eol_130m_eta_threshold.csv：130 mΩ/颗 EOL 行为级计算。
 - netlists/：生成 4 份频率对照和 12 份 RILIM 对照。
 - joint/eol_1p2s_130m_92pct.cir：最终 BOM 被动参数、MODE=0、RILIM=174 kΩ 候选的 EOL 1.2 s 局部窗口。
+- [model_source_audit.md](model_source_audit.md)：TI 官方模型资源、现有模型身份和待完成的二进制比对记录。
 
 在仓库根目录运行：
 
-**生成前先备份或使用独立镜像**：首轮发现 `vin7p0` / `vin7` 命名差异、README 被脚本重写及限流 CSV 丢失百分比列，逐文件再现未通过。16 份电路/测量在名称归一后等效；本轮保留已提交输入，见第一轮报告的差异证据。
+先运行生成器回归测试：
+
+    py -3 -m unittest discover -s sim/tps61088_v1_4/tests -v
+
+再生成网表与计算 CSV：
 
     py -3 sim/tps61088_v1_4/scripts/build_matrix.py
+
+首轮暴露的三项生成器缺陷已在当前分支修复：VIN=7 V 网表命名统一为 vin7；脚本不再覆盖人工维护的 netlists/README.md；限流 CSV 恢复 minimum_headroom_pct。测试会检查 16 份网表、精确文件名、CSV 百分比字段、重复生成一致性和 README 保护。
 
 然后在 LTspice 中运行 sim/tps61088_v1_4/netlists/ 下的网表。每份日志至少检查：
 
@@ -111,8 +119,10 @@ V1.3 原联合网表使用 112.5 mΩ/颗，不是采购文档采用的 EOL 压�
 | MODE 接法差异审计 | 完成；V1.3 联合配置需纠正 |
 | RILIM 方程与候选筛选 | 计算完成；候选待仿真 |
 | 130 mΩ + 60 mΩ EOL 行为级重算 | 完成；假设待实测 |
-| 16 份频率/限流 LTspice 测试输入 | 第一份实际完成；其余 15 份待运行；生成器逐文件再现有差异 |
+| 16 份频率/限流 LTspice 测试输入 | 第一份实际完成；其余 15 份待运行 |
+| 生成器回归测试 | 3 项通过（本地临时目录验证） |
 | 首轮 7 V / RFSW 324 kΩ 频率基准 | 测量时序、调压、稳态纹波通过；实测 442.336 kHz，频偏 −10.844% 待定位 |
+| 官方模型资源二进制对照 | 两个资源已在 TI 产品页确认；下载包内容比对 pending |
 | 130 mΩ EOL 局部开关窗口 | 网表已生成；待运行 |
 | 连续 1.2 s 器件级联合仿真 | 未完成 |
 | 台架效率、热态限流、超级电容脉冲 ESR | 未完成 |
@@ -120,5 +130,6 @@ V1.3 原联合网表使用 112.5 mΩ/颗，不是采购文档采用的 EOL 压�
 ## 参考资料
 
 - TI TPS61088 数据手册 SLVSCM8D（Rev. D）：第 5.1 节 MODE，第 7.3.3 节频率设定方程，第 7.3.4 节峰值限流方程：https://www.ti.com/lit/ds/symlink/tps61088.pdf
+- TI TPS61088 产品与模型资源页：https://www.ti.com/product/TPS61088
 - V1.3 器件级仿真报告：../tps61088_v1_3/DC_V1_3_TPS61088仿真报告.md
 - V1.3 原联合窗口摘要：../tps61088_v1_3/joint/window_summary.md，其中已增加配置勘误。
