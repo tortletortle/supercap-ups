@@ -16,6 +16,9 @@ RILIM_POINTS = (100, 160, 174, 180, 200, 220)
 FREQ_CASES = ((7.0, 324), (7.0, 510), (9.4, 324), (9.4, 517))
 ILIM_VINS = (7.0, 9.4)
 V1_3_STARTUP_PEAK_A = 2.90306045263
+# Highest full-run I(L1) peak observed in V1.4 round two; macro-model only.
+V1_4_ROUND2_FULL_PEAK_A = 3.421603842403414
+V1_4_ROUND2_PEAK_SOURCE = "VIN=7.0V,RFSW=510k,MAX_I_L1_0_26ms"
 OBS = (
     (324, 7.0, .00935581946186, .00950739245064, .0112016221142, "logs/bom_first/bom_7.log"),
     (324, 8.5, .00938894109488, .00952754372400, .0112052446606, "logs/bom_retry/bom_8p5.log"),
@@ -116,20 +119,36 @@ def main():
     ])
 
     ilim_rows = []
+    crosscase_rows = []
     for r in RILIM_POINTS:
         typical = ilim_fpwm(r * 1e3)
         worst_case = typical - 1.3
-        headroom = worst_case - V1_3_STARTUP_PEAK_A
+        headroom_v13 = worst_case - V1_3_STARTUP_PEAK_A
+        headroom_v14 = worst_case - V1_4_ROUND2_FULL_PEAK_A
         ilim_rows.append({
             "rilim_kohm": r,
             "ilim_typical_FPWM_A": f"{typical:.4f}",
             "ilim_worst_case_screen_A": f"{worst_case:.4f}",
             "V1_3_startup_peak_A": f"{V1_3_STARTUP_PEAK_A:.4f}",
-            "minimum_headroom_A": f"{headroom:.4f}",
-            "minimum_headroom_pct": f"{100 * headroom / V1_3_STARTUP_PEAK_A:.2f}",
+            "minimum_headroom_A": f"{headroom_v13:.4f}",
+            "minimum_headroom_pct": f"{100 * headroom_v13 / V1_3_STARTUP_PEAK_A:.2f}",
+            "screen_only_not_a_release_decision": "true",
+        })
+        crosscase_rows.append({
+            "rilim_kohm": r,
+            "ilim_typical_FPWM_A": f"{typical:.4f}",
+            "ilim_worst_case_screen_A": f"{worst_case:.4f}",
+            "V1_3_startup_peak_A": f"{V1_3_STARTUP_PEAK_A:.6f}",
+            "headroom_vs_V1_3_A": f"{headroom_v13:.4f}",
+            "headroom_vs_V1_3_pct": f"{100 * headroom_v13 / V1_3_STARTUP_PEAK_A:.2f}",
+            "V1_4_round2_full_run_peak_A": f"{V1_4_ROUND2_FULL_PEAK_A:.6f}",
+            "V1_4_round2_peak_source_case": V1_4_ROUND2_PEAK_SOURCE,
+            "headroom_vs_V1_4_A": f"{headroom_v14:.4f}",
+            "headroom_vs_V1_4_pct": f"{100 * headroom_v14 / V1_4_ROUND2_FULL_PEAK_A:.2f}",
             "screen_only_not_a_release_decision": "true",
         })
     write_csv(data / "ti_ilim_screen.csv", ilim_rows)
+    write_csv(data / "ti_ilim_crosscase_screen.csv", crosscase_rows)
 
     write_csv(data / "v1_3_startup_edge_observations.csv", [
         {"rfsw_kohm": r, "vin_V": v, "sw_t1_s": f"{t1:.12f}",
