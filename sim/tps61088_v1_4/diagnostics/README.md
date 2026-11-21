@@ -97,3 +97,19 @@ The 50 ns run should reproduce the original 442.336492 kHz result within numeric
 
 No new LTspice run has been performed for these prepared decks yet. The 12-case RILIM matrix remains blocked pending this timing review and the updated current-limit screen.
 
+## New timing-budget hypothesis from existing data (not a new simulation)
+
+The current 883-cycle analysis gives a useful prioritization:
+
+- The 23 pF / 1 MΩ FSW charging-ramp prediction differs from the reconstructed actual ramp by only about 0.100 ns on average.
+- The reconstructed PVIN-threshold crossing to SW falling interval is 110.469 ns.
+- In the macro-model, R_U5_R9 = 90/0.693 Ω ≈ 129.870 Ω and C_U5_C7 = 1 nF. Their nominal RC half-step crossing is about 90.019 ns.
+- The 110.469 ns post-threshold interval exceeds the datasheet's 89 ns delay term by 21.469 ns. Multiplying by VOUT/VIN = 12/7 gives 36.804 ns of equivalent period contribution.
+- The simplified leaky-ramp period model leaves 38.172 ns unexplained; after this delay adjustment, only 1.368 ns remains.
+
+This numerical alignment makes the comparator-to-U5_TOFF-to-GATE_L-to-SW path the highest-priority hypothesis for the residual. It is not yet causal proof: the 89 ns datasheet parameter and reconstructed PVIN-to-SW edge interval may not share exactly the same timing boundary.
+
+The RAW analyzer now separates the direct events: PVIN crossing, comparator-output rise, U5_TOFF 0.5 V crossing, GATE_L rise, timing-capacitor reset, and SW falling. It also reports the direct U5_TDELAY_SW and U5_TEND values. Use these event intervals to determine whether the nominal 90 ns U5_TOFF RC and the remaining logic/driver propagation explain the observed 110.469 ns.
+
+Do not continue tuning the 23 pF / 1 MΩ ramp to explain this residual unless the direct-node data contradict the current charge-balance result.
+
