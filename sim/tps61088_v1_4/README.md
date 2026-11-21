@@ -117,7 +117,7 @@ V1.3 原联合网表使用 112.5 mΩ/颗，不是采购文档采用的 EOL 压�
 - [model_source_audit.md](model_source_audit.md)：TI 官方模型资源、现有模型身份和已完成的二进制比对记录。
 - diagnostics/freq_vin7_rfsw324k_fsw_probe.cir：仅增加 V(FSW)、I(RFSW) 保存量和测量的诊断副本，不计入 16 份矩阵，不替换原始基准网表。
 - diagnostics/freq_vin7_rfsw324k_internal_probe_50ns.cir、diagnostics/freq_vin7_rfsw324k_internal_probe_25ns.cir：直接保存 X1 内部定时节点的只读探针，分别用于原 50 ns Gear 基线复现和 25 ns 最大步长敏感性对照；尚未运行。
-- scripts/analyze_fsw_internal.py：对内部节点 RAW 做逐周期事件分解、RC 充电积分和 50/25 ns 对照后处理。
+- scripts/analyze_fsw_internal.py：对内部节点 RAW 做逐周期事件分解（PVIN交点、比较器输出、U5_TOFF 0.5V、GATE_L、复位、SW下降）、RC 充电积分和 50/25 ns 对照后处理。
 - [diagnostics/README.md](diagnostics/README.md)：说明 FSW 定时电流假设、等效定时电阻推算和诊断观察方法。 新增直接内部节点探针运行说明与验收目标。
 
 在仓库根目录运行：
@@ -154,8 +154,8 @@ V1.3 原联合网表使用 112.5 mΩ/颗，不是采购文档采用的 EOL 压�
 | 生成器回归测试 | 4 项；前三项已通过，新增交叉筛选测试待本地复跑 |
 | 首轮 7 V / RFSW 324 kΩ 频率基准 | 测量时序、调压、稳态纹波通过；实测 442.336 kHz，频偏 −10.844% 待定位 |
 | 官方模型资源二进制对照 | 两个官方 ZIP 实际取得；LIB 仅换行不同，统一后含全部 27 子电路一致 |
-| FSW 定时路径诊断 | 已实际完成；首轮频偏重现；斜坡/漏支路方向有证据，唯一根因待验证 |
-| 直接内部节点探针与 50/25 ns Gear 敏感性对照 | 网表和后处理脚本已准备；尚未运行，等待 LTspice 原始日志与 RAW |
+| FSW 定时路径诊断 | 23pF/1MΩ 斜坡模型与既有波形相容；剩余频偏数值上高度指向比较器之后的 U5_TOFF 延迟链，尚待直接节点验证 |
+| 直接内部节点探针与 50/25 ns Gear 敏感性对照 | 两份网表与逐周期后处理已准备；尚未运行，等待 LTspice 原始日志与 RAW |
 | 130 mΩ EOL 局部开关窗口 | 网表已生成；待运行 |
 | 连续 1.2 s 器件级联合仿真 | 未完成 |
 | 台架效率、热态限流、超级电容脉冲 ESR | 未完成 |
