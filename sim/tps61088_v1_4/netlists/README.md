@@ -1,6 +1,6 @@
 # V1.4 LTspice audit matrix
 
-Run python scripts/build_matrix.py from the repository root to generate 16 test decks.
+From the repository root, run py -3 sim/tps61088_v1_4/scripts/build_matrix.py to generate 16 test decks.
 
 - 4 frequency cases: VIN=7/9.4 V with RFSW=324/510/517 kΩ.
 - 12 current-limit cases: VIN=7/9.4 V with RILIM=100/160/174/180/200/220 kΩ.
