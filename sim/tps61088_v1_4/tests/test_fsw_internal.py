@@ -77,7 +77,7 @@ class RcModelTests(unittest.TestCase):
         t = np.linspace(0.0, 1e-6, 101)
         cap = np.linspace(0.2, 0.8, len(t))
         capacitance = 23e-12
-        current = np.full_like(t, capacitance * (cap[-1] - cap[0]) / (t[-1] - t[0]))
+        current = (np.full_like(t, capacitance * (cap[-1] - cap[0]) / (t[-1] - t[0])) + cap / 1e6)
         mask = np.ones(len(t), dtype=bool)
         gate = np.zeros_like(t)
         estimate, low_fraction = fsw.estimate_capacitance(
