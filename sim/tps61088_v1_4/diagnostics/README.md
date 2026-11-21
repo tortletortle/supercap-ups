@@ -52,3 +52,48 @@ From this directory on the Windows LTspice machine:
     & 'C:\Users\<user>\AppData\Local\Programs\ADI\LTspice\LTspice.exe' -b 'freq_vin7_rfsw324k_fsw_probe.cir'
 
 The executable path is environment-specific. Preserve the original baseline log and RAW. Keep this diagnostic result in a separate folder and do not mix it with the 16-case matrix acceptance count.
+
+## Direct internal-node probe (prepared; not yet simulated)
+
+The first timing analysis reconstructed U5_PVIN from external SW and a small internal divider network. That reconstruction is useful but conditional. The next experiment saves the actual internal nodes through LTspice hierarchical .save references; it does not add components or alter the macro-model.
+
+Prepared decks:
+
+- freq_vin7_rfsw324k_internal_probe_50ns.cir: original Gear / 50 ns maximum step.
+- freq_vin7_rfsw324k_internal_probe_25ns.cir: identical electrical deck and Gear settings, changing only maximum step to 25 ns.
+
+Both retain the original VIN=7 V, RFSW=324 kΩ, RILIM=100 kΩ, MODE=0, 26 ms transient, original 10 V threshold and RISE=6001/6101 measurements. The only netlist change is explicit saving of hierarchical nodes:
+
+- X1:U5_PVIN and X1:U5_N01584: actual comparator threshold and timing-capacitor voltage.
+- X1:U5_IFSW: internal FSW current-sense signal.
+- X1:U5_TSW, X1:U5_TDELAY_SW, X1:U5_TOFF, X1:U5_TEND: timing-path state and delay quantities.
+- X1:GATE_L, X1:SSEND, X1:MODE_OK, X1:U5_SEL_TOFF, X1:U5_TOFF_SEL, X1:U5_TOFF_SEL_1, X1:U5_N16903113: switching control and comparator/selection state.
+
+LTspice documents hierarchical .save references using colon notation (for example, V(x23:node) or wildcard V(x23:*)). If the run does not emit the requested vectors, check **Simulate → Settings → Save Defaults → Save Subcircuit Node Voltages** and rerun. Do not add voltage sources or alter the LIB to expose nodes unless this read-only route fails.
+
+### Run on the Windows LTspice machine
+
+From the diagnostics directory, run each deck separately and retain its own .log and .raw:
+
+    & 'C:\Users\<user>\AppData\Local\Programs\ADI\LTspice\LTspice.exe' -b 'freq_vin7_rfsw324k_internal_probe_50ns.cir'
+    & 'C:\Users\<user>\AppData\Local\Programs\ADI\LTspice\LTspice.exe' -b 'freq_vin7_rfsw324k_internal_probe_25ns.cir'
+
+Then run the read-only analyzer from the repository root:
+
+    py -3 sim/tps61088_v1_4/scripts/analyze_fsw_internal.py --raw <path-to-50ns.raw> --out sim/tps61088_v1_4/results/fsw_internal_probe_50ns
+    py -3 sim/tps61088_v1_4/scripts/analyze_fsw_internal.py --raw <path-to-25ns.raw> --out sim/tps61088_v1_4/results/fsw_internal_probe_25ns
+
+The analyzer emits per-cycle timing CSV and a JSON summary. Keep the large RAW files local; archive their SHA-256, LTspice logs, and generated summaries in the repository.
+
+### What this experiment is intended to discriminate
+
+1. **Threshold reconstruction error:** compare directly saved X1:U5_PVIN with the earlier reconstructed 1.7377 V threshold.
+2. **RC ramp model:** compare actual X1:U5_N01584 against the 23 pF / 1 MΩ differential equation using measured I(RFSW).
+3. **Current-sense equivalence:** compare X1:U5_IFSW against -I(RFSW); do not assume their equivalence before checking the data.
+4. **Logic and propagation delay:** separate comparator crossing, GATE_L transition, capacitor reset, and SW falling edge using directly saved nodes.
+5. **Numerical sensitivity:** compare the 50 ns and 25 ns Gear results. Compare distributions and event intervals, not sample-by-sample RAW values, because adaptive time grids differ.
+
+The 50 ns run should reproduce the original 442.336492 kHz result within numerical repeatability. The 25 ns run is a sensitivity check, not an expected exact target. Do not call the mechanism a unique root cause unless the directly observed node sequence and timestep comparison account for the remaining timing residual.
+
+No new LTspice run has been performed for these prepared decks yet. The 12-case RILIM matrix remains blocked pending this timing review and the updated current-limit screen.
+
