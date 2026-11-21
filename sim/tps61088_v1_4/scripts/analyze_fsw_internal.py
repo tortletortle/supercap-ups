@@ -33,6 +33,7 @@ CYCLE_FIELDS = (
     "raw_10v_rises_in_period", "raw_10v_falls_in_period",
     "pvin_cross_s", "sw_rise_to_pvin_cross_s",
     "comparator_output_rise_s", "cross_to_comparator_output_rise_s",
+    "comparator_output_rise_bracket_width_s",
     "u5_toff_0p5V_rise_s", "comparator_output_rise_to_u5_toff_0p5V_s",
     "cross_to_u5_toff_0p5V_s", "gate_l_rise_s", "cross_to_gate_l_rise_s",
     "u5_toff_0p5V_to_gate_l_rise_s", "cap_reset_0p5V_fall_s",
@@ -60,14 +61,20 @@ def trapezoid(y, x):
     return float(fn(y, x))
 
 
-def crossings(t, y, level, direction):
-    """Linearly interpolated threshold crossings; zero-duration samples are ignored."""
+def crossings_with_brackets(t, y, level, direction):
+    """Return interpolated crossings and their source-sample bracket widths.
+
+    A wide bracket is especially important for near-discontinuous comparator
+    outputs: linear interpolation of a 0-to-1 transition across one max-step
+    interval is not a precise physical propagation-delay measurement.
+    """
     t = np.asarray(t, dtype=float)
     y = np.asarray(y, dtype=float)
     if t.ndim != 1 or y.ndim != 1 or len(t) != len(y):
         raise ValueError("t and y must be equal-length one-dimensional arrays")
     if len(t) < 2:
-        return np.asarray([], dtype=float)
+        empty = np.asarray([], dtype=float)
+        return empty, empty
     if direction == "rise":
         mask = (y[:-1] < level) & (y[1:] >= level)
     elif direction == "fall":
@@ -76,15 +83,64 @@ def crossings(t, y, level, direction):
         raise ValueError("direction must be 'rise' or 'fall'")
     k = np.flatnonzero(mask)
     if not len(k):
-        return np.asarray([], dtype=float)
+        empty = np.asarray([], dtype=float)
+        return empty, empty
     dy = y[k + 1] - y[k]
     dt = t[k + 1] - t[k]
     valid = np.isfinite(dy) & np.isfinite(dt) & (dy != 0) & (dt > 0)
     k, dy, dt = k[valid], dy[valid], dt[valid]
     if not len(k):
-        return np.asarray([], dtype=float)
-    return t[k] + (level - y[k]) / dy * dt
+        empty = np.asarray([], dtype=float)
+        return empty, empty
+    event_times = t[k] + (level - y[k]) / dy * dt
+    return event_times, dt
 
+
+def crossings(t, y, level, direction):
+    """Linearly interpolated threshold crossings."""
+    return crossings_with_brackets(t, y, level, direction)[0]
+
+
+def pair_cycle_events(cycle_start, cycle_limit, input_cross,
+                      comparator_rises, toff_rises, gate_rises,
+                      cap_reset_falls, sw_falls):
+    """Pair timing events using the comparator INPUT crossing as time zero.
+
+    The TI macro-model's ideal comparator source switches on
+    V(U5_N01584) > V(U5_PVIN). Its output node U5_N16903113 is then shaped by
+    a 1-ohm / 1-nF RC, whose fast transition can be under-sampled by a 25/50-ns
+    RAW grid. Therefore its linearly interpolated 0.5-V crossing is diagnostic
+    only and must not gate or invalidate the smooth downstream U5_TOFF event.
+    """
+    comparator = first_between(comparator_rises, cycle_start, cycle_limit)
+    toff = (
+        first_between(toff_rises, input_cross, cycle_limit)
+        if input_cross is not None else None
+    )
+    gate = (
+        first_between(gate_rises, input_cross, cycle_limit)
+        if input_cross is not None else None
+    )
+    sw_fall = first_between(sw_falls, cycle_start, cycle_limit)
+    reset_start = gate if gate is not None else (
+        input_cross if input_cross is not None else cycle_start
+    )
+    reset = first_between(cap_reset_falls, reset_start, cycle_limit)
+
+    ordered = [input_cross, toff, gate, reset, sw_fall]
+    event_order_valid = (
+        all(value is not None for value in ordered)
+        and all(ordered[i] <= ordered[i + 1] + 1e-15
+                for i in range(len(ordered) - 1))
+    )
+    return {
+        "comparator": comparator,
+        "toff": toff,
+        "gate": gate,
+        "reset": reset,
+        "sw_fall": sw_fall,
+        "event_order_valid": bool(event_order_valid),
+    }
 
 def hysteretic_rising_crossings(t, y, high, rearm):
     """Accept a high-threshold rise only after the signal has first fallen below rearm.
@@ -228,6 +284,7 @@ def compare_summaries(current, baseline):
     fields = (
         "period_s", "sw_high_s", "sw_rise_to_pvin_cross_s",
         "cross_to_comparator_output_rise_s",
+        "comparator_output_rise_bracket_width_s",
         "comparator_output_rise_to_u5_toff_0p5V_s",
         "cross_to_u5_toff_0p5V_s", "cross_to_gate_l_rise_s",
         "u5_toff_0p5V_to_gate_l_rise_s",
@@ -384,7 +441,9 @@ def main():
     cap_minus_pvin_rise = crossings(t, cap - pvin, 0.0, "rise")
     cap_reset_fall = crossings(t, cap, DEFAULT_CAP_RESET_V, "fall")
     gate_rise = crossings(t, gate, DEFAULT_LOGIC_EDGE_V, "rise")
-    comparator_rise = crossings(t, comparator_out, DEFAULT_LOGIC_EDGE_V, "rise")
+    comparator_rise, comparator_rise_brackets = crossings_with_brackets(
+        t, comparator_out, DEFAULT_LOGIC_EDGE_V, "rise"
+    )
     toff_rise = crossings(t, toff, DEFAULT_LOGIC_EDGE_V, "rise")
     vout_98 = crossings(t, vout, 0.98 * args.vout_target_v, "rise")
 
@@ -407,24 +466,21 @@ def main():
         raw_rises_in_period = raw_rise_hi - raw_rise_lo
         raw_falls_in_period = raw_fall_hi - raw_fall_lo
 
-        down = first_between(raw_sw_fall, up, cycle_limit)
         cross = first_between(cap_minus_pvin_rise, up, cycle_limit)
-        comp_on = (
-            first_between(comparator_rise, cross, cycle_limit)
-            if cross is not None else None
+        paired = pair_cycle_events(
+            up, cycle_limit, cross, comparator_rise, toff_rise,
+            gate_rise, cap_reset_fall, raw_sw_fall
         )
-        toff_on = (
-            first_between(toff_rise, comp_on, cycle_limit)
-            if comp_on is not None else None
-        )
-        gate_on = (
-            first_between(gate_rise, cross, cycle_limit)
-            if cross is not None else None
-        )
-        reset_start = gate_on if gate_on is not None else (
-            cross if cross is not None else up
-        )
-        reset = first_between(cap_reset_fall, reset_start, cycle_limit)
+        comp_on = paired["comparator"]
+        toff_on = paired["toff"]
+        gate_on = paired["gate"]
+        reset = paired["reset"]
+        down = paired["sw_fall"]
+        comp_bracket_width = None
+        if comp_on is not None:
+            comp_index = int(np.searchsorted(comparator_rise, comp_on, side="left"))
+            if comp_index < len(comparator_rise_brackets):
+                comp_bracket_width = float(comparator_rise_brackets[comp_index])
 
         predicted_cross = None
         # The 1-Mohm path is valid only while GATE_L is low. Stop the RC
@@ -451,19 +507,14 @@ def main():
         missing_events = [
             name for name, value in (
                 ("next_sw_rise", next_up), ("sw_fall_10V", down),
-                ("pvin_cross", cross), ("comparator_output_rise", comp_on),
-                ("u5_toff_0p5V_rise", toff_on), ("gate_l_rise", gate_on),
-                ("cap_reset_0p5V_fall", reset),
+                ("pvin_cross", cross), ("u5_toff_0p5V_rise", toff_on),
+                ("gate_l_rise", gate_on), ("cap_reset_0p5V_fall", reset),
             ) if value is None
         ]
-        ordered_events = [cross, comp_on, toff_on, gate_on, reset, down]
-        event_order_valid = (
-            all(value is not None for value in ordered_events)
-            and all(
-                ordered_events[i] <= ordered_events[i + 1] + 1e-15
-                for i in range(len(ordered_events) - 1)
-            )
-        )
+        # The comparator output's interpolated 0.5-V crossing is diagnostic only.
+        # Its same-bracket ordering versus the smooth input crossing is not used
+        # as a cycle-validity gate.
+        event_order_valid = paired["event_order_valid"]
         if not event_order_valid and not missing_events:
             missing_events.append("event_order_violation")
         if raw_rises_in_period != 1:
@@ -541,6 +592,7 @@ def main():
             "sw_rise_to_pvin_cross_s": cross - up if cross is not None else None,
             "comparator_output_rise_s": comp_on,
             "cross_to_comparator_output_rise_s": cross_to_comp,
+            "comparator_output_rise_bracket_width_s": comp_bracket_width,
             "u5_toff_0p5V_rise_s": toff_on,
             "comparator_output_rise_to_u5_toff_0p5V_s": comp_to_toff,
             "cross_to_u5_toff_0p5V_s": cross_to_toff,
@@ -673,7 +725,9 @@ def main():
         "interpretation_limits": [
             "This is a TI macro-model simulation, not a measurement of silicon internals.",
             "Raw 10-V crossings are retained for the original RISE=6001/6101 measurement; hysteretic edges are used only to suppress ringing-induced duplicate cycles.",
-            "Cycles with missing, duplicated, or out-of-order events are reported and excluded from valid-cycle statistics rather than silently discarded.",
+            "Cycles with missing, duplicated, or out-of-order input-cross, U5_TOFF, GATE_L, reset, or SW events are reported and excluded from valid-cycle statistics rather than silently discarded.",
+            "The comparator output 0.5-V crossing is diagnostic only: the TI macro-model's ideal comparator source switches at U5_N01584 > U5_PVIN, while the output node is shaped by a 1-ohm/1-nF RC that is under-resolved by 25/50-ns sampling. Its interpolated edge is not used to reject a cycle.",
+            "The primary comparator-to-delay interval is measured from the smooth U5_N01584-U5_PVIN input crossing to the smooth U5_TOFF 0.5-V crossing; this includes the comparator output RC and the U5_TOFF RC.",
             "The RC ODE uses measured SW(t) as a piecewise-linear input and assumes the 1-Mohm reset path is OFF during the charging interval.",
             "Charge-derived capacitance is reported only when GATE_L stays low throughout the guarded integration window.",
             "U5_IFSW is compared against -I(RFSW); its numeric interpretation as amperes depends on the unity-gain current-sense source in the macro-model.",
