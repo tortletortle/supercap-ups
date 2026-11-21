@@ -1,0 +1,7 @@
+rilim_kohm,ilim_typical_FPWM_A,ilim_worst_case_screen_A,V1_3_startup_peak_A,headroom_vs_V1_3_A,headroom_vs_V1_3_pct,V1_4_round2_full_run_peak_A,V1_4_round2_peak_source_case,headroom_vs_V1_4_A,headroom_vs_V1_4_pct,screen_only_not_a_release_decision
+100,10.3000,9.0000,2.903060,6.0969,210.02,3.421604,"VIN=7.0V,RFSW=510k,MAX_I_L1_0_26ms",5.5784,163.03,true
+160,5.8375,4.5375,2.903060,1.6344,56.30,3.421604,"VIN=7.0V,RFSW=510k,MAX_I_L1_0_26ms",1.1159,32.61,true
+174,5.2391,3.9391,2.903060,1.0360,35.69,3.421604,"VIN=7.0V,RFSW=510k,MAX_I_L1_0_26ms",0.5175,15.12,true
+180,5.0111,3.7111,2.903060,0.8081,27.83,3.421604,"VIN=7.0V,RFSW=510k,MAX_I_L1_0_26ms",0.2895,8.46,true
+200,4.3500,3.0500,2.903060,0.1469,5.06,3.421604,"VIN=7.0V,RFSW=510k,MAX_I_L1_0_26ms",-0.3716,-10.86,true
+220,3.8091,2.5091,2.903060,-0.3940,-13.57,3.421604,"VIN=7.0V,RFSW=510k,MAX_I_L1_0_26ms",-0.9125,-26.67,true
