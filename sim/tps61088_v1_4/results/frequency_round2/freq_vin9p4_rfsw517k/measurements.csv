@@ -1,0 +1,15 @@
+measurement,value,unit,status,window,source,original_line
+t90,0.0103216646747,s,measured,0-26 ms,ltspice_original.log,t90: V(vout)=10.8 AT 0.0103216646747
+t98,0.011214535348,s,measured,0-26 ms,ltspice_original.log,t98: V(vout)=11.76 AT 0.011214535348
+sw_t6001,,s,FAILED_or_missing,0-26 ms,ltspice_original.log,"Measurement ""sw_t6001"" FAIL'ed"
+sw_t6101,,s,FAILED_or_missing,0-26 ms,ltspice_original.log,"Measurement ""sw_t6101"" FAIL'ed"
+f_sw_khz,,kHz,FAILED_or_missing,0-26 ms,ltspice_original.log,"Measurement ""f_sw_khz"" FAIL'ed"
+avg_vout,11.9989145081,V,measured,24-26 ms,ltspice_original.log,avg_vout: AVG(V(vout))=11.9989145081 FROM 0.024 TO 0.026
+ripple,0.0477229282291,Vpp,measured,24-26 ms,ltspice_original.log,ripple: PP(V(vout))=0.0477229282291 FROM 0.024 TO 0.026
+peak_i,2.54228665236,A,measured,24-26 ms,ltspice_original.log,peak_i: MAX(I(L1))=2.54228665236 FROM 0.024 TO 0.026
+peak_start,2.54779393789,A,measured,0-26 ms,ltspice_original.log,peak_start: MAX(I(L1))=2.54779393789 FROM 0 TO 0.026
+iin_avg,1.28603302201,A,measured,24-26 ms,ltspice_original.log,iin_avg: AVG(-I(V1))=1.28603302201 FROM 0.024 TO 0.026
+iout_avg,1.0,A,measured,24-26 ms,ltspice_original.log,iout_avg: AVG(I(VLOAD))=1 FROM 0.024 TO 0.026
+pin_avg,12.0845391057,W,measured,24-26 ms,ltspice_original.log,pin_avg: AVG(-V(vin)*I(V1))=12.0845391057 FROM 0.024 TO 0.026
+pout_avg,11.9989145081,W,measured,24-26 ms,ltspice_original.log,pout_avg: AVG(V(vout)*I(VLOAD))=11.9989145081 FROM 0.024 TO 0.026
+eta_pct,99.2914533447,%,measured,24-26 ms,ltspice_original.log,eta_pct: 100*pout_avg/pin_avg=99.2914533447

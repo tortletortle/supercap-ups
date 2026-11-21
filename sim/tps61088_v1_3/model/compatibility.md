@@ -1,63 +1,28 @@
 # TPS61088 模型兼容性与文件身份
 
-## 器件与模型身份
+更新：2026-11-21，V1.4 第二轮官方包二进制复核。
 
-- 器件：Texas Instruments TPS61088（非 Q1）。
-- 模型类型：TI 官方 PSpice transient macro-model，子电路名 TPS61088_TRANS。
-- 模型头部标注：TPS61088EVM-677、SLVUAF2、SLVSCM8、Model Version Final 1.00。
-- 模型发布日期：2015-05-11；模型头部标注 PSpice 16.2.0.p001。
-- 仓库适配文件：TPS61088_LT.LIB。
+本项目器件为普通 TPS61088，使用 TI 官方 PSpice 瞬态宏模型，主子电路 TPS61088_TRANS；文件头标注 TPS61088EVM-677、SLVSCM8、Final 1.00、11MAY2015、PSPICE 16.2.0.p001。不是理想开关替代模型。
 
-## 哈希勘误（SHA-256）
+当前文件 TPS61088_LT.LIB 为 16,352 字节，SHA-256：
 
-旧版文档把 TI ZIP 压缩包的哈希误写成了适配后 LIB 文件的哈希。经 V1.4 首轮运行环境记录核对，正确身份如下：
+    418466fbd205f9e9ec487bee1d9c1ada48858ff49eef67767e84706966fa1795
 
-| 对象 | SHA-256 | 状态 |
-|---|---|---|
-| 当前仓库 TPS61088_LT.LIB（适配后文件） | 418466fbd205f9e9ec487bee1d9c1ada48858ff49eef67767e84706966fa1795 | 已由首轮本机运行环境记录 |
-| 适配前 TI 原始 LIB | 27a088f856aaaf4219a494582fba73a801650d7bae09b5b7fd77023c791ebdf0 | 已由首轮本机运行环境记录 |
-| 首轮本机记录中的 TI ZIP 压缩包 | 39f724accc32b8930e06c9f7a979fef5e3163ccd1e2ac027e10f546e7d624ce1 | ZIP 文件名未保留，不能归属到某个当前下载资源 |
+本轮实际重新下载普通 TPS61088 资源 SLVMDA9 与 SLVMAU6A Rev. A，完整哈希表、获取记录与版本见[模型来源审计](../../tps61088_v1_4/model_source_audit.md)及[版本对照报告](../../tps61088_v1_4/results/frequency_round2/model_binary/model_version_comparison_zh.md)。产品页本轮刷新 HTTP 404，两个 TI 官方 ZIP 端点均 HTTP 200；未用 Q1 模型替代。
 
-因此，39f724... 不是 TPS61088_LT.LIB 的 SHA-256。不得再将其作为 LIB 文件哈希，也不得在未取得并计算官方 ZIP 的情况下把它标成 SLVMDA9 或 SLVMAU6A。
+旧版误标的 39f724accc32b8930e06c9f7a979fef5e3163ccd1e2ac027e10f546e7d624ce1 是 ZIP 哈希；新下载字节确认它对应 SLVMAU6A，不能当作 LIB 哈希。先前“包名称未确认、二进制对照 pending”的状态由本轮证据补齐，历史原始记录保持不变。
 
-## TI 官方下载资源核验
+两包 LIB 只有换行差异：SLVMDA9 为 CRLF，SLVMAU6A 为 LF；统一后全文（含注释）和全部 27 个子电路逐字节一致。包 Rev. A 与内部模型 Final 1.00 是不同层次的版本标记。
 
-TI 普通 TPS61088 产品页当前列出两份 PSpice 瞬态模型资源：
+SLVMAU6A 原始 LIB 的 SHA-256 为 27a088f856aaaf4219a494582fba73a801650d7bae09b5b7fd77023c791ebdf0。本次新下载 LIB 仅做两处替换，各一次，即与仓库模型逐字节相同：
 
-| TI 资源编号 | 页面标题 | 页面标示大小 | 当前核验状态 |
-|---|---|---:|---|
-| SLVMDA9.ZIP | TPS61088 Unencrypted PSPICE Transient Model | 4 KB | 已确认产品页列出；尚未取得 ZIP 二进制 |
-| SLVMAU6A.ZIP | TPS61088 Unencrypted PSpice Transient Model Package (Rev. A) | 87 KB | 已确认产品页列出；尚未取得 ZIP 二进制 |
+1. (2.35-6m) → 2.344。
+2. (1.48+6m) → 1.486。
 
-官方页面：https://www.ti.com/product/TPS61088
+完整 [diff](../../tps61088_v1_4/results/frequency_round2/model_binary/official_to_repository.diff) 已保存。没有发现额外端口、参数、FSW 或 ILIM 改动。文件关系已验证，跨求解器功能等价性仍需回归。未覆盖当前模型基线。
 
-本仓库当前模型头部是 2015 年 Final 1.00。仅凭产品页标题、文件大小或模型头部，无法确认当前仓库模型究竟对应 SLVMDA9 还是 SLVMAU6A Rev. A，也不能推断两个 ZIP 内容相同或不同。TI 产品页也在 TPS61088-Q1 页面列出 SLVMAU6A，但本项目使用普通 TPS61088 器件；后续模型归属必须通过下载包内文件、哈希和子电路内容确认，不以 Q1 页面作为替代依据。
+LTspice 26.1.1 / Normal / Gear 已完成 V1.4 首轮及本轮指定案例。日志均保留 5 条二极管 N=0.0001 警告。退出码、完整 RAW、终止时间与测量有效性需联合判断；低频案例固定边沿计数不足属于测量失败，不等同于求解不收敛。
 
-## LTspice 适配内容
+[第二轮报告](../../tps61088_v1_4/results/frequency_round2/实验报告.md)记录频率差异和 FSW 定时路径诊断。两包源码相同，不能用版本差异解释本次频偏；也不能仅凭源码审计判定模型或 LTspice 存在缺陷。
 
-当前仓库适配文件相对记录中的 TI 原始 LIB 有两处表达式兼容性改写：
-
-1. (2.35-6m) 改为 2.344。
-2. (1.48+6m) 改为 1.486。
-
-当前网表实例仍为 XU1 ... TPS61088_TRANS，使用的是 TI 宏模型，不是理想开关。除上述两处改写外，不应在未审查差异的情况下声称模型内部行为完全等价。
-
-## 已知 LTspice 兼容性观察
-
-- LTspice 26.1.1 能完成 V1.4 首个 26 ms 瞬态案例。
-- 日志有 5 条二极管发射系数 N=0.0001 警告；本次求解和测量完成，但警告必须保留。
-- 模型输出功率比不代表实物整机效率、热性能或器件极限。
-- 目前 VIN=7 V、RFSW=324 kΩ 案例的实测频率为 442.336 kHz，数据手册公式计算值为 496.137 kHz，偏差 -10.844%。根因尚未确定，不能将其归咎于模型版本或 LTspice 数值算法中的任何单一因素。
-
-## 下一步模型对照要求
-
-取得官方原始下载文件后，分别记录：
-
-1. 最终下载 URL、下载时间、文件名、字节数和 SHA-256。
-2. ZIP 内目录清单、LIB 文件名、LIB 字节数和 SHA-256。
-3. 与本仓库 LIB、适配前原始 LIB 做逐文件 diff；区分注释/格式差异与电路表达式/参数差异。
-4. 标注模型版本、子电路名、器件身份、加密状态、仿真器要求。
-5. 若本机安装原生 PSpice，使用相同测试条件对照；否则明确写明未完成原生 PSpice 验证。
-6. 先并行保留模型版本，不覆盖当前基线。只有在模型身份、差异和回归结果充分后，才提出替换建议。
-
-在上述核验完成前，当前 TPS61088_LT.LIB 继续作为 V1.4 的固定基线；SLVMDA9 和 SLVMAU6A 的二进制对照状态均为 pending。
+未完成原生 PSpice 交叉仿真。宏模型功率比不等于实物效率；电感仅有 L 与 DCR，不能验证磁芯饱和安全。

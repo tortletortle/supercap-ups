@@ -1,0 +1,56 @@
+{
+  "source_commit": "f24cf8e72681097c2e148064ddd3cb6ca5f1704c",
+  "branch": "v1.4-audit-frequency-ilim",
+  "source_worktree_status": "?? sim/tps61088_v1_4/results/frequency_round2/\n?? sim/tps61088_v1_4/tests/__pycache__/",
+  "os": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "simulator_path": "C:\\Users\\tortl\\AppData\\Local\\Programs\\ADI\\LTspice\\LTspice.exe",
+  "simulator_version": "26.1.1.0",
+  "simulator_sha256": "3c144a2b3ec6a30baac6761c502d99b95aaa40b947ff5eca25b8fbd80d68af72",
+  "model_sha256": "418466fbd205f9e9ec487bee1d9c1ada48858ff49eef67767e84706966fa1795",
+  "native_root": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\v14-round2-native",
+  "started_utc": "2026-11-21T08:49:26.970021+00:00",
+  "cases_in_order": [
+    "freq_vin7_rfsw510k",
+    "freq_vin9p4_rfsw324k",
+    "freq_vin9p4_rfsw517k",
+    "freq_vin7_rfsw324k_fsw_probe"
+  ],
+  "note": "Only these 4 runs, serial; original .cir files untouched",
+  "case": "freq_vin9p4_rfsw517k",
+  "deck": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\supercap-ups-repo\\sim\\tps61088_v1_4\\netlists\\freq_vin9p4_rfsw517k.cir",
+  "deck_sha256": "a39fe5caa98f37e8efe8d9b182271495de5fd9a81f1db3ee394fdb9a85acf312",
+  "command": [
+    "C:\\Users\\tortl\\AppData\\Local\\Programs\\ADI\\LTspice\\LTspice.exe",
+    "-b",
+    "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\supercap-ups-repo\\sim\\tps61088_v1_4\\netlists\\freq_vin9p4_rfsw517k.cir"
+  ],
+  "cwd": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\supercap-ups-repo\\sim\\tps61088_v1_4\\netlists",
+  "pid": 52956,
+  "finished_utc": "2026-11-21T08:51:46.993976+00:00",
+  "elapsed_wall_s": 140.015,
+  "exit_code": 0,
+  "deck_sha256_after_run": "a39fe5caa98f37e8efe8d9b182271495de5fd9a81f1db3ee394fdb9a85acf312",
+  "native_files": [
+    {
+      "name": "freq_vin9p4_rfsw517k.db",
+      "bytes": 32768,
+      "sha256": "b94b8298fd838f0b4a03f237893bf539a5a970d1c9f61e8e260c297cf1c23c89"
+    },
+    {
+      "name": "freq_vin9p4_rfsw517k.log",
+      "bytes": 1942,
+      "sha256": "0b3607ba2cca91a84c4806244235d75d4cdd17954bfd70b7a9fcc32a2614ee1e"
+    },
+    {
+      "name": "freq_vin9p4_rfsw517k.op.raw",
+      "bytes": 1256,
+      "sha256": "bff93a45868767d7bea1baf76e15ab4ae906365fd9fe0bd30e8b5db8600cadf0"
+    },
+    {
+      "name": "freq_vin9p4_rfsw517k.raw",
+      "bytes": 145924146,
+      "sha256": "05794d10745d7384057e603b4ab484a134205a506e42a9248fe1c76771740e2a"
+    }
+  ]
+}

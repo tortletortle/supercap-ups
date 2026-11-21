@@ -1,0 +1,8 @@
+test_committed_case_names_and_exact_count (test_build_matrix.BuildMatrixTests.test_committed_case_names_and_exact_count) ... ok
+test_limiter_csv_retains_percentage_column_and_values (test_build_matrix.BuildMatrixTests.test_limiter_csv_retains_percentage_column_and_values) ... ok
+test_repeated_generation_is_deterministic_and_readme_safe (test_build_matrix.BuildMatrixTests.test_repeated_generation_is_deterministic_and_readme_safe) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.631s
+
+OK

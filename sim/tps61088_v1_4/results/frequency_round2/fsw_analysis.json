@@ -1,0 +1,158 @@
+{
+  "raw": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\v14-round2-native\\freq_vin7_rfsw324k_fsw_probe\\freq_vin7_rfsw324k_fsw_probe.raw",
+  "variables": [
+    "time",
+    "V(comp)",
+    "V(en)",
+    "V(fsw)",
+    "V(ss)",
+    "V(sw)",
+    "V(vin)",
+    "V(vout)",
+    "I(L1)",
+    "I(RFSW)",
+    "I(V1)",
+    "I(VLOAD)",
+    "L1:flux"
+  ],
+  "steady_window_s": [
+    0.024,
+    0.026
+  ],
+  "steady_fsw_voltage_V": {
+    "min": -9.81019421457674e-05,
+    "max": 1.8936057751641167,
+    "time_avg": 0.5519866203039328
+  },
+  "steady_resistor_current_A": {
+    "min": -3.781981184190054e-05,
+    "max": -2.2012316215324302e-08,
+    "time_avg": -1.9756622297823554e-05
+  },
+  "ohm_law_max_abs_residual_A": 6.776263578034403e-21,
+  "valid_sw_high_R_timing_ohm": {
+    "min": 325355.3488418207,
+    "median": 333870.1456837581,
+    "max": 383540.4644810094,
+    "mean": 343441.7161333433,
+    "std": 18001.377786377154
+  },
+  "reconstructed_PVIN_V": {
+    "min": 1.7362934527585274,
+    "max": 1.7393871579502933,
+    "time_avg": 1.73776045113375
+  },
+  "average_SW_over_4_V": 1.7382830611996913,
+  "average_VIN_over_4_V": 1.7491327818147144,
+  "U5_ON_normal_regulation_condition_verified": true,
+  "U5_ON_condition_margin_min_V": 0.048769607372370016,
+  "cycles": 883,
+  "cycle_summary": {
+    "period_s": {
+      "min": 2.2008358076842927e-06,
+      "median": 2.260219429742194e-06,
+      "max": 2.3501737254488786e-06,
+      "mean": 2.2615737545071304e-06,
+      "std": 2.688090043347103e-08
+    },
+    "sw_high_s": {
+      "min": 1.2807850014763533e-06,
+      "median": 1.3046423229558235e-06,
+      "max": 1.330850320006155e-06,
+      "mean": 1.3050899218620292e-06,
+      "std": 8.473619121507012e-09
+    },
+    "cross_to_sw_down_s": {
+      "min": 8.633820356568345e-08,
+      "median": 1.1003687179142463e-07,
+      "max": 1.3594902626215544e-07,
+      "mean": 1.1046884956180445e-07,
+      "std": 8.446158091224988e-09
+    },
+    "cross_to_fsw_reset_s": {
+      "min": 7.180458225924946e-08,
+      "median": 9.55400586075128e-08,
+      "max": 1.2140536103516508e-07,
+      "mean": 9.598852875220404e-08,
+      "std": 8.446202931838984e-09
+    },
+    "fsw_reset_to_sw_down_s": {
+      "min": 1.3604143315332218e-08,
+      "median": 1.4475185692447434e-08,
+      "max": 1.4768469558390507e-08,
+      "mean": 1.4480320809600406e-08,
+      "std": 1.1518784412413297e-10
+    },
+    "sw_rise_to_pvin_cross_s": {
+      "min": 1.1936897474675023e-06,
+      "median": 1.194605933625692e-06,
+      "max": 1.195507499680143e-06,
+      "mean": 1.1946210723002249e-06,
+      "std": 2.924225953077956e-10
+    },
+    "model_RC_ramp_prediction_s": {
+      "min": 1.1935802962332335e-06,
+      "median": 1.1945093998675755e-06,
+      "max": 1.1954009543943253e-06,
+      "mean": 1.1945211158137043e-06,
+      "std": 2.943524348935925e-10
+    },
+    "model_RC_ramp_error_s": {
+      "min": -1.2594833148137477e-10,
+      "median": -1.0609248298441086e-10,
+      "max": -9.711446719004238e-12,
+      "mean": -9.995648652055764e-11,
+      "std": 1.9068452957424136e-11
+    },
+    "fsw_at_sw_rise_V": {
+      "min": 0.00011842077810579176,
+      "median": 0.00036124668343163633,
+      "max": 0.00041054894043088524,
+      "mean": 0.00035358059245832446,
+      "std": 3.882802387141691e-05
+    },
+    "fsw_peak_in_cycle_V": {
+      "min": 1.8300040398572741,
+      "median": 1.8605020804506716,
+      "max": 1.8936057751641167,
+      "mean": 1.861057794326862,
+      "std": 0.010844115829270385
+    },
+    "sw_high_avg_V": {
+      "min": 12.024871564295315,
+      "median": 12.029534613515883,
+      "max": 12.034570184143517,
+      "mean": 12.029578541761444,
+      "std": 0.0016220826332015194
+    },
+    "pvin_at_cross_V": {
+      "min": 1.7370393174890382,
+      "median": 1.7376860105287448,
+      "max": 1.738358291621479,
+      "mean": 1.7376896933274883,
+      "std": 0.0002131487967027077
+    },
+    "charge_inferred_C_F": {
+      "min": 2.2999738035120352e-11,
+      "median": 2.2999740893550438e-11,
+      "max": 2.29998765207341e-11,
+      "mean": 2.2999753396688044e-11,
+      "std": 1.998893958895855e-17
+    }
+  },
+  "formula_comparison": {
+    "linear_ramp_s": 1.08675e-06,
+    "exponential_ramp_without_leak_s": 1.174650892205102e-06,
+    "exponential_ramp_with_1Mohm_leak_s": 1.2074878545996475e-06,
+    "datasheet_period_s": 2.0155714285714287e-06,
+    "noleak_estimated_period_s": 2.1662586723516033e-06,
+    "leaky_estimated_period_s": 2.22255060788511e-06
+  },
+  "limitations": [
+    "PVIN reconstruction assumes U5_ON=0 in normal regulation; threshold nodes were not saved.",
+    "Analytical period assumes ideal boost duty relation, fixed 7V/12V, 89ns delay, and no switch drops.",
+    "PVIN reconstruction uses external SW; 4 parallel 1mOhm internal pin resistors are not directly probed.",
+    "Sampling excludes 30ns from either SW transition for charge/C validation.",
+    "These calculations apportion timing contributions and do not establish a model defect."
+  ]
+}

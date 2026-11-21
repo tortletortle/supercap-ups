@@ -12,6 +12,12 @@ This is a diagnostic-only duplicate of the first accepted electrical test point:
 
 The power-stage components, circuit values, operating conditions, solver settings and original 6001/6101 frequency measurement are unchanged. The only additions are saved vectors and measurements for V(FSW) and I(RFSW). Do not replace the original baseline deck with this diagnostic copy.
 
+## Completed round-two observation (2026-11-21)
+
+This probe has now completed in LTspice 26.1.1 / Normal / Gear, exit 0. Original prescribed frequency: 442.336492 kHz. Every common RAW vector, including time, is exactly equal to the first-round baseline at every stored double. V(FSW) averages 0.551986903 V and ranges from -0.098102 mV to 1.893605775 V; I(RFSW) averages -19.756621 uA with the positive direction FSW to SW.
+
+See the [Chinese timing analysis](../results/frequency_round2/FSW定时路径分析.md), [experiment report](../results/frequency_round2/实验报告.md), and [original log](../results/frequency_round2/freq_vin7_rfsw324k_fsw_probe/ltspice_original.log). The voltage is a charging/reset ramp, not a constant DC offset. The 23 pF ramp and reset-switch off resistance are relevant diagnostic paths. The dynamic VSW/current expression below must not be treated as a complete frequency equation: in FPWM the selected timing logic also depends on the ramp comparator, filtered threshold, delay, and switching duty. Internal logic nodes were not saved in this run, so reconstruction remains conditional. No model-defect conclusion is established.
+
 ## Why this probe exists
 
 The current TI macro-model contains these timing-path expressions:
