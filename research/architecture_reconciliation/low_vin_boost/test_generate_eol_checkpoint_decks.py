@@ -32,6 +32,8 @@ class EolCheckpointDeckTests(unittest.TestCase):
         self.assertIn("CSTORE PACK_OC 0 10.5 IC=4.34072086033", deck)
         self.assertIn("RESR PACK_OC PACK 0.32", deck)
         self.assertIn("RPATH PACK PACK_IN 0.002", deck)
+        self.assertIn("CIN VIN 0 35u IC=4.34072086033", deck)
+        self.assertIn("CINHF VIN 0 100n IC=4.34072086033", deck)
         self.assertIn("VSENSE PACK_IN VIN 0", deck)
         self.assertIn(".tran 0 40m 0 50n uic", deck)
 
