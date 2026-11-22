@@ -204,6 +204,36 @@ class LowVinLogParserTests(unittest.TestCase):
             self.assertEqual(result["enable_delay_us"], "20")
             self.assertIn("no system minimum-output-voltage", result["screen_reasons"])
 
+    def test_prebiased_transfer_missing_droop_measurement_is_incomplete(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            case = root / "case"
+            case.mkdir()
+            deck = case / "case.cir"
+            log = case / "case.log"
+            raw = case / "case.raw"
+            model = root / "model.lib"
+            deck.write_text(".tran 0 40m 0 50n uic\n")
+            transfer_log = (
+                GOOD_LOG
+                + "vout_at_enable: AVG(V(VOUT))=11.9 FROM 19u TO 20u\n"
+                + "vout_pre_enable_min: MIN(V(VOUT))=11.8 FROM 0 TO 20u\n"
+                + "vout_first_5ms_min: MIN(V(VOUT))=11.5 FROM 0 TO 5m\n"
+            )
+            log.write_text(transfer_log)
+            raw.write_bytes(b"synthetic raw")
+            model.write_text("* synthetic model\n")
+            row = {
+                "case": "case", "case_type": "prebiased_transfer",
+                "architecture": "2S25F_KAM_LR", "enable_delay_us": "20",
+                "exit_code": "0",
+                "input_deck_sha256": sha(deck), "log_sha256": sha(log),
+                "raw_sha256": sha(raw), "model_sha256": sha(model),
+            }
+            result = analyze_case(row, case, model)
+            self.assertEqual(result["screen_result"], "measurement_incomplete")
+            self.assertIn("vout_global_min", result["missing_measurements"])
+
     def test_pack_checkpoint_missing_required_pack_measurement_is_incomplete(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
