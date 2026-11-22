@@ -34,6 +34,25 @@ class CrossingTests(unittest.TestCase):
         self.assertEqual(rejected, 1)
         self.assertLess(accepted[0], accepted[1])
 
+    def test_count_between_is_half_open(self):
+        events = np.array([1.0, 2.0, 3.0, 4.0])
+        self.assertEqual(fsw.count_between(events, 2.0, 4.0), 2)
+        self.assertEqual(fsw.count_between(events, 4.0, 5.0), 1)
+        self.assertEqual(fsw.count_between(events, 2.0, 2.0), 0)
+
+    def test_pair_cycle_events_rejects_out_of_order_downstream_edges(self):
+        paired = fsw.pair_cycle_events(
+            cycle_start=0.0,
+            cycle_limit=2.0,
+            input_cross=1.0,
+            comparator_rises=np.array([1.005]),
+            toff_rises=np.array([1.100]),
+            gate_rises=np.array([1.090]),
+            cap_reset_falls=np.array([1.120]),
+            sw_falls=np.array([1.130]),
+        )
+        self.assertFalse(paired["event_order_valid"])
+
     def test_first_between_is_half_open(self):
         events = np.array([1.0, 2.0, 3.0])
         self.assertEqual(fsw.first_between(events, 2.0, 3.0), 2.0)
