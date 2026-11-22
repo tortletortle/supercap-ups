@@ -53,11 +53,21 @@ def load_inventory_rows(path=INVENTORY):
         rows = list(csv.DictReader(stream))
     by_step = {}
     for row in rows:
-        step = int(float(row["max_step_ns"]))
-        if step in (50, 25):
-            if step in by_step:
-                raise ValueError(f"Duplicate {step} ns entry in RAW inventory")
-            by_step[step] = row
+        step_value = float(row["max_step_ns"])
+        if step_value not in (50.0, 25.0):
+            continue
+        step = int(step_value)
+
+        # The inventory also records .db, .log and .op.raw sidecars.
+        # Only the main transient RAW is an analyzer input.
+        normalized_path = row["path"].replace("\\", "/").rstrip("/")
+        basename = normalized_path.rsplit("/", 1)[-1].lower()
+        if not basename.endswith(".raw") or basename.endswith(".op.raw"):
+            continue
+
+        if step in by_step:
+            raise ValueError(f"Duplicate primary {step} ns RAW entry in inventory")
+        by_step[step] = row
     missing = sorted(set((50, 25)) - set(by_step))
     if missing:
         raise ValueError(f"RAW inventory is missing max-step entries: {missing}")
