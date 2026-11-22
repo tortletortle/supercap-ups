@@ -74,7 +74,7 @@ A separate nine-case transfer matrix now models this boundary:
 
 The three enable delays are sensitivity points, not claims about the actual controller response. The decks record output voltage immediately before enable, the average output voltage during the final 1 µs before enable, the minimum during the first 5 ms, and the global minimum over 40 ms. They also record steady-state regulation, ripple, input current, inductor current and observed FSW.
 
-No minimum output-voltage acceptance limit has been invented. The analyzer therefore labels a complete transfer run as transfer_review_required, not screen_pass, even if the later steady-state window regulates correctly. The minimum-output trace must be compared with the system's actual load brownout/reset tolerance before the transfer can be accepted.
+No minimum output-voltage acceptance limit has been invented. The analyzer therefore labels a complete transfer run as transfer_review_required, not screen_pass, even if the later steady-state window regulates correctly. The minimum-output trace must be compared with the system's actual load brownout/reset tolerance before the transfer can be accepted. The transfer analyzer does not require the t98 rising-crossing measurement: if the prebiased 12 V bus never falls below 11.76 V, LTspice may correctly report t98 as FAIL because no rising crossing occurred. For transfer cases, timing validity is instead checked using EN followed by the two observed switching-edge measurements; the t98 FAIL marker remains visible in the evidence record but does not invalidate an otherwise complete transfer measurement set.
 
 Generate, run and analyze:
 
