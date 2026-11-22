@@ -13,7 +13,7 @@ from generate_low_vin_matrix import (
 
 
 class LowVinMatrixTests(unittest.TestCase):
-    def test_five_required_input_points(self):
+    def test_seven_required_input_points(self):
         self.assertEqual(INPUT_POINTS_V, (2.8, 3.0, 3.2, 3.6, 4.0, 4.4, 4.8))
         self.assertEqual(
             [format_vin(v) for v in INPUT_POINTS_V],
