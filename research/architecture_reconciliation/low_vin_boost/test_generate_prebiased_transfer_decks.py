@@ -26,7 +26,7 @@ class PrebiasedTransferDeckTests(unittest.TestCase):
         deck, metadata = render_deck("2S30F_KAM_HP_40", 20)
         self.assertIn("COUT VOUT 0 47u Rser=0.003 IC=12", deck)
         self.assertIn("CSS SS 0 47n IC=1.5", deck)
-        self.assertIn("BLOAD LOAD 0 I=min(max(V(LOAD)/10,0),1)", deck)
+        self.assertIn("BLOAD LOAD 0 I=if(V(LOAD)>0.5,1,0)", deck)
         self.assertNotIn("I=if(V(EN)>1.5", deck)
         self.assertIn("PWL(0 0 2e-05 0 2.1e-05 3)", deck)
         self.assertIn(".meas tran vout_global_min MIN V(VOUT) from 0 to 40m", deck)
