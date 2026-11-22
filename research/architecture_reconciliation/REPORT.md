@@ -251,7 +251,7 @@ V_{\rm terminal}=V_{\rm oc}-IR_{\rm pack}
 ## 6. 可复现文件
 
 - compare_storage_architectures.py：纯 Python 标准库恒功率 + ESR 模型；
-- test_compare_storage_architectures.py：7 项回归测试；
+- test_compare_storage_architectures.py：8 项回归测试，新增 2S EOL checkpoint 状态采样一致性检查；
 - results.csv：24 组名义/EOL 与效率敏感性结果，分别区分 30F HP 的 40 mΩ 和 44 mΩ 料号；
 - low_vin_boost/generate_low_vin_matrix.py：七点低输入电压网表生成器；
 - low_vin_boost/netlists/：七份固定 VIN LTspice 输入网表与 manifest.csv，当前全部 not_run；
