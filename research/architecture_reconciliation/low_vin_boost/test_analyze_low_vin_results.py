@@ -132,7 +132,19 @@ class LowVinLogParserTests(unittest.TestCase):
             raw = case / "case.raw"
             model = root / "model.lib"
             deck.write_text(".tran 0 40m 0 50n uic\n")
-            log.write_text(GOOD_LOG)
+            pack_log = (
+                GOOD_LOG
+                .replace("vin_avg: AVG(V(vin))=3.6", "vin_avg: AVG(V(vin))=2.8608")
+                .replace("iin_avg: AVG(-I(V1))=4.0", "iin_avg: AVG(-I(V1))=4.6")
+                .replace("pin: AVG(-V(vin)*I(V1))=14.4", "pin: AVG(-V(vin)*I(V1))=13.16")
+                .replace("eff: 100*pout/pin=83.3333", "eff: 100*pout/pin=91.1854")
+                .replace("ppack: AVG(V(PACK)*I(VSENSE))=11.48", "ppack: AVG(V(PACK)*I(VSENSE))=13.202")
+                .replace("pack_esr_loss_w: AVG(I(VSENSE)*I(VSENSE)*0.32)=5.12", "pack_esr_loss_w: AVG(I(VSENSE)*I(VSENSE)*0.32)=6.7712")
+                .replace("path_loss_w: AVG(I(VSENSE)*I(VSENSE)*0.002)=0.032", "path_loss_w: AVG(I(VSENSE)*I(VSENSE)*0.002)=0.04232")
+                .replace("eff_pack: 100*pout/ppack=104.5296", "eff_pack: 100*pout/ppack=90.8953")
+                .replace("pack_input_avg: AVG(V(PACK_IN))=2.86", "pack_input_avg: AVG(V(PACK_IN))=2.8608")
+            )
+            log.write_text(pack_log)
             raw.write_bytes(b"synthetic raw")
             model.write_text("* synthetic model\n")
             row = {
@@ -146,8 +158,8 @@ class LowVinLogParserTests(unittest.TestCase):
             result = analyze_case(row, case, model)
             self.assertEqual(result["screen_result"], "screen_pass")
             self.assertAlmostEqual(result["pack_terminal_delta_v"], -0.0035)
-            self.assertAlmostEqual(result["input_current_delta_a"], -0.5851)
-            self.assertAlmostEqual(result["pack_esr_loss_w"], 5.12)
+            self.assertAlmostEqual(result["input_current_delta_a"], 0.0149)
+            self.assertAlmostEqual(result["pack_esr_loss_w"], 6.7712)
             self.assertEqual(result["architecture"], "2S30F_KAM_HP_40")
 
     def test_pack_checkpoint_missing_required_pack_measurement_is_incomplete(self):
