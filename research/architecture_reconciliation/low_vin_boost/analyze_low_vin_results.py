@@ -162,13 +162,16 @@ def analyze_case(row: dict, case_dir: Path, model_path: Path) -> dict:
     )
     m = log["measurements"]
     required_measurements = set(REQUIRED_MEASUREMENTS)
-    if row.get("architecture"):
-        required_measurements.update(PACK_REQUIRED_MEASUREMENTS)
     if row.get("case_type") == "prebiased_transfer":
+        # A prebiased output bus may never fall below 11.76 V. In that
+        # successful case, a RISE crossing for t98 correctly does not exist.
+        required_measurements.difference_update({"t98", "t98_delay"})
         required_measurements.update({
             "vout_at_enable", "vout_pre_enable_min",
             "vout_first_5ms_min", "vout_global_min",
         })
+    if row.get("architecture"):
+        required_measurements.update(PACK_REQUIRED_MEASUREMENTS)
     missing = sorted(required_measurements - set(m))
     failed_required = sorted(required_measurements & set(log["failed_measurements"]))
 
@@ -201,12 +204,22 @@ def analyze_case(row: dict, case_dir: Path, model_path: Path) -> dict:
         if deck_path.is_file() else ""
     )
     timing_ok = False
-    if all(name in m for name in ("t_en", "t98", "sw_t6001", "sw_t6101")) and stop_s:
-        timing_ok = (
-            m["t_en"] < m["t98"] < m["sw_t6001"] < m["sw_t6101"] < stop_s
-        )
+    if row.get("case_type") == "prebiased_transfer":
+        # Transfer acceptance is based on EN and observed switching edges;
+        # t98 is not a valid mandatory event for a bus that never droops below 98%.
+        if all(name in m for name in ("t_en", "sw_t6001", "sw_t6101")) and stop_s:
+            timing_ok = m["t_en"] < m["sw_t6001"] < m["sw_t6101"] < stop_s
+        timing_description = "t_en < sw_t6001 < sw_t6101 < .tran stop"
+    else:
+        if all(name in m for name in ("t_en", "t98", "sw_t6001", "sw_t6101")) and stop_s:
+            timing_ok = (
+                m["t_en"] < m["t98"] < m["sw_t6001"] < m["sw_t6101"] < stop_s
+            )
+        timing_description = "t_en < t98 < sw_t6001 < sw_t6101 < .tran stop"
     if not timing_ok:
-        reasons.append("required timing order t_en < t98 < sw_t6001 < sw_t6101 < .tran stop is not satisfied")
+        reasons.append(
+            "required timing order " + timing_description + " is not satisfied"
+        )
 
     electrical_checks = {
         "vout_in_range": "avg_vout" in m and 11.9 <= m["avg_vout"] <= 12.1,
