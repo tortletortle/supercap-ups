@@ -1,6 +1,6 @@
 # LTC3350 integrated supercapacitor UPS — architecture evaluation
 
-**Status:** alternative architecture study; not merged into the cost-sensitive discrete mainline.  
+**Status:** alternative architecture study; not merged into the cost-sensitive discrete mainline. This branch currently contains a design review and a reproducible analytical model, not a new KiCad schematic.  
 **Base branch:** power-stage-integration  
 **Base commit:** ad015db2288c47f03f88ff1d29f4c2090b7e1663
 
@@ -60,6 +60,8 @@ These values are calculation candidates, not a frozen BOM.
 | Charge current sense | R_SNSC = 8 mΩ | Data-sheet peak-current estimate: 58 mV / 8 mΩ = 7.25 A. This is a starting point for 12 W backup; check ripple and saturation. |
 | Input-current sense | R_SNSI1 = 16 mΩ, R_SNSI2 = 75 mΩ | With the data-sheet two-resistor equation, charger input-current limit is about 0.352 A with no system load and 0.176 A at a 1 A system load. |
 | Adapter current | ≥1.5 A recommended | At a 1 A load, the first-pass input budget is about 1.176 A before adapter tolerance and transient margin. |
+| Power-fail threshold | 806 kΩ / 100 kΩ PFI divider | With the 1.17 V PFI threshold, this is about 10.60 V; confirm against the actual 12 V adapter tolerance. |
+| I²C / cell alarms | 7-bit address 0x09; VSHUNT 0x06, CAP_UV 0x07, CAP_OV 0x08 | CH32V003 can read individual cell voltages and configure alarms; alarm polling is not a substitute for an independent fast hardware cutoff. |
 
 ### Charge-current budget
 
