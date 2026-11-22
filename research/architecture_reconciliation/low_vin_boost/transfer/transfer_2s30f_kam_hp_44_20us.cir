@@ -2,8 +2,8 @@
 * Architecture: 2S30F_KAM_HP_44
 * EOL capacitance/ESR, fully charged OCV 4.8 V
 * Backup EN begins after 20 us; 1 us EN ramp
-* This is a local transfer/startup test, not a 1.2 s hold-up simulation.
 * SS capacitor starts discharged; do not pre-complete the TPS61088 soft-start.
+* This is a local transfer/startup test, not a 1.2 s hold-up simulation.
 .include ../../../../sim/tps61088_v1_3/model/TPS61088_LT.LIB
 CSTORE PACK_OC 0 10.5 IC=4.8
 RESR PACK_OC PACK 0.352
