@@ -222,6 +222,12 @@ def analyze_case(row: dict, case_dir: Path, model_path: Path) -> dict:
         result = "measurement_incomplete"
     elif not timing_ok:
         result = "measurement_timing_invalid"
+    elif row.get("case_type") == "prebiased_transfer" and electrical_ok:
+        result = "transfer_review_required"
+        reasons.append(
+            "steady-state screen passed; transfer voltage minima are recorded, "
+            "but no system minimum-output-voltage acceptance limit is configured"
+        )
     elif electrical_ok:
         result = "screen_pass"
     else:
@@ -247,7 +253,10 @@ def analyze_case(row: dict, case_dir: Path, model_path: Path) -> dict:
 
     return {
         "case": case,
+        "case_type": row.get("case_type", ""),
         "architecture": row.get("architecture", ""),
+        "enable_delay_us": row.get("enable_delay_us", ""),
+        "initial_pack_ocv_v": row.get("initial_pack_ocv_v", ""),
         "checkpoint_s": row.get("checkpoint_s", ""),
         "vin_source_v": row.get("vin_source_v", ""),
         "expected_pack_ocv_v": expected_pack_ocv,
@@ -276,6 +285,11 @@ def analyze_case(row: dict, case_dir: Path, model_path: Path) -> dict:
         "avg_vout_v": m.get("avg_vout", ""),
         "vmin_v": m.get("vmin", ""),
         "vmax_v": m.get("vmax", ""),
+        "vout_pre_enable_min_v": m.get("vout_pre_enable_min", ""),
+        "vout_at_enable_v": m.get("vout_at_enable", ""),
+        "vout_first_5ms_min_v": m.get("vout_first_5ms_min", ""),
+        "vout_global_min_v": m.get("vout_global_min", ""),
+        "vout_global_drop_v": 12.0 - m["vout_global_min"] if "vout_global_min" in m else "",
         "ripple_mVpp": m.get("ripple", "") * 1000 if "ripple" in m else "",
         "iin_avg_a": m.get("iin_avg", ""),
         "iout_avg_a": m.get("iout_avg", ""),
@@ -326,18 +340,22 @@ def write_outputs(run_dir: Path, rows: list[dict]) -> None:
         "A screen_pass is only a limited macro-model screening result; it is "
         "not hardware qualification or BOM release.",
         "",
-        "| Case | Expected pack terminal | Measured VIN | VOUT avg | IOUT avg | Ripple | Peak IL | FSW observed | Result |",
-        "|---|---:|---:|---:|---:|---:|---:|---:|---|",
+        "| Case | EN delay | Pre-enable min | Global VOUT min | Expected pack terminal | Measured VIN | VOUT avg | IOUT avg | Ripple | Peak IL | FSW observed | Result |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|",
     ]
     for row in rows:
         def fmt(key, digits=3, suffix=""):
             value = row.get(key, "")
             return f"{float(value):.{digits}f}{suffix}" if value != "" else "—"
         case_label = row.get("architecture") or row["case"]
+        if row.get("case_type") == "prebiased_transfer":
+            case_label = f"{case_label} / {row.get('enable_delay_us', '')} us"
         expected_pack = row.get("expected_pack_terminal_v", "")
         expected_pack_text = f"{float(expected_pack):.3f} V" if expected_pack != "" else "—"
         lines.append(
-            f"| {case_label} | {expected_pack_text} | {fmt('vin_avg_v')} V | "
+            f"| {case_label} | {row.get('enable_delay_us') or '—'} us | "
+            f"{fmt('vout_pre_enable_min_v')} V | {fmt('vout_global_min_v')} V | "
+            f"{expected_pack_text} | {fmt('vin_avg_v')} V | "
             f"{fmt('avg_vout_v')} V | {fmt('iout_avg_a')} A | "
             f"{fmt('ripple_mVpp')} mVpp | {fmt('peak_start_a')} A | "
             f"{fmt('f_sw_khz', 2)} kHz | {row['screen_result']} |"
@@ -351,6 +369,7 @@ def write_outputs(run_dir: Path, rows: list[dict]) -> None:
         "- eff_model_pct is the macro-model input/output power ratio, not measured hardware efficiency.",
         "- The inductor model contains inductance and DCR only; it cannot establish saturation, core loss, or thermal safety.",
         "- The fixed-VIN cases do not reproduce the supercapacitor's dynamic voltage/ESR trajectory.",
+        "- For prebiased_transfer cases, screen_result=transfer_review_required is intentionally not a pass; the output minimum is reported until a system-level minimum-voltage requirement is specified.",
         "- A successful run or screen does not establish the 1.2 s backup requirement.",
         "",
         "## Per-case detail",
@@ -364,6 +383,12 @@ def write_outputs(run_dir: Path, rows: list[dict]) -> None:
             f"- FSW observed: {fmt_value(row.get('f_sw_khz'), 'kHz')}",
             f"- Model power ratio: {fmt_value(row.get('eff_model_pct'), '%')} (not hardware efficiency)",
             f"- Average input current: {fmt_value(row.get('iin_avg_a'), 'A')}",
+            f"- Backup enable delay: {row.get('enable_delay_us') or 'not applicable'} us",
+            f"- Output minimum before enable: {fmt_value(row.get('vout_pre_enable_min_v'), 'V')}",
+            f"- Output voltage at enable: {fmt_value(row.get('vout_at_enable_v'), 'V')}",
+            f"- Output minimum in first 5 ms: {fmt_value(row.get('vout_first_5ms_min_v'), 'V')}",
+            f"- Global output minimum: {fmt_value(row.get('vout_global_min_v'), 'V')}",
+            f"- Global output droop from 12 V: {fmt_value(row.get('vout_global_drop_v'), 'V')}",
             f"- Expected pack terminal: {fmt_value(row.get('expected_pack_terminal_v'), 'V')}",
             f"- Measured pack OCV: {fmt_value(row.get('pack_ocv_avg_v'), 'V')}",
             f"- Pack OCV change during local window: {fmt_value(row.get('pack_ocv_delta_v'), 'V')}",
