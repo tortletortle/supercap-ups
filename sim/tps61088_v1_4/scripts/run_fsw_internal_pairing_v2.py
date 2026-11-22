@@ -406,6 +406,9 @@ def run_configuration_check(summary, step):
         "rfsw_ohm": parameters.get("rfsw_ohm"),
         "cfsw_f": parameters.get("cfsw_f"),
         "roff_ohm": parameters.get("roff_ohm"),
+        "sw_edge_v": parameters.get("sw_edge_v"),
+        "sw_rearm_v": parameters.get("sw_rearm_v"),
+        "vout_target_v": parameters.get("vout_target_v"),
         "analysis_window_s": summary.get("analysis_window_s"),
     }
     expected = {
@@ -414,6 +417,9 @@ def run_configuration_check(summary, step):
         "rfsw_ohm": 324000.0,
         "cfsw_f": 23e-12,
         "roff_ohm": 1e6,
+        "sw_edge_v": 10.0,
+        "sw_rearm_v": 2.0,
+        "vout_target_v": 12.0,
         "analysis_window_s": [0.024, 0.026],
     }
     return {"observed": observed, "expected": expected, "match": observed == expected}
@@ -513,6 +519,7 @@ def main():
     cmd50 = [
         sys.executable, str(ANALYZER), "--raw", str(raw50),
         "--out", str(out50), "--max-step-ns", "50", "--solver-label", "Gear",
+        "--sw-edge-v", "10.0", "--sw-rearm-v", "2.0", "--vout-target-v", "12.0",
     ]
     rc50 = run_logged(cmd50, REPO_ROOT, log50_out, log50_err)
     if rc50 != 0:
@@ -530,6 +537,7 @@ def main():
     cmd25 = [
         sys.executable, str(ANALYZER), "--raw", str(raw25),
         "--out", str(out25), "--max-step-ns", "25", "--solver-label", "Gear",
+        "--sw-edge-v", "10.0", "--sw-rearm-v", "2.0", "--vout-target-v", "12.0",
         "--compare-with", str(summary50_path),
     ]
     rc25 = run_logged(cmd25, REPO_ROOT, log25_out, log25_err)
