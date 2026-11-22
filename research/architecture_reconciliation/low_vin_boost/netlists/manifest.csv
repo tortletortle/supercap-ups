@@ -1,0 +1,6 @@
+run_order,case,vin_source_v,vout_target_v,iout_target_a,simulation_end_ms,max_step_ns,steady_window_ms,rfsw_kohm,rilim_kohm,mode,run_status
+1,tps61088_vin_3p2v,3.2,12.0,1.0,40,50,35-37,324,100,GND_FPWM,not_run
+2,tps61088_vin_3p6v,3.6,12.0,1.0,40,50,35-37,324,100,GND_FPWM,not_run
+3,tps61088_vin_4p0v,4.0,12.0,1.0,40,50,35-37,324,100,GND_FPWM,not_run
+4,tps61088_vin_4p4v,4.4,12.0,1.0,40,50,35-37,324,100,GND_FPWM,not_run
+5,tps61088_vin_4p8v,4.8,12.0,1.0,40,50,35-37,324,100,GND_FPWM,not_run
