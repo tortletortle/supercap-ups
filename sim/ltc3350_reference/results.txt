@@ -19,6 +19,12 @@ Hold time at worst-low VCAP, 80% backup efficiency: 1.4437 s
 Hold time at worst-low VCAP, 85% backup efficiency: 1.5890 s
 Hold time at worst-low VCAP, 90% backup efficiency: 1.7345 s
 Required initial VCAP for 1.2 s at 80% efficiency: 9.5183 V
+
+Current 9.4 V project-baseline comparison:
+  worst-low VCAP after the same tolerance budget: 9.1889 V
+  hold time at 7.102 V cutoff and 80% efficiency: 0.9070 s
+  hold time at 7.000 V cutoff and 90% efficiency: 1.1979 s
+  interpretation: the 9.4 V baseline has essentially no worst-case margin in this conservative model; the 10.0 V setting below is exploratory and not approved.
 Equalized-start weak-cell case (6.3 F + 3 x 9 F):
   time to pack cutoff: 2.1490 s
   pack loaded voltage at cutoff: 7.1019 V
