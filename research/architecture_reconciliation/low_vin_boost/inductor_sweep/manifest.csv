@@ -1,0 +1,7 @@
+run_order,case,case_type,vin_source_v,vout_target_v,iout_target_a,simulation_end_ms,max_step_ns,steady_window_ms,rfsw_kohm,rilim_kohm,mode,inductor_mpn,inductance_nominal_uH,inductance_min_uH,dcr_max_mohm,isat_typical_a,irms_typical_a,isat_above_programmed_ilim_typical,programmed_ilim_typical_a,run_status
+1,inductor_3p3uH_vin_2p8v,inductor_stress,2.8,12.0,1.0,40,50,35-37,324,100,GND_FPWM,CKST0603-3.3uH/M,3.3,2.64,26,9.5,6,false,10.3,not_run
+2,inductor_3p3uH_vin_3p6v,inductor_stress,3.6,12.0,1.0,40,50,35-37,324,100,GND_FPWM,CKST0603-3.3uH/M,3.3,2.64,26,9.5,6,false,10.3,not_run
+3,inductor_2p2uH_vin_2p8v,inductor_stress,2.8,12.0,1.0,40,50,35-37,324,100,GND_FPWM,CKST0603-2.2uH/M,2.2,1.76,17.5,10,8,false,10.3,not_run
+4,inductor_2p2uH_vin_3p6v,inductor_stress,3.6,12.0,1.0,40,50,35-37,324,100,GND_FPWM,CKST0603-2.2uH/M,2.2,1.76,17.5,10,8,false,10.3,not_run
+5,inductor_1p5uH_vin_2p8v,inductor_stress,2.8,12.0,1.0,40,50,35-37,324,100,GND_FPWM,CKST0603-1.5uH/M,1.5,1.2,12.1,12.5,11,true,10.3,not_run
+6,inductor_1p5uH_vin_3p6v,inductor_stress,3.6,12.0,1.0,40,50,35-37,324,100,GND_FPWM,CKST0603-1.5uH/M,1.5,1.2,12.1,12.5,11,true,10.3,not_run
