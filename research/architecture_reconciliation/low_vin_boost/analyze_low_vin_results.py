@@ -20,6 +20,18 @@ PACK_REQUIRED_MEASUREMENTS = (
 )
 
 
+def configured_current_limit_min_a(row: dict) -> float | None:
+    """Return a datasheet minimum only for the explicitly qualified baseline."""
+    mode = str(row.get("mode", "")).strip().upper()
+    try:
+        r_ohm_k = float(row.get("rilim_kohm", ""))
+    except (TypeError, ValueError):
+        return None
+    if mode == "GND_FPWM" and abs(r_ohm_k - 100.0) < 1e-9:
+        return 9.0
+    return None
+
+
 def sha256_file(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as handle:
@@ -162,6 +174,8 @@ def analyze_case(row: dict, case_dir: Path, model_path: Path) -> dict:
     )
     m = log["measurements"]
     required_measurements = set(REQUIRED_MEASUREMENTS)
+    if row.get("case_type") == "inductor_stress":
+        required_measurements.update({"il_avg", "il_rms"})
     if row.get("case_type") == "prebiased_transfer":
         # A prebiased output bus may never fall below 11.76 V. In that
         # successful case, a RISE crossing for t98 correctly does not exist.
@@ -221,11 +235,48 @@ def analyze_case(row: dict, case_dir: Path, model_path: Path) -> dict:
             "required timing order " + timing_description + " is not satisfied"
         )
 
+    peak_current_values = [m[name] for name in ("peak_i", "peak_start") if name in m]
+    peak_current_max = max(peak_current_values) if peak_current_values else ""
+    current_limit_min = configured_current_limit_min_a(row)
+    current_limit_ok = (
+        peak_current_max < current_limit_min
+        if current_limit_min is not None and peak_current_max != ""
+        else None
+    )
+    try:
+        inductor_isat_typical = float(row.get("isat_typical_a", ""))
+    except (TypeError, ValueError):
+        inductor_isat_typical = None
+    try:
+        inductor_irms_typical = float(row.get("irms_typical_a", ""))
+    except (TypeError, ValueError):
+        inductor_irms_typical = None
+    isat_above_programmed_typical = (
+        str(row.get("isat_above_programmed_ilim_typical", "")).strip().lower()
+        in {"true", "1", "yes"}
+    )
+    inductor_reference_exceeded = False
+    if row.get("case_type") == "inductor_stress":
+        inductor_reference_exceeded = (
+            not isat_above_programmed_typical
+            or (
+                inductor_isat_typical is not None
+                and peak_current_max != ""
+                and peak_current_max >= inductor_isat_typical
+            )
+            or (
+                inductor_irms_typical is not None
+                and "il_rms" in m
+                and m["il_rms"] >= inductor_irms_typical
+            )
+        )
     electrical_checks = {
         "vout_in_range": "avg_vout" in m and 11.9 <= m["avg_vout"] <= 12.1,
         "iout_in_range": "iout_avg" in m and 0.98 <= m["iout_avg"] <= 1.02,
         "ripple_at_most_100mVpp": "ripple" in m and m["ripple"] <= 0.100,
     }
+    if current_limit_min is not None:
+        electrical_checks["peak_current_below_ti_minimum_limit"] = bool(current_limit_ok)
     electrical_ok = all(electrical_checks.values())
     if not electrical_ok:
         reasons.extend(
@@ -245,6 +296,12 @@ def analyze_case(row: dict, case_dir: Path, model_path: Path) -> dict:
         reasons.append(
             "steady-state screen passed; transfer voltage minima are recorded, "
             "but no system minimum-output-voltage acceptance limit is configured"
+        )
+    elif row.get("case_type") == "inductor_stress" and electrical_ok and inductor_reference_exceeded:
+        result = "inductor_reference_exceeded"
+        reasons.append(
+            "inductor Isat coordination or measured peak/RMS current reached/exceeded "
+            "a conservative typical reference; manufacturer confirmation is required"
         )
     elif electrical_ok:
         result = "screen_pass"
@@ -313,6 +370,38 @@ def analyze_case(row: dict, case_dir: Path, model_path: Path) -> dict:
         "iout_avg_a": m.get("iout_avg", ""),
         "peak_i_a": m.get("peak_i", ""),
         "peak_start_a": m.get("peak_start", ""),
+        "peak_current_max_a": peak_current_max,
+        "current_limit_min_a": current_limit_min if current_limit_min is not None else "",
+        "current_limit_margin_a": (
+            current_limit_min - peak_current_max
+            if current_limit_min is not None and peak_current_max != "" else ""
+        ),
+        "current_limit_floor_not_exceeded": (
+            current_limit_ok if current_limit_ok is not None else ""
+        ),
+        "il_avg_a": m.get("il_avg", ""),
+        "il_rms_a": m.get("il_rms", ""),
+        "inductor_mpn": row.get("inductor_mpn", ""),
+        "inductance_nominal_uH": row.get("inductance_nominal_uH", ""),
+        "inductance_min_uH": row.get("inductance_min_uH", ""),
+        "dcr_max_mohm": row.get("dcr_max_mohm", ""),
+        "inductor_isat_typical_a": inductor_isat_typical if inductor_isat_typical is not None else "",
+        "inductor_irms_typical_a": inductor_irms_typical if inductor_irms_typical is not None else "",
+        "isat_above_programmed_ilim_typical": (
+            isat_above_programmed_typical if row.get("case_type") == "inductor_stress" else ""
+        ),
+        "programmed_ilim_typical_a": row.get("programmed_ilim_typical_a", ""),
+        "inductor_reference_exceeded": (
+            inductor_reference_exceeded if row.get("case_type") == "inductor_stress" else ""
+        ),
+        "peak_to_isat_typical_ratio": (
+            peak_current_max / inductor_isat_typical
+            if peak_current_max != "" and inductor_isat_typical else ""
+        ),
+        "irms_to_irms_typical_ratio": (
+            m["il_rms"] / inductor_irms_typical
+            if "il_rms" in m and inductor_irms_typical else ""
+        ),
         "pin_w": m.get("pin", ""),
         "pack_pin_w": m.get("ppack", ""),
         "pout_w": m.get("pout", ""),
@@ -358,8 +447,8 @@ def write_outputs(run_dir: Path, rows: list[dict]) -> None:
         "A screen_pass is only a limited macro-model screening result; it is "
         "not hardware qualification or BOM release.",
         "",
-        "| Case | EN delay | Pre-enable min | Global VOUT min | Expected pack terminal | Measured VIN | VOUT avg | IOUT avg | Ripple | Peak IL | FSW observed | Result |",
-        "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|",
+        "| Case | EN delay | Pre-enable min | Global VOUT min | Expected pack terminal | Measured VIN | VOUT avg | IOUT avg | Ripple | Peak IL max | IL RMS | ILIM margin | FSW observed | Result |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|",
     ]
     for row in rows:
         def fmt(key, digits=3, suffix=""):
@@ -375,7 +464,8 @@ def write_outputs(run_dir: Path, rows: list[dict]) -> None:
             f"{fmt('vout_pre_enable_min_v')} V | {fmt('vout_global_min_v')} V | "
             f"{expected_pack_text} | {fmt('vin_avg_v')} V | "
             f"{fmt('avg_vout_v')} V | {fmt('iout_avg_a')} A | "
-            f"{fmt('ripple_mVpp')} mVpp | {fmt('peak_start_a')} A | "
+            f"{fmt('ripple_mVpp')} mVpp | {fmt('peak_current_max_a')} A | "
+            f"{fmt('il_rms_a')} A | {fmt('current_limit_margin_a')} A | "
             f"{fmt('f_sw_khz', 2)} kHz | {row['screen_result']} |"
         )
     lines.extend([
@@ -385,7 +475,9 @@ def write_outputs(run_dir: Path, rows: list[dict]) -> None:
         "- f_sw_khz is reported as observed; this script does not impose an "
         "approved frequency target because the V1.4 RFSW discrepancy remains unresolved.",
         "- eff_model_pct is the macro-model input/output power ratio, not measured hardware efficiency.",
-        "- The inductor model contains inductance and DCR only; it cannot establish saturation, core loss, or thermal safety.",
+        "- The measured peak current is screened against the TI 9.0 A FPWM minimum only for RILIM=100 kOhm; this does not prove transient, thermal, or hardware margin.",
+        "- Inductor Isat/Irms values in the candidate sweep are manufacturer typical references, not guaranteed minimum ratings. A reference exceedance is flagged separately.",
+        "- The inductor macro-model contains inductance and DCR only; it cannot establish saturation, core loss, or thermal safety.",
         "- The fixed-VIN cases do not reproduce the supercapacitor's dynamic voltage/ESR trajectory.",
         "- For prebiased_transfer cases, screen_result=transfer_review_required is intentionally not a pass; the output minimum is reported until a system-level minimum-voltage requirement is specified.",
         "- A successful run or screen does not establish the 1.2 s backup requirement.",
@@ -414,7 +506,15 @@ def write_outputs(run_dir: Path, rows: list[dict]) -> None:
             f"- Pack terminal delta vs t=1.2s reference: {fmt_value(row.get('pack_terminal_delta_v'), 'V')}",
             f"- Pack ESR loss: {fmt_value(row.get('pack_esr_loss_w'), 'W')}",
             f"- Macro-model efficiency at converter input: {fmt_value(row.get('eff_model_pct'), '%')}",
-            f"- Startup peak inductor current: {fmt_value(row.get('peak_start_a'), 'A')}",
+            f"- Maximum measured inductor peak (steady/startup): {fmt_value(row.get('peak_current_max_a'), 'A')}",
+            f"- TI FPWM current-limit minimum: {fmt_value(row.get('current_limit_min_a'), 'A')}",
+            f"- Margin to TI FPWM current-limit minimum: {fmt_value(row.get('current_limit_margin_a'), 'A')}",
+            f"- Inductor average/RMS current: {fmt_value(row.get('il_avg_a'), 'A')} / {fmt_value(row.get('il_rms_a'), 'A')}",
+            f"- Inductor candidate: {row.get('inductor_mpn') or 'not specified'}",
+            f"- Inductor L min / DCR max: {row.get('inductance_min_uH') or '—'} uH / {row.get('dcr_max_mohm') or '—'} mOhm",
+            f"- Inductor Isat / Irms typical references: {row.get('inductor_isat_typical_a') or '—'} A / {row.get('inductor_irms_typical_a') or '—'} A",
+            f"- Inductor Isat/current-limit coordination: {row.get('isat_above_programmed_ilim_typical') if row.get('isat_above_programmed_ilim_typical') != '' else 'not applicable'}",
+            f"- Inductor typical-reference exceeded: {row.get('inductor_reference_exceeded') if row.get('inductor_reference_exceeded') != '' else 'not applicable'}",
             f"- Warnings: {row['warning_count']}",
             f"- Reasons: {row['screen_reasons'] or 'none'}",
             "",
