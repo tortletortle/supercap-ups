@@ -12,7 +12,15 @@ The LTC3350 is a purpose-built supercapacitor backup controller. It combines a s
 
 This branch evaluates it as a **reference architecture**, not as an approved replacement. Its unit price is high relative to a low-cost student design.
 
-## 2. Evidence from the vendor reference designs
+## 2. Compatibility with the current project baseline
+
+The repository baseline remains 4S × 10 F, 9.4 V charge target, 7.0 V group discharge cutoff, 12 V / 1 A output, and a 35–40 RMB board-cost target. This branch does not change those requirements.
+
+The 10.0 V VCAP target used below is an **exploratory alternative**, not an approved new setpoint. It was selected to create runtime margin in the conservative 80% backup-efficiency model. If the existing 9.4 V target is retained, the LTC3350 divider/reference tolerance budget gives a worst-low VCAP of about 9.189 V; the current model predicts about 0.907 s at an upper-corner 7.102 V cutoff and 80% efficiency, or about 1.198 s at a 7.0 V cutoff and 90% efficiency. That leaves effectively no tolerance margin at the original 9.4 V target. The system-level decision is therefore still open: preserve 9.4 V and improve accuracy/efficiency/cutoff margin, or separately validate a higher pack target with cell-level protection.
+
+The cost constraint is decisive. A single LTC3350 listing is about ¥121.49 at DigiKey or US$10.36 at LCSC, before external MOSFETs, inductor, ballast resistors, and PCB. That exceeds the complete 35–40 RMB board target by itself. The LTC3350 branch is consequently a **reference and verification benchmark**, not the cost-sensitive production candidate.
+
+## 3. Evidence from the vendor reference designs
 
 ADI's LTC3350 data sheet includes:
 - An application circuit with four series 10 F supercapacitors and a 10 V / 1 A backup output.
@@ -26,7 +34,7 @@ References:
 - [DC1937B evaluation-board schematic](https://www.analog.com/media/en/technical-documentation/eval-board-schematic/DC1937B-3-SCH.PDF)
 - [DC1937B evaluation-board product page](https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/dc1937b.html)
 
-## 3. Proposed power architecture
+## 4. Proposed power architecture
 
 ~~~mermaid
 flowchart LR
@@ -44,7 +52,7 @@ flowchart LR
 
 Normal operation: the input path supplies the system rail while the LTC3350 charges the capacitor stack. On input failure, the same switching power stage reverses into boost operation and supplies the backup rail. The ideal-diode paths prevent the two sources from back-feeding one another.
 
-## 4. Candidate setpoints and first-pass values
+## 5. Candidate setpoints and first-pass values
 
 These values are calculation candidates, not a frozen BOM.
 
@@ -81,7 +89,7 @@ A separate per-cell shunt regulator provides the high-current overvoltage path. 
 
 At the +5% ballast corner, the instantaneous shunt-current estimate is 0.459 A and the 75%-duty average envelope is about 0.344 A. The modeled no-load charge current is about 0.380 A at 90% buck efficiency, so charge current may be reduced while a shunt is active. At a 1 A system load, the modeled charge current is about 0.190 A and is below that envelope. This is an expected charge-time tradeoff, not a proven transient result.
 
-## 5. Hold-time model
+## 6. Hold-time model
 
 The existing project EOL assumptions are retained:
 
@@ -113,7 +121,7 @@ python3 sim/ltc3350_reference/evaluate.py
 python3 -m unittest discover -s sim/ltc3350_reference -p 'test_*.py' -v
 ~~~
 
-## 6. What this architecture does not solve automatically
+## 7. What this architecture does not solve automatically
 
 1. **12 V / 1 A combined validation.** The vendor's 4 × 10 F / 10 V / 1 A and 12 V / 48 W examples are separate designs. The proposed combination needs a fresh power-stage design.
 2. **12 V input overvoltage.** The LTC3350's high input OVLO threshold is not a precise 12 V adapter protector. Retain a separately specified TVS/eFuse/OVP stage based on the actual adapter limits.
@@ -123,12 +131,12 @@ python3 -m unittest discover -s sim/ltc3350_reference -p 'test_*.py' -v
 6. **Power-path transitions.** Measure input removal/recovery, output droop/overshoot, reverse current, and source-priority behavior at 1 A.
 7. **Cost.** Current single-unit distributor listings are roughly US$10.36 at LCSC and ¥121.49 at DigiKey for the IC alone. This is a high-reliability reference option, not the low-cost BOM winner.
 
-## 7. Firmware prototype
+## 8. Firmware prototype
 
 A portable C11 driver now lives in `firmware/ltc3350/`. It verifies the four-cell configuration, programs VSHUNT = 2.60 V, CAP_UV = 1.00 V, CAP_OV = 2.60 V, enables the UV/OV alarm mask, reads individual cell voltages and status, and clears latched alarms. The host-side fake-bus test suite passes 5/5 tests with GCC. The driver is not yet connected to the CH32V003 SDK, and SMBus Alert Response Address handling is still a board-layer task.
 
 The driver intentionally documents that the IC powers up with VSHUNT = 2.70 V. If 2.60 V must apply from the first instant of charging, hardware must hold the charger input disabled until the MCU has completed configuration. The cap UV/OV alarms are ADC-based notifications, not hard hardware disconnects.
 
-## 8. Decision
+## 9. Decision
 
 Keep the existing TPS54302 + TPS61088 design as the cost-sensitive mainline. Keep this LTC3350 branch separate as an integrated reference architecture. The next engineering gate is to create a KiCad schematic from the ADI application circuit, set VCAP ≈ 10 V and VOUT = 12 V, run switching/thermal analysis, connect the driver to the CH32V003 I²C peripheral, and compare the complete BOM against the discrete design. Do not merge this branch or order the IC until that comparison is complete.
