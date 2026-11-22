@@ -200,6 +200,202 @@ def event_multiplicity_check(summary):
     }
 
 
+CSV_EVENT_FIELDS = {
+    "pvin_cross": ("pvin_cross_count", "pvin_cross_s"),
+    "comparator_output_rise": (
+        "comparator_output_rise_count", "comparator_output_rise_s"
+    ),
+    "u5_toff_0p5V_rise": (
+        "u5_toff_0p5V_rise_count", "u5_toff_0p5V_rise_s"
+    ),
+    "gate_l_rise": ("gate_l_rise_count", "gate_l_rise_s"),
+    "cap_reset_0p5V_fall": (
+        "cap_reset_0p5V_fall_count", "cap_reset_0p5V_fall_s"
+    ),
+    "sw_fall_10V": ("sw_fall_10V_count", "sw_fall_10V_s"),
+}
+REQUIRED_CSV_EVENT_NAMES = frozenset(CSV_EVENT_FIELDS) - {
+    "comparator_output_rise"
+}
+
+
+def csv_summary_consistency_check(csv_path, summary):
+    """Independently recompute row accounting and event totals from the CSV."""
+    try:
+        with Path(csv_path).open("r", newline="", encoding="utf-8-sig") as stream:
+            rows = list(csv.DictReader(stream))
+
+        def number(value):
+            return None if value in (None, "") else float(value)
+
+        def integer(value):
+            return int(value)
+
+        def boolean(value):
+            if value == "True":
+                return True
+            if value == "False":
+                return False
+            raise ValueError(f"invalid CSV boolean: {value!r}")
+
+        statuses = [row["cycle_status"] for row in rows]
+        valid_flags = [boolean(row["cycle_valid"]) for row in rows]
+        order_flags = [boolean(row["event_order_valid"]) for row in rows]
+        accounting = {
+            "candidate_cycles": len(rows),
+            "complete_valid_cycles": sum(valid_flags),
+            "right_censored_cycles": statuses.count("right_censored_at_raw_end"),
+            "invalid_cycles": statuses.count("invalid"),
+        }
+        summary_accounting = summary.get("cycle_accounting", {})
+        accounting_match = all(
+            int(summary_accounting.get(key, -1)) == value
+            for key, value in accounting.items()
+        )
+
+        completeness = {
+            time_field: sum(number(row[time_field]) is not None for row in rows)
+            for _, time_field in CSV_EVENT_FIELDS.values()
+        }
+        summary_completeness = summary.get("event_completeness", {})
+        completeness_match = summary_completeness == completeness
+
+        complete_rows = [
+            row for row in rows if number(row["next_cycle_start_s"]) is not None
+        ]
+        multiplicity = {
+            name: {
+                "missing_cycles": sum(
+                    integer(row[count_field]) == 0 for row in complete_rows
+                ),
+                "multiple_cycles": sum(
+                    integer(row[count_field]) > 1 for row in complete_rows
+                ),
+            }
+            for name, (count_field, _) in CSV_EVENT_FIELDS.items()
+        }
+        summary_multiplicity = summary.get("event_multiplicity", {})
+        multiplicity_match = summary_multiplicity == multiplicity
+
+        cycle_valid_matches_status = True
+        complete_rows_have_one_primary_event_each = True
+        event_times_match_counts = True
+        event_times_in_half_open_period = True
+        event_order_matches_timestamps = True
+        period_matches_boundaries = True
+        sw_high_matches_boundaries = True
+        allowed_statuses = {"complete", "invalid", "right_censored_at_raw_end"}
+
+        for row, is_valid, order_valid in zip(rows, valid_flags, order_flags):
+            status = row["cycle_status"]
+            if status not in allowed_statuses:
+                cycle_valid_matches_status = False
+            if is_valid != (status == "complete" and order_valid):
+                cycle_valid_matches_status = False
+
+            start = number(row["cycle_start_s"])
+            end = number(row["next_cycle_start_s"])
+            period = number(row["period_s"])
+            sw_fall = number(row["sw_fall_10V_s"])
+            sw_high = number(row["sw_high_s"])
+
+            if start is None:
+                period_matches_boundaries = False
+                continue
+            if end is None:
+                if status != "right_censored_at_raw_end" or period is not None:
+                    period_matches_boundaries = False
+            else:
+                if status == "right_censored_at_raw_end" or period is None:
+                    period_matches_boundaries = False
+                elif not math.isclose(
+                    period, end - start, rel_tol=1e-9, abs_tol=1e-15
+                ):
+                    period_matches_boundaries = False
+
+            if sw_fall is None:
+                if sw_high is not None:
+                    sw_high_matches_boundaries = False
+            elif sw_high is None or not math.isclose(
+                sw_high, sw_fall - start, rel_tol=1e-9, abs_tol=1e-15
+            ):
+                sw_high_matches_boundaries = False
+
+            primary_times = {}
+            for name, (count_field, time_field) in CSV_EVENT_FIELDS.items():
+                count = integer(row[count_field])
+                event_time = number(row[time_field])
+                if count < 0 or ((count == 0) != (event_time is None)):
+                    event_times_match_counts = False
+                if name in REQUIRED_CSV_EVENT_NAMES:
+                    if status == "complete" and count != 1:
+                        complete_rows_have_one_primary_event_each = False
+                    if status == "complete" and (
+                        event_time is None or end is None
+                        or not (start <= event_time < end)
+                    ):
+                        event_times_in_half_open_period = False
+                    if event_time is not None:
+                        primary_times[name] = event_time
+
+            if status == "complete":
+                if integer(row["raw_10v_rises_in_period"]) != 1:
+                    complete_rows_have_one_primary_event_each = False
+                if not order_valid:
+                    event_order_matches_timestamps = False
+
+            ordered_names = (
+                "pvin_cross",
+                "u5_toff_0p5V_rise",
+                "gate_l_rise",
+                "cap_reset_0p5V_fall",
+                "sw_fall_10V",
+            )
+            ordered_values = [primary_times.get(name) for name in ordered_names]
+            if all(value is not None for value in ordered_values):
+                if not all(
+                    ordered_values[i] <= ordered_values[i + 1] + 1e-15
+                    for i in range(len(ordered_values) - 1)
+                ):
+                    event_order_matches_timestamps = False
+                if not order_valid:
+                    event_order_matches_timestamps = False
+            elif status == "complete":
+                event_order_matches_timestamps = False
+
+        checks = {
+            "csv_cycle_accounting_matches_summary": accounting_match,
+            "csv_event_completeness_matches_summary": completeness_match,
+            "csv_event_multiplicity_matches_summary": multiplicity_match,
+            "cycle_valid_flags_match_status": cycle_valid_matches_status,
+            "complete_cycles_have_one_primary_event_each": (
+                complete_rows_have_one_primary_event_each
+            ),
+            "event_times_match_event_counts": event_times_match_counts,
+            "primary_event_times_are_inside_half_open_cycle": (
+                event_times_in_half_open_period
+            ),
+            "primary_event_order_matches_timestamps": event_order_matches_timestamps,
+            "period_matches_cycle_boundaries": period_matches_boundaries,
+            "sw_high_matches_cycle_boundaries": sw_high_matches_boundaries,
+        }
+        return {
+            "csv_path": str(Path(csv_path)),
+            "csv_row_count": len(rows),
+            "recomputed_cycle_accounting": accounting,
+            "recomputed_event_completeness": completeness,
+            "recomputed_event_multiplicity": multiplicity,
+            "checks": checks,
+            "match": all(checks.values()),
+        }
+    except (KeyError, TypeError, ValueError, OSError) as exc:
+        return {
+            "csv_path": str(Path(csv_path)),
+            "match": False,
+            "error": f"{type(exc).__name__}: {exc}",
+        }
+
+
 def run_configuration_check(summary, step):
     parameters = summary.get("run_parameters", {})
     observed = {
@@ -350,6 +546,10 @@ def main():
     summary50 = json.loads(summary50_path.read_text(encoding="utf-8"))
     summary25 = json.loads(summary25_path.read_text(encoding="utf-8"))
     comparison = json.loads(comparison_path.read_text(encoding="utf-8"))
+    csv50_path = out50 / "fsw_internal_cycles.csv"
+    csv25_path = out25 / "fsw_internal_cycles.csv"
+    csv_audit50 = csv_summary_consistency_check(csv50_path, summary50)
+    csv_audit25 = csv_summary_consistency_check(csv25_path, summary25)
 
     accounting50 = cycle_accounting_check(summary50, 50)
     accounting25 = cycle_accounting_check(summary25, 25)
@@ -373,6 +573,8 @@ def main():
         "25ns_event_completeness": events25["all_required_event_counts_cover_valid_cycles"],
         "50ns_no_missing_or_multiple_events": multiplicity50["required_events_no_missing_or_multiple"],
         "25ns_no_missing_or_multiple_events": multiplicity25["required_events_no_missing_or_multiple"],
+        "50ns_csv_summary_consistency": csv_audit50["match"],
+        "25ns_csv_summary_consistency": csv_audit25["match"],
         "50ns_run_configuration": config50["match"],
         "25ns_run_configuration": config25["match"],
         "50ns_prescribed_frequency_measurement": frequency50["match"],
@@ -415,6 +617,7 @@ def main():
                 "cycle_accounting": accounting50,
                 "event_completeness": events50,
                 "event_multiplicity": multiplicity50,
+                "csv_consistency_audit": csv_audit50,
                 "run_configuration": config50,
                 "prescribed_frequency_measurement": frequency50,
             },
@@ -423,6 +626,7 @@ def main():
                 "cycle_accounting": accounting25,
                 "event_completeness": events25,
                 "event_multiplicity": multiplicity25,
+                "csv_consistency_audit": csv_audit25,
                 "run_configuration": config25,
                 "prescribed_frequency_measurement": frequency25,
                 "analysis_status": summary25.get("analysis_status"),
