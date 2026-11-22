@@ -3,7 +3,9 @@ param(
     [Parameter(Mandatory = $true)]
     [string]$LtspiceExe,
 
-    [string[]]$Case = @()
+    [string[]]$Case = @(),
+
+    [string]$NetlistSubdir = "netlists"
 )
 
 Set-StrictMode -Version Latest
@@ -17,7 +19,7 @@ function Get-HashOrBlank([string]$Path) {
 }
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$netlistDir = Join-Path $scriptDir "netlists"
+$netlistDir = Join-Path $scriptDir $NetlistSubdir
 $modelPath = (Resolve-Path -LiteralPath (
     Join-Path $netlistDir "..\..\..\..\sim\tps61088_v1_3\model\TPS61088_LT.LIB"
 )).Path
@@ -49,6 +51,16 @@ try {
     $versionOutput = "version query failed: $($_.Exception.Message)"
 }
 
+$metadataByCase = @{}
+$metadataPath = Join-Path $netlistDir "manifest.csv"
+if (Test-Path -LiteralPath $metadataPath -PathType Leaf) {
+    foreach ($metadata in (Import-Csv -LiteralPath $metadataPath)) {
+        if ($metadata.case) {
+            $metadataByCase[$metadata.case] = $metadata
+        }
+    }
+}
+
 $records = New-Object System.Collections.Generic.List[object]
 
 foreach ($deck in $decks) {
@@ -60,6 +72,10 @@ foreach ($deck in $decks) {
     }
 
     $caseName = $deck.BaseName
+    $metadata = $null
+    if ($metadataByCase.ContainsKey($caseName)) {
+        $metadata = $metadataByCase[$caseName]
+    }
     $caseDir = Join-Path $resultsRoot $caseName
     New-Item -ItemType Directory -Path $caseDir -Force | Out-Null
     Copy-Item -LiteralPath $deck.FullName -Destination $caseDir
@@ -99,6 +115,12 @@ foreach ($deck in $decks) {
 
     $records.Add([PSCustomObject]@{
         case = $caseName
+        architecture = if ($metadata) { $metadata.architecture } else { "" }
+        checkpoint_s = if ($metadata) { $metadata.checkpoint_s } else { "" }
+        expected_pack_ocv_v = if ($metadata) { $metadata.expected_pack_ocv_v } else { "" }
+        expected_pack_terminal_v = if ($metadata) { $metadata.expected_pack_terminal_v } else { "" }
+        expected_input_current_a = if ($metadata) { $metadata.expected_input_current_a } else { "" }
+        vin_source_v = if ($metadata) { $metadata.vin_source_v } else { "" }
         input_deck_sha256 = Get-HashOrBlank $deck.FullName
         model_sha256 = Get-HashOrBlank $modelPath
         exit_code = $exitCode
