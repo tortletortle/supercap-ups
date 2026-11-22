@@ -1,0 +1,39 @@
+name: V1.4 FSW Python checks
+
+on:
+  push:
+    branches:
+      - v1.4-audit-frequency-ilim
+    paths:
+      - "sim/tps61088_v1_4/scripts/**"
+      - "sim/tps61088_v1_4/tests/**"
+      - ".github/workflows/v1-4-fsw-python-tests.yml"
+  pull_request:
+    paths:
+      - "sim/tps61088_v1_4/scripts/**"
+      - "sim/tps61088_v1_4/tests/**"
+      - ".github/workflows/v1-4-fsw-python-tests.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  python-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install analyzer dependency
+        run: python -m pip install --disable-pip-version-check "numpy>=1.26,<3"
+      - name: Compile FSW analysis modules
+        run: |
+          python -m py_compile \
+            sim/tps61088_v1_4/scripts/analyze_fsw_internal.py \
+            sim/tps61088_v1_4/scripts/ltspice_raw.py \
+            sim/tps61088_v1_4/scripts/run_fsw_internal_pairing_v2.py
+      - name: Run FSW unit tests
+        run: python -m unittest discover -s sim/tps61088_v1_4/tests -v
