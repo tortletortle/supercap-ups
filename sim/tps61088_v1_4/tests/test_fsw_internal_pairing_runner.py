@@ -159,24 +159,24 @@ class PairingRunnerTests(unittest.TestCase):
         summary["cycle_accounting"]["invalid_cycles"] = 1
         self.assertFalse(runner.cycle_accounting_check(summary, 50)["match"])
 
-    def test_event_completeness_must_cover_every_valid_cycle(self):
+    def test_event_completeness_gates_primary_events_not_diagnostic_comparator(self):
         summary = {
             "cycle_accounting": {"complete_valid_cycles": 2},
             "event_completeness": {
                 "pvin_cross_s": 2,
-                "comparator_output_rise_s": 2,
+                "comparator_output_rise_s": 0,
                 "u5_toff_0p5V_rise_s": 2,
                 "gate_l_rise_s": 2,
                 "cap_reset_0p5V_fall_s": 2,
                 "sw_fall_10V_s": 2,
             },
         }
-        self.assertTrue(
-            runner.event_completeness_check(summary)["all_event_counts_cover_valid_cycles"]
-        )
+        check = runner.event_completeness_check(summary)
+        self.assertTrue(check["all_required_event_counts_cover_valid_cycles"])
+        self.assertEqual(check["diagnostic_only_event_counts"]["comparator_output_rise_s"], 0)
         summary["event_completeness"]["u5_toff_0p5V_rise_s"] = 1
         self.assertFalse(
-            runner.event_completeness_check(summary)["all_event_counts_cover_valid_cycles"]
+            runner.event_completeness_check(summary)["all_required_event_counts_cover_valid_cycles"]
         )
 
 
