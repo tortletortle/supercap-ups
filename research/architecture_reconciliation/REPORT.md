@@ -222,7 +222,7 @@ V_{\rm terminal}=V_{\rm oc}-IR_{\rm pack}
 按以下顺序推进：
 
 1. **向 KAMCAP 询证 LR-2R7-J256UYJ21：** 容量容差、DC ESR 测量电流/方法、1 s 与 5 s 最大脉冲电流、漏电流、样品价格、批量价格和交期。
-2. **新增 TPS61088 低输入电压仿真矩阵：** VIN=3.2/3.6/4.0/4.4/4.8 V，12 V/1 A，统一实际 RFSW、L1、RILIM、MODE 和输出滤波参数；记录稳态效率、纹波、输入平均/峰值电流、开关峰值和启动。TI 的 PMP9778 已证明 TPS61088 可在 3～4.2 V 输入范围提供 12 V/1.5 A 输出能力，但该参考设计不能替代本项目的效率和热验证。
+2. **已准备 TPS61088 低输入电压仿真矩阵：** 已生成 VIN=3.2/3.6/4.0/4.4/4.8 V 五份 12 V/1 A LTspice 网表，保持 3.3 µH、26 mΩ DCR、RFSW=324 kΩ、RILIM=100 kΩ、MODE=GND。当前五份均为 not_run，必须在 Windows LTspice 中实际运行。RILIM=100 kΩ 是高限流基线；不能直接套用此前为 4S 工况筛出的 174 kΩ 候选。TI PMP9778 的 3～4.2 V、12 V/1.5 A 参考设计只证明拓扑有先例，不替代本项目效率和热验证。
 3. **修正 4S10F EOL 器件级窗口：** 使用 6.3 F/颗、130 mΩ/颗、9.4 V 初始包电压，检查 7 V 截止附近的输出调节、限流和纹波。原 V1.4 的 eol_1p2s_130m_92pct.cir 是预偏置局部开关窗口，不是连续 1.2 s 仿真。
 4. **用实测效率映射重跑三种架构：** 不再用同一个固定 92% 值替代 4～9 V 输入范围内的效率差异。
 5. **最后才做第一版储能 BOM 决策。**
@@ -231,16 +231,20 @@ V_{\rm terminal}=V_{\rm oc}-IR_{\rm pack}
 
 - compare_storage_architectures.py：纯 Python 标准库恒功率 + ESR 模型；
 - test_compare_storage_architectures.py：7 项回归测试；
-- results.csv：18 组名义/EOL 与效率敏感性结果。
+- results.csv：18 组名义/EOL 与效率敏感性结果；
+- low_vin_boost/generate_low_vin_matrix.py：五点低输入电压网表生成器；
+- low_vin_boost/netlists/：五份 LTspice 输入网表与 manifest.csv，当前全部 not_run；
+- low_vin_boost/test_low_vin_matrix.py：4 项网表生成测试。
 
 运行：
 
 ~~~bash
-python compare_storage_architectures.py
-python -m unittest -v
+python research/architecture_reconciliation/compare_storage_architectures.py
+python -m unittest discover -s research/architecture_reconciliation -p "test_*.py" -v
+python -m unittest discover -s research/architecture_reconciliation/low_vin_boost -p "test_*.py" -v
 ~~~
 
-模型的时间步长收敛差异小于 0.1 ms，EOL 案例的电容能量守恒残差小于 0.0001 J。以上仅验证模型实现与数值积分，不代表 LTspice、硬件或竞赛指标通过。
+CI 共运行 11 项 Python 测试，并重新生成 CSV 与五份低输入电压网表进行一致性比对。默认 0.1 ms CSV 的能量平衡残差小于 0.0004 J；1e-5 s 高精度单元测试中的 EOL 残差小于 0.0001 J；保持时间步长敏感性小于 0.1 ms。以上只验证模型实现和网表生成，不代表 LTspice 电路仿真、硬件或竞赛指标通过。
 
 ## 参考资料
 
