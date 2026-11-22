@@ -164,6 +164,11 @@ def analyze_case(row: dict, case_dir: Path, model_path: Path) -> dict:
     required_measurements = set(REQUIRED_MEASUREMENTS)
     if row.get("architecture"):
         required_measurements.update(PACK_REQUIRED_MEASUREMENTS)
+    if row.get("case_type") == "prebiased_transfer":
+        required_measurements.update({
+            "vout_at_enable", "vout_pre_enable_min",
+            "vout_first_5ms_min", "vout_global_min",
+        })
     missing = sorted(required_measurements - set(m))
     failed_required = sorted(required_measurements & set(log["failed_measurements"]))
 
