@@ -134,9 +134,18 @@ def build_manifest_rows() -> list[dict]:
     rows = []
     for order, (architecture, _) in enumerate(CANDIDATES, start=1):
         _, case = render_deck(architecture)
-        rows.append({
+        row = {
             "run_order": order,
             **case,
+        }
+        for field in (
+            "checkpoint_s", "expected_pack_ocv_v", "expected_pack_terminal_v",
+            "expected_input_current_a", "Ceq_F", "Rpack_ohm",
+            "boost_efficiency", "path_efficiency",
+        ):
+            row[field] = _num(float(row[field]))
+        rows.append({
+            **row,
             "vin_source_v": "",
             "vout_target_v": "12.0",
             "iout_target_a": "1.0",
