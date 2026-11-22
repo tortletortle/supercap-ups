@@ -212,6 +212,59 @@ class PairingRunnerTests(unittest.TestCase):
             self.assertTrue(audit["match"], audit)
             self.assertTrue(audit["checks"]["csv_event_multiplicity_matches_summary"])
 
+    def test_csv_summary_consistency_audit_accepts_consistently_reported_invalid_order(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "invalid_order.csv"
+            row = {
+                "cycle_start_s": "0", "next_cycle_start_s": "2",
+                "period_s": "2", "sw_high_s": "1.5",
+                "cycle_status": "invalid", "cycle_valid": "False",
+                "event_order_valid": "False",
+                "raw_10v_rises_in_period": "1",
+                "pvin_cross_count": "1", "pvin_cross_s": "0.2",
+                "comparator_output_rise_count": "1",
+                "comparator_output_rise_s": "0.25",
+                "u5_toff_0p5V_rise_count": "1",
+                "u5_toff_0p5V_rise_s": "0.6",
+                "gate_l_rise_count": "1", "gate_l_rise_s": "0.5",
+                "cap_reset_0p5V_fall_count": "1",
+                "cap_reset_0p5V_fall_s": "0.7",
+                "sw_fall_10V_count": "1", "sw_fall_10V_s": "1.5",
+            }
+            with path.open("w", newline="", encoding="utf-8") as stream:
+                writer = csv.DictWriter(stream, fieldnames=list(row))
+                writer.writeheader()
+                writer.writerow(row)
+            summary = {
+                "cycle_accounting": {
+                    "candidate_cycles": 1,
+                    "complete_valid_cycles": 0,
+                    "right_censored_cycles": 0,
+                    "invalid_cycles": 1,
+                },
+                "event_completeness": {
+                    "pvin_cross_s": 1,
+                    "comparator_output_rise_s": 1,
+                    "u5_toff_0p5V_rise_s": 1,
+                    "gate_l_rise_s": 1,
+                    "cap_reset_0p5V_fall_s": 1,
+                    "sw_fall_10V_s": 1,
+                },
+                "event_multiplicity": {
+                    name: {"missing_cycles": 0, "multiple_cycles": 0}
+                    for name in (
+                        "pvin_cross", "comparator_output_rise",
+                        "u5_toff_0p5V_rise", "gate_l_rise",
+                        "cap_reset_0p5V_fall", "sw_fall_10V",
+                    )
+                },
+            }
+            audit = runner.csv_summary_consistency_check(path, summary)
+            self.assertTrue(audit["match"], audit)
+            self.assertTrue(
+                audit["checks"]["primary_event_order_matches_timestamps"]
+            )
+
     def test_csv_summary_consistency_audit_rejects_primary_event_multiplicity_mismatch(self):
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "cycles.csv"
