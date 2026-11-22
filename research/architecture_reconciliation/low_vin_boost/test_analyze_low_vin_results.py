@@ -32,6 +32,13 @@ iout_avg: AVG(I(VLOAD))=1.0 FROM 0.035 TO 0.037
 pin: AVG(-V(vin)*I(V1))=14.4 FROM 0.035 TO 0.037
 pout: AVG(V(vout)*I(VLOAD))=12.0 FROM 0.035 TO 0.037
 eff: 100*pout/pin=83.3333
+pack_ocv_avg: AVG(V(PACK_OC))=4.34 FROM 0.035 TO 0.037
+pack_terminal_avg: AVG(V(PACK))=2.87 FROM 0.035 TO 0.037
+pack_input_avg: AVG(V(PACK_IN))=2.86 FROM 0.035 TO 0.037
+ppack: AVG(V(PACK)*I(VSENSE))=11.48 FROM 0.035 TO 0.037
+pack_esr_loss_w: AVG(I(VSENSE)*I(VSENSE)*0.32)=5.12 FROM 0.035 TO 0.037
+path_loss_w: AVG(I(VSENSE)*I(VSENSE)*0.002)=0.032 FROM 0.035 TO 0.037
+eff_pack: 100*pout/ppack=104.5296
 """
 
 
@@ -114,6 +121,59 @@ class LowVinLogParserTests(unittest.TestCase):
             result = analyze_case(row, case, model)
             self.assertEqual(result["screen_result"], "screen_fail")
             self.assertFalse(result["check_ripple_at_most_100mVpp"])
+
+    def test_pack_coupled_checkpoint_requires_and_reports_pack_measurements(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            case = root / "case"
+            case.mkdir()
+            deck = case / "case.cir"
+            log = case / "case.log"
+            raw = case / "case.raw"
+            model = root / "model.lib"
+            deck.write_text(".tran 0 40m 0 50n uic\n")
+            log.write_text(GOOD_LOG)
+            raw.write_bytes(b"synthetic raw")
+            model.write_text("* synthetic model\n")
+            row = {
+                "case": "case", "architecture": "2S30F_KAM_HP_40",
+                "checkpoint_s": "1.2", "expected_pack_ocv_v": "4.3407",
+                "expected_pack_terminal_v": "2.8735",
+                "expected_input_current_a": "4.5851", "exit_code": "0",
+                "input_deck_sha256": sha(deck), "log_sha256": sha(log),
+                "raw_sha256": sha(raw), "model_sha256": sha(model),
+            }
+            result = analyze_case(row, case, model)
+            self.assertEqual(result["screen_result"], "screen_pass")
+            self.assertAlmostEqual(result["pack_terminal_delta_v"], -0.0035)
+            self.assertAlmostEqual(result["input_current_delta_a"], -0.5851)
+            self.assertAlmostEqual(result["pack_esr_loss_w"], 5.12)
+            self.assertEqual(result["architecture"], "2S30F_KAM_HP_40")
+
+    def test_pack_checkpoint_missing_required_pack_measurement_is_incomplete(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            case = root / "case"
+            case.mkdir()
+            deck = case / "case.cir"
+            log = case / "case.log"
+            raw = case / "case.raw"
+            model = root / "model.lib"
+            deck.write_text(".tran 0 40m 0 50n uic\n")
+            log.write_text(GOOD_LOG.replace(
+                "pack_terminal_avg: AVG(V(PACK))=2.87 FROM 0.035 TO 0.037\n", ""
+            ))
+            raw.write_bytes(b"synthetic raw")
+            model.write_text("* synthetic model\n")
+            row = {
+                "case": "case", "architecture": "2S30F_KAM_HP_40",
+                "expected_pack_terminal_v": "2.8735", "exit_code": "0",
+                "input_deck_sha256": sha(deck), "log_sha256": sha(log),
+                "raw_sha256": sha(raw), "model_sha256": sha(model),
+            }
+            result = analyze_case(row, case, model)
+            self.assertEqual(result["screen_result"], "measurement_incomplete")
+            self.assertIn("pack_terminal_avg", result["missing_measurements"])
 
     def test_hash_mismatch_blocks_screen_pass(self):
         with tempfile.TemporaryDirectory() as tmp:
