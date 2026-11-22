@@ -18,8 +18,8 @@ from simulate_calibrated_hold_up import (
 
 def constant_map(efficiency=0.92, min_vin=2.0, max_vin=6.0):
     return EfficiencyMap([
-        {"case": "low", "vin_v": min_vin, "efficiency": efficiency, "peak_i_a": 3.0},
-        {"case": "high", "vin_v": max_vin, "efficiency": efficiency, "peak_i_a": 4.0},
+        {"case": "low", "vin_v": min_vin, "efficiency": efficiency, "peak_i_a": 3.0, "f_sw_khz": 450.0},
+        {"case": "high", "vin_v": max_vin, "efficiency": efficiency, "peak_i_a": 4.0, "f_sw_khz": 500.0},
     ])
 
 
@@ -28,7 +28,7 @@ def write_analysis_csv(path, failed_case=None, omit_case=None):
         "case", "screen_result", "simulation_complete", "timing_order_ok",
         "deck_hash_ok", "log_hash_ok", "raw_hash_ok", "model_hash_ok",
         "vin_avg_v", "eff_model_pct", "peak_i_a", "avg_vout_v",
-        "iout_avg_a", "ripple_mVpp",
+        "iout_avg_a", "ripple_mVpp", "f_sw_khz",
     ]
     with path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
@@ -52,6 +52,7 @@ def write_analysis_csv(path, failed_case=None, omit_case=None):
                 "avg_vout_v": 12.0,
                 "iout_avg_a": 1.0,
                 "ripple_mVpp": 45.0,
+                "f_sw_khz": 440.0 + index * 10.0,
             })
 
 
@@ -143,6 +144,8 @@ class CalibratedHoldUpTests(unittest.TestCase):
                 "point_count": 7,
                 "min_vin_v": 2.8,
                 "max_vin_v": 4.8,
+                "min_f_sw_khz": 440.0,
+                "max_f_sw_khz": 500.0,
             })
             self.assertTrue((output / "calibrated_hold_up_summary.csv").is_file())
             report = (output / "calibrated_hold_up_report.md").read_text(encoding="utf-8")
