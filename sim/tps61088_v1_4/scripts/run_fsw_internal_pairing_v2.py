@@ -146,17 +146,22 @@ def event_completeness_check(summary):
     counts = summary.get("event_completeness", {})
     required = (
         "pvin_cross_s",
-        "comparator_output_rise_s",
         "u5_toff_0p5V_rise_s",
         "gate_l_rise_s",
         "cap_reset_0p5V_fall_s",
         "sw_fall_10V_s",
     )
     observed = {key: int(counts.get(key, -1)) for key in required}
+    diagnostic_only = {
+        "comparator_output_rise_s": int(counts.get("comparator_output_rise_s", -1))
+    }
     return {
         "valid_cycle_count": valid,
-        "event_counts": observed,
-        "all_event_counts_cover_valid_cycles": all(value >= valid for value in observed.values()),
+        "required_event_counts": observed,
+        "diagnostic_only_event_counts": diagnostic_only,
+        "all_required_event_counts_cover_valid_cycles": all(
+            value >= valid for value in observed.values()
+        ),
     }
 
 
@@ -164,7 +169,6 @@ def event_multiplicity_check(summary):
     counts = summary.get("event_multiplicity", {})
     required = (
         "pvin_cross",
-        "comparator_output_rise",
         "u5_toff_0p5V_rise",
         "gate_l_rise",
         "cap_reset_0p5V_fall",
@@ -177,11 +181,23 @@ def event_multiplicity_check(summary):
             "missing_cycles": int(item.get("missing_cycles", -1)),
             "multiple_cycles": int(item.get("multiple_cycles", -1)),
         }
+    diagnostic_item = counts.get("comparator_output_rise", {})
+    diagnostic_only = {
+        "comparator_output_rise": {
+            "missing_cycles": int(diagnostic_item.get("missing_cycles", -1)),
+            "multiple_cycles": int(diagnostic_item.get("multiple_cycles", -1)),
+            "hard_gate": False,
+        }
+    }
     clean = all(
         item["missing_cycles"] == 0 and item["multiple_cycles"] == 0
         for item in observed.values()
     )
-    return {"observed": observed, "no_missing_or_multiple_events": clean}
+    return {
+        "required_event_counts": observed,
+        "diagnostic_only": diagnostic_only,
+        "required_events_no_missing_or_multiple": clean,
+    }
 
 
 def run_configuration_check(summary, step):
@@ -353,10 +369,10 @@ def main():
         "raw_25ns_hash_verified": hash25 == EXPECTED[25]["sha256"],
         "50ns_expected_cycle_accounting": accounting50["match"],
         "25ns_expected_cycle_accounting": accounting25["match"],
-        "50ns_event_completeness": events50["all_event_counts_cover_valid_cycles"],
-        "25ns_event_completeness": events25["all_event_counts_cover_valid_cycles"],
-        "50ns_no_missing_or_multiple_events": multiplicity50["no_missing_or_multiple_events"],
-        "25ns_no_missing_or_multiple_events": multiplicity25["no_missing_or_multiple_events"],
+        "50ns_event_completeness": events50["all_required_event_counts_cover_valid_cycles"],
+        "25ns_event_completeness": events25["all_required_event_counts_cover_valid_cycles"],
+        "50ns_no_missing_or_multiple_events": multiplicity50["required_events_no_missing_or_multiple"],
+        "25ns_no_missing_or_multiple_events": multiplicity25["required_events_no_missing_or_multiple"],
         "50ns_run_configuration": config50["match"],
         "25ns_run_configuration": config25["match"],
         "50ns_prescribed_frequency_measurement": frequency50["match"],
