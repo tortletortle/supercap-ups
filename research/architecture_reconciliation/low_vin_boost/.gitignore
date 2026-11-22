@@ -7,3 +7,6 @@ netlists/*.op.raw
 checkpoints/*.raw
 checkpoints/*.db
 checkpoints/*.op.raw
+transfer/*.raw
+transfer/*.db
+transfer/*.op.raw
