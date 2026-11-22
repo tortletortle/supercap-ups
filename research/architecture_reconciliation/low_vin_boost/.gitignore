@@ -1,3 +1,9 @@
 results/**/*.raw
 results/**/*.db
 results/**/*.op.raw
+netlists/*.raw
+netlists/*.db
+netlists/*.op.raw
+checkpoints/*.raw
+checkpoints/*.db
+checkpoints/*.op.raw
