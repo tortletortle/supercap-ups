@@ -186,5 +186,5 @@ py -3 sim/tps61088_v1_4/scripts/run_fsw_internal_pairing_v2.py
 
 自动化回归状态：2026-11-22 GitHub Actions run #7 已通过，Python 3.11 下三个 FSW 模块语法检查成功，21 项 V1.4 单元测试全部通过。该结果不替代 Windows 本机对 50/25 ns RAW 的哈希核验和 pairing-v2 实际后处理。
 
-注意：run #7 的 21 项通过结果对应此前提交。当前分支随后增加了 3 项 runner 测试（当前合计 24 项）；最新 HEAD 尚无可见 CI 结果，这 3 项不标记为已通过。
+最新验证：GitHub Actions run #14（run ID 44976985653）已在当前 24-test revision 上通过；三个模块语法检查和 24 项单元测试全部成功。
 
