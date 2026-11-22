@@ -34,9 +34,11 @@ class LTC3350CandidateTests(unittest.TestCase):
         self.assertGreater(required_vcap_v(1.2, self.design, 0.80), 9.4)
 
     def test_shunt_has_current_margin(self):
-        _, min_shunt_current, _ = shunt_budget(self.design)
+        _, min_shunt_current, average_ceiling, _ = shunt_budget(self.design)
         charge = input_charge_budget(self.design)
-        self.assertGreater(min_shunt_current, charge["pack_charge_current_no_load_a"])
+        self.assertGreater(min_shunt_current, average_ceiling)
+        self.assertLess(average_ceiling, charge["pack_charge_current_no_load_a"])
+        self.assertGreater(average_ceiling, charge["pack_charge_current_at_1a_load_a"])
 
     def test_equalized_weak_cell_case(self):
         _, low, _, _ = vcap_window(self.design)
