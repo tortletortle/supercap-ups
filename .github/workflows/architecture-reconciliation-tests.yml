@@ -30,6 +30,11 @@ jobs:
           python -m unittest discover \
             -s research/architecture_reconciliation \
             -p "test_*.py" -v
+      - name: Run low-VIN generator tests
+        run: |
+          python -m unittest discover \
+            -s research/architecture_reconciliation/low_vin_boost \
+            -p "test_*.py" -v
       - name: Regenerate and compare result CSV
         run: |
           python research/architecture_reconciliation/compare_storage_architectures.py \
