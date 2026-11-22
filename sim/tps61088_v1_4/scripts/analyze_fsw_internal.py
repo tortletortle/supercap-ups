@@ -193,6 +193,30 @@ def count_between(events, start, end):
     return right - left
 
 
+EVENT_COUNT_FIELDS = {
+    "pvin_cross": "pvin_cross_count",
+    "comparator_output_rise": "comparator_output_rise_count",
+    "u5_toff_0p5V_rise": "u5_toff_0p5V_rise_count",
+    "gate_l_rise": "gate_l_rise_count",
+    "cap_reset_0p5V_fall": "cap_reset_0p5V_fall_count",
+    "sw_fall_10V": "sw_fall_10V_count",
+}
+
+
+def event_multiplicity_summary(rows):
+    """Count missing and repeated events over complete SW periods only."""
+    complete_period_rows = [
+        row for row in rows if row["next_cycle_start_s"] is not None
+    ]
+    return {
+        name: {
+            "missing_cycles": sum(row[field] == 0 for row in complete_period_rows),
+            "multiple_cycles": sum(row[field] > 1 for row in complete_period_rows),
+        }
+        for name, field in EVENT_COUNT_FIELDS.items()
+    }
+
+
 def summary(values):
     x = np.asarray(
         [v for v in values if v is not None and np.isfinite(v)], dtype=float
@@ -681,24 +705,7 @@ def main():
     event_completeness = {
         key: sum(row[key] is not None for row in rows) for key in event_keys
     }
-    complete_period_rows = [
-        row for row in rows if row["next_cycle_start_s"] is not None
-    ]
-    event_count_fields = {
-        "pvin_cross": "pvin_cross_count",
-        "comparator_output_rise": "comparator_output_rise_count",
-        "u5_toff_0p5V_rise": "u5_toff_0p5V_rise_count",
-        "gate_l_rise": "gate_l_rise_count",
-        "cap_reset_0p5V_fall": "cap_reset_0p5V_fall_count",
-        "sw_fall_10V": "sw_fall_10V_count",
-    }
-    event_multiplicity = {
-        name: {
-            "missing_cycles": sum(row[field] == 0 for row in complete_period_rows),
-            "multiple_cycles": sum(row[field] > 1 for row in complete_period_rows),
-        }
-        for name, field in event_count_fields.items()
-    }
+    event_multiplicity = event_multiplicity_summary(rows)
 
     summary_data = {
         "raw_path": str(args.raw.resolve()),
