@@ -18,6 +18,13 @@ function Get-HashOrBlank([string]$Path) {
     return ""
 }
 
+function Get-MetadataValue($Metadata, [string]$Name) {
+    if ($null -ne $Metadata -and $Metadata.PSObject.Properties.Name -contains $Name) {
+        return $Metadata.$Name
+    }
+    return ""
+}
+
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $netlistDir = Join-Path $scriptDir $NetlistSubdir
 $modelPath = (Resolve-Path -LiteralPath (
@@ -115,12 +122,12 @@ foreach ($deck in $decks) {
 
     $records.Add([PSCustomObject]@{
         case = $caseName
-        architecture = if ($metadata) { $metadata.architecture } else { "" }
-        checkpoint_s = if ($metadata) { $metadata.checkpoint_s } else { "" }
-        expected_pack_ocv_v = if ($metadata) { $metadata.expected_pack_ocv_v } else { "" }
-        expected_pack_terminal_v = if ($metadata) { $metadata.expected_pack_terminal_v } else { "" }
-        expected_input_current_a = if ($metadata) { $metadata.expected_input_current_a } else { "" }
-        vin_source_v = if ($metadata) { $metadata.vin_source_v } else { "" }
+        architecture = Get-MetadataValue $metadata "architecture"
+        checkpoint_s = Get-MetadataValue $metadata "checkpoint_s"
+        expected_pack_ocv_v = Get-MetadataValue $metadata "expected_pack_ocv_v"
+        expected_pack_terminal_v = Get-MetadataValue $metadata "expected_pack_terminal_v"
+        expected_input_current_a = Get-MetadataValue $metadata "expected_input_current_a"
+        vin_source_v = Get-MetadataValue $metadata "vin_source_v"
         input_deck_sha256 = Get-HashOrBlank $deck.FullName
         model_sha256 = Get-HashOrBlank $modelPath
         exit_code = $exitCode
