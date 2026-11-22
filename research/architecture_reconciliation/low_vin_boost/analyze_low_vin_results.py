@@ -236,6 +236,10 @@ def analyze_case(row: dict, case_dir: Path, model_path: Path) -> dict:
         float(pack_terminal_actual) - float(expected_pack_terminal)
         if pack_terminal_actual != "" and expected_pack_terminal != "" else ""
     )
+    pack_ocv_delta = (
+        float(pack_ocv_actual) - float(expected_pack_ocv)
+        if pack_ocv_actual != "" and expected_pack_ocv != "" else ""
+    )
     input_current_delta = (
         float(m["iin_avg"]) - float(expected_input_current)
         if "iin_avg" in m and expected_input_current != "" else ""
@@ -248,6 +252,7 @@ def analyze_case(row: dict, case_dir: Path, model_path: Path) -> dict:
         "vin_source_v": row.get("vin_source_v", ""),
         "expected_pack_ocv_v": expected_pack_ocv,
         "pack_ocv_avg_v": pack_ocv_actual,
+        "pack_ocv_delta_v": pack_ocv_delta,
         "expected_pack_terminal_v": expected_pack_terminal,
         "pack_terminal_avg_v": pack_terminal_actual,
         "pack_terminal_delta_v": pack_terminal_delta,
@@ -360,8 +365,10 @@ def write_outputs(run_dir: Path, rows: list[dict]) -> None:
             f"- Model power ratio: {fmt_value(row.get('eff_model_pct'), '%')} (not hardware efficiency)",
             f"- Average input current: {fmt_value(row.get('iin_avg_a'), 'A')}",
             f"- Expected pack terminal: {fmt_value(row.get('expected_pack_terminal_v'), 'V')}",
+            f"- Measured pack OCV: {fmt_value(row.get('pack_ocv_avg_v'), 'V')}",
+            f"- Pack OCV change during local window: {fmt_value(row.get('pack_ocv_delta_v'), 'V')}",
             f"- Measured pack terminal: {fmt_value(row.get('pack_terminal_avg_v'), 'V')}",
-            f"- Pack terminal delta vs behavioral checkpoint: {fmt_value(row.get('pack_terminal_delta_v'), 'V')}",
+            f"- Pack terminal delta vs t=1.2s reference: {fmt_value(row.get('pack_terminal_delta_v'), 'V')}",
             f"- Pack ESR loss: {fmt_value(row.get('pack_esr_loss_w'), 'W')}",
             f"- Macro-model efficiency at converter input: {fmt_value(row.get('eff_model_pct'), '%')}",
             f"- Startup peak inductor current: {fmt_value(row.get('peak_start_a'), 'A')}",
