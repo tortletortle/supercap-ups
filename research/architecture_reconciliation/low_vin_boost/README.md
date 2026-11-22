@@ -60,6 +60,32 @@ py -3 .\simulate_calibrated_hold_up.py --analysis-csv .\results\<run_timestamp>\
 
 The script writes calibrated_hold_up_summary.csv and calibrated_hold_up_report.md beside the input analysis CSV. Preserve the source analysis CSV and its SHA-256 with the report. If the calibrated trajectory leaves the measured VIN range before 1.2 s, the result is NOT VERIFIED; do not extrapolate efficiency or call it a physical cutoff prediction.
 
+## Prebiased 12 V output-bus transfer matrix
+
+The system architecture gives the main supply priority and uses the supercapacitor Boost stage as backup. During a real switchover, the 12 V output bus is already energized and the load does not disappear while the backup converter starts. A cold-start deck with COUT=0 and a load gated by EN does not represent that event.
+
+A separate nine-case transfer matrix now models this boundary:
+- three 2S candidates: J306VYJ23 (44 mΩ), J306VYJ22 (40 mΩ), and J256UYJ21 (25 mΩ);
+- EOL capacitance and EOL DC ESR, but the pack starts fully charged at 4.8 V;
+- output capacitor COUT=47 µF prebiased to 12 V;
+- 1 A constant-current load remains connected throughout the transfer;
+- backup EN delay sensitivity points of 20, 50, and 100 µs, followed by a 1 µs EN ramp;
+- 2 mΩ input path, same TPS61088 macro-model and switching BOM baseline.
+
+The three enable delays are sensitivity points, not claims about the actual controller response. The decks record output voltage immediately before enable, the average output voltage during the final 1 µs before enable, the minimum during the first 5 ms, and the global minimum over 40 ms. They also record steady-state regulation, ripple, input current, inductor current and observed FSW.
+
+No minimum output-voltage acceptance limit has been invented. The analyzer therefore labels a complete transfer run as transfer_review_required, not screen_pass, even if the later steady-state window regulates correctly. The minimum-output trace must be compared with the system's actual load brownout/reset tolerance before the transfer can be accepted.
+
+Generate, run and analyze:
+
+~~~powershell
+py -3 .\generate_prebiased_transfer_decks.py
+powershell -ExecutionPolicy Bypass -File .\run_low_vin_matrix.ps1 -LtspiceExe "C:\Program Files\ADI\LTspice\LTspice.exe" -NetlistSubdir transfer
+py -3 .\analyze_low_vin_results.py --run-dir .\results\<run_timestamp>
+~~~
+
+This 40 ms test covers initial switchover and recovery only. It does not replace the continuous 1.2 s storage-side integration or the separate EOL local operating-point check.
+
 ## EOL pack-coupled checkpoint decks
 
 七点固定 VIN 矩阵把输入端视为理想电压源，适合隔离 Boost 在不同 VIN 下的启动和稳态表现，但不包含超级电容组的 ESR 压降。为补上这一缺口，新增两个 1.2 s EOL 局部启动窗口：
@@ -141,7 +167,9 @@ py -3 .\analyze_low_vin_results.py --run-dir .\results\<run_timestamp>
 - netlists/：七份固定 VIN LTspice 输入网表及 manifest.csv；
 - checkpoints/：两份 2S EOL pack-coupled 局部启动网表及 manifest.csv；
 - generate_eol_checkpoint_decks.py：从储能行为模型生成 EOL checkpoint 网表；
+- generate_prebiased_transfer_decks.py：生成 3 种 2S 料号 × 3 种备电使能延迟的预偏置 12 V 输出切换矩阵；
+- transfer/：9 份预偏置输出切换 LTspice 网表及 manifest.csv；
 - run_low_vin_matrix.ps1：Windows 批处理运行和证据归档脚本，支持 -NetlistSubdir；
 - analyze_low_vin_results.py：LOG/RAW/哈希与电气筛查分析器；
 - simulate_calibrated_hold_up.py：基于七点 LTspice 宏模型效率映射的连续 1.2 s 储能行为积分器；
-- test_low_vin_matrix.py、test_analyze_low_vin_results.py、test_generate_eol_checkpoint_decks.py、test_simulate_calibrated_hold_up.py：网表、证据分析和连续保持时间模型回归测试。
+- test_low_vin_matrix.py、test_analyze_low_vin_results.py、test_generate_eol_checkpoint_decks.py、test_generate_prebiased_transfer_decks.py、test_simulate_calibrated_hold_up.py：网表、证据分析、输出切换矩阵和连续保持时间模型回归测试。
