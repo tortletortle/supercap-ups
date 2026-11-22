@@ -267,6 +267,7 @@ def analyze_case(row: dict, case_dir: Path, model_path: Path) -> dict:
         "t98_ms": _ms(m, "t98"),
         "sw_t6001_ms": _ms(m, "sw_t6001"),
         "sw_t6101_ms": _ms(m, "sw_t6101"),
+        "vin_avg_v": m.get("vin_avg", ""),
         "avg_vout_v": m.get("avg_vout", ""),
         "vmin_v": m.get("vmin", ""),
         "vmax_v": m.get("vmax", ""),
