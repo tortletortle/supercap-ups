@@ -1,0 +1,36 @@
+name: LTC3350 candidate validation
+
+on:
+  push:
+    branches:
+      - ltc3350-reference-architecture
+  pull_request:
+    branches:
+      - ltc3350-reference-architecture
+
+jobs:
+  analytical-model:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run analytical model
+        run: python sim/ltc3350_reference/evaluate.py
+      - name: Run model tests
+        run: python -m unittest discover -s sim/ltc3350_reference -p 'test_*.py' -v
+
+  portable-driver:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Compile portable C11 driver and host tests
+        run: |
+          gcc -std=c11 -Wall -Wextra -Werror -pedantic \
+            firmware/ltc3350/ltc3350.c firmware/ltc3350/test_ltc3350.c \
+            -o /tmp/test_ltc3350
+          /tmp/test_ltc3350
