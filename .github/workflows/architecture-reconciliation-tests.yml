@@ -1,0 +1,68 @@
+name: Architecture reconciliation tests
+
+on:
+  push:
+    branches:
+      - architecture-reconciliation-2s-vs-4s
+    paths:
+      - "research/architecture_reconciliation/**"
+      - ".github/workflows/architecture-reconciliation-tests.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "research/architecture_reconciliation/**"
+      - ".github/workflows/architecture-reconciliation-tests.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  model-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run unit tests
+        run: |
+          python -m unittest discover \
+            -s research/architecture_reconciliation \
+            -p "test_*.py" -v
+      - name: Regenerate and compare result CSV
+        run: |
+          python research/architecture_reconciliation/compare_storage_architectures.py \
+            --output /tmp/generated-results.csv
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+
+          committed = Path("research/architecture_reconciliation/results.csv")
+          generated = Path("/tmp/generated-results.csv")
+          with committed.open(newline="", encoding="utf-8") as f:
+              expected = list(csv.DictReader(f))
+          with generated.open(newline="", encoding="utf-8") as f:
+              actual = list(csv.DictReader(f))
+          if len(expected) != len(actual):
+              raise SystemExit(f"row count mismatch: {len(expected)} != {len(actual)}")
+          numeric = {
+              "boost_efficiency", "Ceq_F", "Rpack_ohm", "hold_time_s",
+              "vterminal_at_1p2s_V", "iin_at_1p2s_A",
+              "esr_loss_at_1p2s_J", "energy_balance_error_J"
+          }
+          for i, (a, b) in enumerate(zip(expected, actual), start=2):
+              if a.keys() != b.keys():
+                  raise SystemExit(f"column mismatch at CSV row {i}")
+              for key in a:
+                  if key in numeric and a[key] and b[key]:
+                      if abs(float(a[key]) - float(b[key])) > 5e-4:
+                          raise SystemExit(
+                              f"numeric mismatch row {i}, {key}: {a[key]} != {b[key]}"
+                          )
+                  elif a[key] != b[key]:
+                      raise SystemExit(
+                          f"value mismatch row {i}, {key}: {a[key]!r} != {b[key]!r}"
+                      )
+          print(f"CSV matches regenerated model output: {len(expected)} rows")
+          PY
