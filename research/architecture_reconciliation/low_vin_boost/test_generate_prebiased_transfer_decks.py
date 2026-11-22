@@ -29,6 +29,7 @@ class PrebiasedTransferDeckTests(unittest.TestCase):
         self.assertIn("BLOAD LOAD 0 I=if(V(LOAD)>0.5,1,0)", deck)
         self.assertNotIn("I=if(V(EN)>1.5", deck)
         self.assertIn("PWL(0 0 2e-05 0 2.1e-05 3)", deck)
+        self.assertIn(".meas tran vout_at_enable AVG V(VOUT) from 1.9e-05 to 2e-05", deck)
         self.assertIn(".meas tran vout_global_min MIN V(VOUT) from 0 to 40m", deck)
         self.assertEqual(metadata["case_type"], "prebiased_transfer")
         self.assertEqual(metadata["enable_delay_us"], 20)
