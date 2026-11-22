@@ -83,6 +83,11 @@ def parse_ltspice_log(log_text: str) -> dict:
         if values:
             measurements[name] = float(values[-1])
 
+    # A FAIL marker is authoritative even if an earlier duplicate or
+    # partial measurement line with the same name appeared in the log.
+    for name in failed:
+        measurements.pop(name, None)
+
     elapsed = re.search(
         rf"(?im)^\s*Total elapsed time:\s*({FLOAT})\s*seconds\b",
         log_text,
