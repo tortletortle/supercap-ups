@@ -338,11 +338,17 @@ class PairingRunnerTests(unittest.TestCase):
                 "rfsw_ohm": 324000.0,
                 "cfsw_f": 23e-12,
                 "roff_ohm": 1e6,
+                "sw_edge_v": 10.0,
+                "sw_rearm_v": 2.0,
+                "vout_target_v": 12.0,
             },
         }
         self.assertTrue(runner.run_configuration_check(summary, 50)["match"])
         self.assertFalse(runner.run_configuration_check(summary, 25)["match"])
         summary["run_parameters"]["rfsw_ohm"] = 510000.0
+        self.assertFalse(runner.run_configuration_check(summary, 50)["match"])
+        summary["run_parameters"]["rfsw_ohm"] = 324000.0
+        summary["run_parameters"]["sw_rearm_v"] = 3.0
         self.assertFalse(runner.run_configuration_check(summary, 50)["match"])
 
     def test_prescribed_frequency_check_requires_valid_timing_and_frequency(self):
