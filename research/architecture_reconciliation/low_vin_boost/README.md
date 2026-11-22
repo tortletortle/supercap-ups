@@ -70,6 +70,7 @@ A separate nine-case transfer matrix now models this boundary:
 - output capacitor COUT=47 µF prebiased to 12 V;
 - 1 A constant-current load remains connected throughout the transfer;
 - backup EN delay sensitivity points of 20, 50, and 100 µs, followed by a 1 µs EN ramp;
+- SS capacitor starts discharged (no IC override), so the TPS61088 macro-model must execute its modeled soft-start after EN; the previous 1.5 V SS prebias incorrectly represented soft-start as already complete and has been removed;
 - 2 mΩ input path, same TPS61088 macro-model and switching BOM baseline.
 
 The three enable delays are sensitivity points, not claims about the actual controller response. The decks record output voltage immediately before enable, the average output voltage during the final 1 µs before enable, the minimum during the first 5 ms, and the global minimum over 40 ms. They also record steady-state regulation, ripple, input current, inductor current and observed FSW.
