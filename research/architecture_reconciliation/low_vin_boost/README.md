@@ -26,7 +26,7 @@ TI 数据手册给出 TPS61088 的 2.7–12 V 输入范围。TI PMP9778 页面�
 - L1 = 3.3 µH，DCR = 26 mΩ；
 - CIN = 35 µF；
 - COUT = 47 µF，ESR = 3 mΩ；
-- RFSW = 324 kΩ；
+- RFSW = 324 kΩ；这是为保持与 V1.3 BOM 基线可比而暂时固定的值，不代表开关频率已经验收。V1.4 在 VIN=7 V、VOUT=12 V 下测得 442.336 kHz，而 TI 公式理论值为 496.137 kHz，偏差约 −10.84%；FSW 斜坡/延迟路径已有诊断证据，但唯一根因尚未闭环。低压各点必须以本轮实测 FSW 为准，不按电阻标称值推断频率，也不在本轮擅自换阻值；
 - RILIM = 100 kΩ；这是用于观察低输入电压能力的高限流基线。不要直接沿用 4S 工况筛出的 174 kΩ 候选，因为 2S 输入电流更高，必须先确认限流裕量；
 - MODE 接地（FPWM）；
 - COMP = 21.5 kΩ / 13 nF / 100 pF；
@@ -52,6 +52,14 @@ powershell -ExecutionPolicy Bypass -File .\run_low_vin_matrix.ps1 -LtspiceExe "C
 脚本使用 LTspice 的 -b batch 模式。官方命令行说明见 [Analog Devices LTspice Quick Reference](https://www.analog.com/media/en/news-marketing-collateral/solutions-bulletins-brochures/ltspice-keyboard-shortcuts.pdf)。每次运行会创建独立的 results/run_timestamp 目录，不覆盖旧结果；脚本状态只表示进程与文件收集情况，不代表电气验收通过。大型 RAW 文件默认由本目录 .gitignore 排除，避免意外提交超大二进制文件。
 
 每份运行都应保留原始 LOG/RAW、退出状态、模型哈希、网表哈希和 LTspice 版本；不要覆盖先前结果。
+
+运行结束后，用分析器自动读取 manifest、LOG/RAW 与输入文件哈希：
+
+~~~powershell
+py -3 .\analyze_low_vin_results.py --run-dir .\results\<run_timestamp>
+~~~
+
+分析器会生成 analysis_summary.csv 和 analysis_report.md，逐点区分仿真未完成、测量失败、证据哈希不匹配、有限电气筛查通过/失败。它不会把进程退出码 0 当成电气通过，也不会给 FSW 设未经批准的目标值。只有全部文件哈希匹配、求解完成、必需 .meas 齐全、时序正确且输出电压/电流/纹波满足筛查范围，才标记 screen_pass；这仍然只是宏模型筛查，不是硬件资格或 BOM 放行。
 
 仿真时长 40 ms，最大步长 50 ns；稳态统计窗口为 35–37 ms。网表还请求测量 t98、6001/6101 次 SW=10 V 上升沿及两者计算的开关频率。若某个 .meas 返回 FAIL，保留原始失败，不得通过改边沿序号或阈值把它改写成通过。
 
@@ -81,4 +89,5 @@ powershell -ExecutionPolicy Bypass -File .\run_low_vin_matrix.ps1 -LtspiceExe "C
 - generate_low_vin_matrix.py：生成矩阵；
 - netlists/：七份 LTspice 输入网表及 manifest.csv；
 - run_low_vin_matrix.ps1：Windows 批处理运行和证据归档脚本；
-- test_low_vin_matrix.py：生成器回归测试。
+- analyze_low_vin_results.py：LOG/RAW/哈希与电气筛查分析器；
+- test_low_vin_matrix.py、test_analyze_low_vin_results.py：网表生成和结果分析回归测试。
