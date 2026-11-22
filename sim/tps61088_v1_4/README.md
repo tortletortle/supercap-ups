@@ -186,7 +186,7 @@ py -3 sim/tps61088_v1_4/scripts/run_fsw_internal_pairing_v2.py
 
 历史自动化回归：GitHub Actions run #7 曾在 21-test revision 上通过。
 
-最新验证：GitHub Actions run #52（run ID 44982623033，job ID 137086230188）已在当前 34-test revision 上通过；三个模块语法检查和 34 项单元测试全部成功。新增 runner 会独立重算 CSV 并与 JSON 汇总对照。该结果不替代 Windows 本机对 50/25 ns RAW 的哈希核验和 pairing-v2 实际后处理。
+最新验证：GitHub Actions run #60（run ID 44982850618，job ID 137086938668）已在当前 34-test revision 上通过；三个模块语法检查和 34 项单元测试全部成功。新增 runner 会独立重算 CSV 并与 JSON 汇总对照；SW edge=10 V、rearm=2 V、VOUT target=12 V 均已显式固定并纳入配置审计。该结果不替代 Windows 本机对 50/25 ns RAW 的哈希核验和 pairing-v2 实际后处理。
 
 pairing-v2 还会对每个完整周期计数输入交点、比较器输出、TOFF、GATE、复位和 SW 下降事件。任何事件缺失或重复都会触发审查门禁；不再只取第一个事件而忽略后续重复脉冲。真实 RAW 的这项检查仍待 Windows 本机运行。
 
