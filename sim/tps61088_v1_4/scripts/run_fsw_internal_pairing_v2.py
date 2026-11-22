@@ -417,7 +417,6 @@ def main():
                 "event_multiplicity": multiplicity50,
                 "run_configuration": config50,
                 "prescribed_frequency_measurement": frequency50,
-                "analysis_status": summary50.get("analysis_status"),
             },
             "25ns": {
                 "summary": str(summary25_path),
