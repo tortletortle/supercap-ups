@@ -352,15 +352,17 @@ def csv_summary_consistency_check(csv_path, summary):
                 "sw_fall_10V",
             )
             ordered_values = [primary_times.get(name) for name in ordered_names]
-            if all(value is not None for value in ordered_values):
-                if not all(
+            timestamps_present = all(value is not None for value in ordered_values)
+            timestamp_order_valid = (
+                timestamps_present
+                and all(
                     ordered_values[i] <= ordered_values[i + 1] + 1e-15
                     for i in range(len(ordered_values) - 1)
-                ):
-                    event_order_matches_timestamps = False
-                if not order_valid:
-                    event_order_matches_timestamps = False
-            elif status == "complete":
+                )
+            )
+            if order_valid != timestamp_order_valid:
+                event_order_matches_timestamps = False
+            if status == "complete" and not timestamp_order_valid:
                 event_order_matches_timestamps = False
 
         checks = {
