@@ -259,9 +259,11 @@ V_{\rm terminal}=V_{\rm oc}-IR_{\rm pack}
 - low_vin_boost/generate_eol_checkpoint_decks.py：从储能行为模型提取 1.2 s EOL 状态并生成含等效电容、DC ESR 和输入路径的局部开关级网表；
 - low_vin_boost/run_low_vin_matrix.ps1：Windows LTspice 批处理与证据归档脚本，支持选择 netlists/checkpoints 子目录，尚未在用户本机执行；
 - low_vin_boost/analyze_low_vin_results.py：逐例解析 LTspice LOG、验证 deck/log/raw/model SHA-256，并对 pack-coupled 案例比较实测与行为模型的电压/电流；
+- low_vin_boost/simulate_calibrated_hold_up.py：要求七个固定 VIN 点全部通过并且证据哈希匹配，以实测宏模型效率—VIN 映射进行连续 2S 储能侧 1.2 s 积分；不允许外推；
 - low_vin_boost/test_low_vin_matrix.py：5 项固定 VIN 网表生成与模型路径测试；
 - low_vin_boost/test_analyze_low_vin_results.py：9 项日志解析、失败保留、哈希完整性、pack 测量与筛查分类测试；
-- low_vin_boost/test_generate_eol_checkpoint_decks.py：5 项 EOL checkpoint 网表与 manifest 生成测试。
+- low_vin_boost/test_generate_eol_checkpoint_decks.py：5 项 EOL checkpoint 网表与 manifest 生成测试；
+- low_vin_boost/test_simulate_calibrated_hold_up.py：8 项效率映射、证据门槛、能量平衡、步长一致性和报告生成测试。
 
 运行：
 
@@ -271,7 +273,9 @@ python -m unittest discover -s research/architecture_reconciliation -p "test_*.p
 python -m unittest discover -s research/architecture_reconciliation/low_vin_boost -p "test_*.py" -v
 ~~~
 
-CI 共运行 27 项 Python 测试，并重新生成 CSV、七份固定 VIN 网表和两份 EOL pack-coupled checkpoint 网表进行一致性比对。默认 0.1 ms CSV 的能量平衡残差小于 0.0004 J；1e-5 s 高精度单元测试中的 EOL 残差小于 0.0001 J；保持时间步长敏感性小于 0.1 ms。以上只验证模型实现和网表生成，不代表 LTspice 电路仿真、硬件或竞赛指标通过。
+CI 共运行 35 项 Python 测试，并重新生成 CSV、七份固定 VIN 网表和两份 EOL pack-coupled checkpoint 网表进行一致性比对。默认 0.1 ms CSV 的能量平衡残差小于 0.0004 J；1e-5 s 高精度单元测试中的 EOL 残差小于 0.0001 J；保持时间步长敏感性小于 0.1 ms。以上只验证模型实现和网表生成，不代表 LTspice 电路仿真、硬件或竞赛指标通过。
+新增的连续积分器尚未得到任何 LTspice 输入数据，因此当前没有新的保持时间结果。它只有在七点固定 VIN 网表全部 screen_pass、模型/网表/LOG/RAW 哈希匹配后才接受效率映射；输出仍是 TPS61088 宏模型校准的储能侧行为估算，不是 1.2 s 连续开关级仿真或硬件通过证据。两份 EOL checkpoint 目前是 EOL 状态下冷启动，不能替代主电源优先系统的预偏置 12 V 输出切换测试；切换延迟和输出电容暂态仍待单独验证。
+
 
 ## 参考资料
 
