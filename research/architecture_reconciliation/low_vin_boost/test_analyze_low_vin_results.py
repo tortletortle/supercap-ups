@@ -8,6 +8,7 @@ from analyze_low_vin_results import (
     parse_ltspice_log,
     parse_spice_number,
     parse_tran_stop_s,
+    write_outputs,
 )
 
 GOOD_LOG = """LTspice 26.1.1 for Windows
@@ -99,6 +100,11 @@ class LowVinLogParserTests(unittest.TestCase):
             self.assertTrue(result["timing_order_ok"])
             self.assertEqual(result["f_sw_khz"], 500.0)
             self.assertEqual(result["eff_model_pct"], 83.3333)
+            write_outputs(root, [result])
+            self.assertTrue((root / "analysis_summary.csv").is_file())
+            report = (root / "analysis_report.md").read_text(encoding="utf-8")
+            self.assertIn("screen_pass", report)
+            self.assertIn("FSW observed", report)
 
     def test_output_ripple_failure_is_not_hidden(self):
         with tempfile.TemporaryDirectory() as tmp:
