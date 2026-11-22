@@ -70,6 +70,7 @@ class EfficiencyMap:
                     "vin_v": float(point["vin_v"]),
                     "efficiency": float(point["efficiency"]),
                     "peak_i_a": float(point["peak_i_a"]),
+                    "f_sw_khz": float(point["f_sw_khz"]),
                 }
                 for point in points
             ),
@@ -87,6 +88,10 @@ class EfficiencyMap:
             if not math.isfinite(point["peak_i_a"]) or point["peak_i_a"] <= 0.0:
                 raise ValueError(
                     f"steady peak inductor current must be positive for {point['case']}"
+                )
+            if not math.isfinite(point["f_sw_khz"]) or point["f_sw_khz"] <= 0.0:
+                raise ValueError(
+                    f"observed switching frequency must be positive for {point['case']}"
                 )
         for left, right in zip(self.points, self.points[1:]):
             if right["vin_v"] - left["vin_v"] <= 1e-6:
@@ -125,6 +130,9 @@ class EfficiencyMap:
     def peak_current_at(self, vin_v: float) -> float:
         return self._interpolate(vin_v, "peak_i_a")
 
+    def frequency_at(self, vin_v: float) -> float:
+        return self._interpolate(vin_v, "f_sw_khz")
+
 
 def load_efficiency_map(csv_path: Path) -> tuple[EfficiencyMap, dict]:
     """Load only the complete seven-point, hash-verified fixed-VIN test matrix."""
@@ -162,6 +170,7 @@ def load_efficiency_map(csv_path: Path) -> tuple[EfficiencyMap, dict]:
             vin = float(row["vin_avg_v"])
             efficiency = float(row["eff_model_pct"]) / 100.0
             peak_i = float(row["peak_i_a"])
+            f_sw_khz = float(row["f_sw_khz"])
             vout = float(row["avg_vout_v"])
             iout = float(row["iout_avg_a"])
             ripple = float(row["ripple_mVpp"])
@@ -180,6 +189,7 @@ def load_efficiency_map(csv_path: Path) -> tuple[EfficiencyMap, dict]:
             "vin_v": vin,
             "efficiency": efficiency,
             "peak_i_a": peak_i,
+            "f_sw_khz": f_sw_khz,
         })
 
     if rejected:
@@ -197,6 +207,8 @@ def load_efficiency_map(csv_path: Path) -> tuple[EfficiencyMap, dict]:
         "point_count": len(points),
         "min_vin_v": efficiency_map.min_vin_v,
         "max_vin_v": efficiency_map.max_vin_v,
+        "min_f_sw_khz": min(point["f_sw_khz"] for point in points),
+        "max_f_sw_khz": max(point["f_sw_khz"] for point in points),
     }
     return efficiency_map, metadata
 
@@ -282,6 +294,7 @@ def _solve_midpoint_current(
         "vin_mid_v": vin_mid_v,
         "efficiency": efficiency,
         "peak_i_a": peak_i,
+        "f_sw_khz": efficiency_map.frequency_at(vin_mid_v),
     }
 
 
@@ -312,6 +325,8 @@ def simulate_calibrated_hold_up(
     min_vin_v = math.inf
     max_input_current_a = 0.0
     max_peak_inductor_current_a = 0.0
+    min_f_sw_khz = math.inf
+    max_f_sw_khz = 0.0
     converter_input_energy_j = 0.0
     output_energy_j = 0.0
     pack_esr_loss_j = 0.0
@@ -361,6 +376,8 @@ def simulate_calibrated_hold_up(
         max_peak_inductor_current_a = max(
             max_peak_inductor_current_a, op["peak_i_a"]
         )
+        min_f_sw_khz = min(min_f_sw_khz, op["f_sw_khz"])
+        max_f_sw_khz = max(max_f_sw_khz, op["f_sw_khz"])
         max_efficiency = max(max_efficiency, op["efficiency"])
         min_efficiency = min(min_efficiency, op["efficiency"])
 
@@ -436,6 +453,8 @@ def simulate_calibrated_hold_up(
         "min_converter_vin_v": min_vin_v if math.isfinite(min_vin_v) else "",
         "max_input_current_a": max_input_current_a,
         "max_steady_peak_inductor_current_a": max_peak_inductor_current_a,
+        "min_observed_f_sw_khz": min_f_sw_khz if time_s else "",
+        "max_observed_f_sw_khz": max_f_sw_khz if time_s else "",
         "min_map_efficiency_pct": min_efficiency * 100.0 if time_s else "",
         "max_map_efficiency_pct": max_efficiency * 100.0 if time_s else "",
         "converter_input_energy_j": converter_input_energy_j,
@@ -487,12 +506,13 @@ def write_outputs(output_dir: Path, results: list[dict], metadata: dict) -> None
         f"- Source analysis SHA-256: {metadata['source_csv_sha256']}",
         f"- Validated map points: {metadata['point_count']}",
         f"- Calibrated VIN range: {metadata['min_vin_v']:.4f}–{metadata['max_vin_v']:.4f} V",
+        f"- Observed FSW range in calibration: {metadata['min_f_sw_khz']:.2f}–{metadata['max_f_sw_khz']:.2f} kHz (no approved target is imposed)",
         f"- Output load: {P_OUT_W:.3f} W",
         f"- Required task: {TASK_S:.3f} s",
         f"- Input path resistance: {PATH_RESISTANCE_OHM * 1000:.3f} mΩ",
         "",
-        "| Candidate | Verified duration in map | 1.2 s task | End OCV | End VIN | Max IIN | Max steady peak IL | Stop reason |",
-        "|---|---:|---|---:|---:|---:|---:|---|",
+        "| Candidate | Verified duration in map | 1.2 s task | End OCV | End VIN | Max IIN | Max steady peak IL | Observed FSW range | Stop reason |",
+        "|---|---:|---|---:|---:|---:|---:|---:|---|",
     ]
     for row in results:
         def fmt(key: str, digits: int = 3) -> str:
@@ -504,6 +524,7 @@ def write_outputs(output_dir: Path, results: list[dict], metadata: dict) -> None
             f"{fmt('end_ocv_v')} V | {fmt('end_converter_vin_v')} V | "
             f"{fmt('max_input_current_a')} A | "
             f"{fmt('max_steady_peak_inductor_current_a')} A | "
+            f"{fmt('min_observed_f_sw_khz', 2)}–{fmt('max_observed_f_sw_khz', 2)} kHz | "
             f"{row['stop_reason']} |"
         )
     lines.extend([
@@ -513,7 +534,7 @@ def write_outputs(output_dir: Path, results: list[dict], metadata: dict) -> None
         "- Efficiency is interpolated only between the seven passing fixed-VIN LTspice macro-model points; extrapolation is rejected.",
         "- A 1.2 s PASS means the calibrated behavioral model can find a valid 12 W operating point through the endpoint. It is not a continuous switching-level simulation.",
         "- This model includes the pack EOL DC ESR and a 2 mΩ series input path. It does not include wiring inductance, fuse resistance, connector resistance, PCB parasitics, capacitor frequency-dependent ESR, thermal drift, or cell imbalance.",
-        "- The reported steady peak inductor current is interpolated from fixed-VIN measurements; it is not the transient peak during the 1.2 s event.",
+        "- The reported steady peak inductor current and observed switching frequency are interpolated from fixed-VIN measurements; neither is a transient waveform result. No FSW pass/fail threshold is imposed while the RFSW discrepancy remains unresolved.",
         "- Macro-model efficiency is not hardware efficiency. Hardware qualification and BOM release remain blocked on measured prototype evidence.",
         "- hold_verified_s is the time integrated inside the calibrated map. If the run stops at efficiency_map_out_of_range, it is not a prediction of the true physical cutoff time.",
         "",
