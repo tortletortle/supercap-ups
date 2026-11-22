@@ -255,7 +255,9 @@ V_{\rm terminal}=V_{\rm oc}-IR_{\rm pack}
 - low_vin_boost/generate_low_vin_matrix.py：七点低输入电压网表生成器；
 - low_vin_boost/netlists/：七份 LTspice 输入网表与 manifest.csv，当前全部 not_run；
 - low_vin_boost/run_low_vin_matrix.ps1：Windows LTspice 批处理与证据归档脚本，尚未在用户本机执行；
-- low_vin_boost/test_low_vin_matrix.py：5 项网表生成与模型路径测试。
+- low_vin_boost/analyze_low_vin_results.py：逐例解析 LTspice LOG、验证 deck/log/raw/model SHA-256，并按限定标准输出筛查结果；
+- low_vin_boost/test_low_vin_matrix.py：5 项网表生成与模型路径测试；
+- low_vin_boost/test_analyze_low_vin_results.py：7 项日志解析、失败保留、哈希完整性与筛查分类测试。
 
 运行：
 
@@ -265,7 +267,7 @@ python -m unittest discover -s research/architecture_reconciliation -p "test_*.p
 python -m unittest discover -s research/architecture_reconciliation/low_vin_boost -p "test_*.py" -v
 ~~~
 
-CI 共运行 12 项 Python 测试，并重新生成 CSV 与七份低输入电压网表进行一致性比对。默认 0.1 ms CSV 的能量平衡残差小于 0.0004 J；1e-5 s 高精度单元测试中的 EOL 残差小于 0.0001 J；保持时间步长敏感性小于 0.1 ms。以上只验证模型实现和网表生成，不代表 LTspice 电路仿真、硬件或竞赛指标通过。
+CI 共运行 19 项 Python 测试，并重新生成 CSV 与七份低输入电压网表进行一致性比对。默认 0.1 ms CSV 的能量平衡残差小于 0.0004 J；1e-5 s 高精度单元测试中的 EOL 残差小于 0.0001 J；保持时间步长敏感性小于 0.1 ms。以上只验证模型实现和网表生成，不代表 LTspice 电路仿真、硬件或竞赛指标通过。
 
 ## 参考资料
 
