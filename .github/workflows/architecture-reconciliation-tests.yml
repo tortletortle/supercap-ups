@@ -83,3 +83,9 @@ jobs:
             --output-dir /tmp/generated-eol-checkpoints
           diff -ru research/architecture_reconciliation/low_vin_boost/checkpoints \
             /tmp/generated-eol-checkpoints
+      - name: Regenerate and compare prebiased output-transfer decks
+        run: |
+          python research/architecture_reconciliation/low_vin_boost/generate_prebiased_transfer_decks.py \
+            --output-dir /tmp/generated-prebiased-transfer
+          diff -ru research/architecture_reconciliation/low_vin_boost/transfer \
+            /tmp/generated-prebiased-transfer
