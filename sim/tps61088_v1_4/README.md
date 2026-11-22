@@ -171,3 +171,16 @@ V1.3 原联合网表使用 112.5 mΩ/颗，不是采购文档采用的 EOL 压�
 - TI TPS61088 产品与模型资源页：https://www.ti.com/product/TPS61088
 - V1.3 器件级仿真报告：../tps61088_v1_3/DC_V1_3_TPS61088仿真报告.md
 - V1.3 原联合窗口摘要：../tps61088_v1_3/joint/window_summary.md，其中已增加配置勘误。
+
+## 内部 FSW pairing-v2 只读后处理
+
+50 ns / 25 ns 原始 RAW 已保存在本机；仓库仅保存其文件大小、SHA-256、日志和分析证据，不上传约 1.2 GB 的 RAW。完成新增的 pairing-v2 后处理时，在仓库根目录执行：
+
+~~~powershell
+py -3 sim/tps61088_v1_4/scripts/run_fsw_internal_pairing_v2.py
+~~~
+
+入口脚本先核验两份 RAW 的归档大小和 SHA-256，再运行完整 Python 单元测试，随后将两份 RAW 分别分析到新的 pairing-v2 目录并生成 50/25 ns 分布对照。它不会启动 LTspice，也不会覆盖原始 warning 结果；若输出目录已存在，应使用 --out-root 指向新的目录。RAW 路径或执行细节见 [内部探针实验报告第 11 节](results/fsw_internal_probe_session/实验报告.md)。
+
+预期复核目标为 50 ns 的 883 个、25 ns 的 882 个完整有效周期，且没有 invalid 周期。该计数是审查目标，不是预先认定的结果。只有本机运行后，才能根据 pairing-v2 summary、comparison 和执行报告决定是否追加 12.5 ns 仿真。
+
