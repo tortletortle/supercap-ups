@@ -1,6 +1,6 @@
 # LTC3350 integrated supercapacitor UPS — architecture evaluation
 
-**Status:** alternative architecture study; not merged into the cost-sensitive discrete mainline. This branch currently contains a design review and a reproducible analytical model, not a new KiCad schematic.  
+**Status:** alternative architecture study; not merged into the cost-sensitive discrete mainline. This branch contains a design review, reproducible analytical model, and portable C11 driver prototype; it does not yet contain a new KiCad schematic or CH32V003 board adapter.  
 **Base branch:** power-stage-integration  
 **Base commit:** ad015db2288c47f03f88ff1d29f4c2090b7e1663
 
@@ -123,6 +123,12 @@ python3 -m unittest discover -s sim/ltc3350_reference -p 'test_*.py' -v
 6. **Power-path transitions.** Measure input removal/recovery, output droop/overshoot, reverse current, and source-priority behavior at 1 A.
 7. **Cost.** Current single-unit distributor listings are roughly US$10.36 at LCSC and ¥121.49 at DigiKey for the IC alone. This is a high-reliability reference option, not the low-cost BOM winner.
 
-## 7. Decision
+## 7. Firmware prototype
 
-Keep the existing TPS54302 + TPS61088 design as the cost-sensitive mainline. Keep this LTC3350 branch separate as an integrated reference architecture. The next engineering gate is to create a KiCad schematic from the ADI application circuit, set VCAP ≈ 10 V and VOUT = 12 V, run switching/thermal analysis, and compare the complete BOM against the discrete design. Do not merge this branch or order the IC until that comparison is complete.
+A portable C11 driver now lives in `firmware/ltc3350/`. It verifies the four-cell configuration, programs VSHUNT = 2.60 V, CAP_UV = 1.00 V, CAP_OV = 2.60 V, enables the UV/OV alarm mask, reads individual cell voltages and status, and clears latched alarms. The host-side fake-bus test suite passes 5/5 tests with GCC. The driver is not yet connected to the CH32V003 SDK, and SMBus Alert Response Address handling is still a board-layer task.
+
+The driver intentionally documents that the IC powers up with VSHUNT = 2.70 V. If 2.60 V must apply from the first instant of charging, hardware must hold the charger input disabled until the MCU has completed configuration. The cap UV/OV alarms are ADC-based notifications, not hard hardware disconnects.
+
+## 8. Decision
+
+Keep the existing TPS54302 + TPS61088 design as the cost-sensitive mainline. Keep this LTC3350 branch separate as an integrated reference architecture. The next engineering gate is to create a KiCad schematic from the ADI application circuit, set VCAP ≈ 10 V and VOUT = 12 V, run switching/thermal analysis, connect the driver to the CH32V003 I²C peripheral, and compare the complete BOM against the discrete design. Do not merge this branch or order the IC until that comparison is complete.
