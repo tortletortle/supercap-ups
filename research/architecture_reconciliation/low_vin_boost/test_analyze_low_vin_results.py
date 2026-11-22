@@ -181,6 +181,10 @@ class LowVinLogParserTests(unittest.TestCase):
             deck.write_text(".tran 0 40m 0 50n uic\n")
             transfer_log = (
                 GOOD_LOG
+                .replace("t98: V(vout)=11.76 AT 0.0112\n", "")
+                .replace("t98_delay: t98-t_en=0.0110996\n", "")
+                + "Measurement \"t98\" FAIL'ed\n"
+                + "Measurement \"t98_delay\" FAIL'ed\n"
                 + "vout_at_enable: FIND V(VOUT) AT=20u=11.57\n"
                 + "vout_pre_enable_min: MIN(V(VOUT))=11.55 FROM 0 TO 20u\n"
                 + "vout_first_5ms_min: MIN(V(VOUT))=11.55 FROM 0 TO 5m\n"
@@ -198,6 +202,9 @@ class LowVinLogParserTests(unittest.TestCase):
             }
             result = analyze_case(row, case, model)
             self.assertEqual(result["screen_result"], "transfer_review_required")
+            self.assertTrue(result["timing_order_ok"])
+            self.assertNotIn("t98", result["missing_measurements"])
+            self.assertIn("t98", result["failed_measurements"])
             self.assertAlmostEqual(result["vout_pre_enable_min_v"], 11.55)
             self.assertAlmostEqual(result["vout_global_min_v"], 11.50)
             self.assertAlmostEqual(result["vout_global_drop_v"], 0.50)
