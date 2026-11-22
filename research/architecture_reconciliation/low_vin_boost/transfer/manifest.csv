@@ -5,6 +5,6 @@ run_order,case,case_type,architecture,enable_delay_us,initial_pack_ocv_v,cap_fac
 4,transfer_2s30f_kam_hp_40_20us,prebiased_transfer,2S30F_KAM_HP_40,20,4.8,0.7,4.0,10.5,0.32,0.002,12.0,12.0,1.0,40,50,35-37,324,100,GND_FPWM,not_run
 5,transfer_2s30f_kam_hp_40_50us,prebiased_transfer,2S30F_KAM_HP_40,50,4.8,0.7,4.0,10.5,0.32,0.002,12.0,12.0,1.0,40,50,35-37,324,100,GND_FPWM,not_run
 6,transfer_2s30f_kam_hp_40_100us,prebiased_transfer,2S30F_KAM_HP_40,100,4.8,0.7,4.0,10.5,0.32,0.002,12.0,12.0,1.0,40,50,35-37,324,100,GND_FPWM,not_run
-7,transfer_2s25f_kam_lr_20us,prebiased_transfer,2S25F_KAM_LR,20,4.8,0.7,4,8.75,0.2,0.002,12.0,12.0,1.0,40,50,35-37,324,100,GND_FPWM,not_run
-8,transfer_2s25f_kam_lr_50us,prebiased_transfer,2S25F_KAM_LR,50,4.8,0.7,4,8.75,0.2,0.002,12.0,12.0,1.0,40,50,35-37,324,100,GND_FPWM,not_run
-9,transfer_2s25f_kam_lr_100us,prebiased_transfer,2S25F_KAM_LR,100,4.8,0.7,4,8.75,0.2,0.002,12.0,12.0,1.0,40,50,35-37,324,100,GND_FPWM,not_run
+7,transfer_2s25f_kam_lr_20us,prebiased_transfer,2S25F_KAM_LR,20,4.8,0.7,4.0,8.75,0.2,0.002,12.0,12.0,1.0,40,50,35-37,324,100,GND_FPWM,not_run
+8,transfer_2s25f_kam_lr_50us,prebiased_transfer,2S25F_KAM_LR,50,4.8,0.7,4.0,8.75,0.2,0.002,12.0,12.0,1.0,40,50,35-37,324,100,GND_FPWM,not_run
+9,transfer_2s25f_kam_lr_100us,prebiased_transfer,2S25F_KAM_LR,100,4.8,0.7,4.0,8.75,0.2,0.002,12.0,12.0,1.0,40,50,35-37,324,100,GND_FPWM,not_run
