@@ -201,6 +201,17 @@ EVENT_COUNT_FIELDS = {
     "cap_reset_0p5V_fall": "cap_reset_0p5V_fall_count",
     "sw_fall_10V": "sw_fall_10V_count",
 }
+REQUIRED_EVENT_COUNT_NAMES = frozenset(EVENT_COUNT_FIELDS) - {
+    "comparator_output_rise"
+}
+
+
+def duplicate_required_event_reasons(event_counts):
+    return [
+        f"multiple_{name}"
+        for name, count in event_counts.items()
+        if name in REQUIRED_EVENT_COUNT_NAMES and count > 1
+    ]
 
 
 def event_multiplicity_summary(rows):
@@ -564,9 +575,10 @@ def main():
             missing_events.append("multiple_raw_10V_rises")
         if raw_falls_in_period != 1:
             missing_events.append("multiple_or_missing_raw_10V_falls")
-        for event_name, event_count in event_counts.items():
-            if event_count > 1:
-                missing_events.append(f"multiple_{event_name}")
+        missing_events.extend(duplicate_required_event_reasons({
+            name.removesuffix("_count"): count
+            for name, count in event_counts.items()
+        }))
 
         if next_up is None:
             cycle_status = "right_censored_at_raw_end"
