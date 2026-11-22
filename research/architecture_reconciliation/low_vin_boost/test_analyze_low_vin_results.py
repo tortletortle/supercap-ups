@@ -28,6 +28,8 @@ vmax: MAX(V(vout))=12.03 FROM 0.035 TO 0.037
 ripple: PP(V(vout))=0.06 FROM 0.035 TO 0.037
 peak_i: MAX(I(L1))=5.1 FROM 0.035 TO 0.037
 peak_start: MAX(I(L1))=5.4 FROM 0 TO 0.035
+il_avg: AVG(I(L1))=4.0 FROM 0.035 TO 0.037
+il_rms: RMS(I(L1))=4.02 FROM 0.035 TO 0.037
 iin_avg: AVG(-I(V1))=4.0 FROM 0.035 TO 0.037
 iout_avg: AVG(I(VLOAD))=1.0 FROM 0.035 TO 0.037
 pin: AVG(-V(vin)*I(V1))=14.4 FROM 0.035 TO 0.037
@@ -288,6 +290,44 @@ class LowVinLogParserTests(unittest.TestCase):
             self.assertEqual(result["screen_result"], "artifact_integrity_failure")
             self.assertFalse(result["deck_hash_ok"])
 
+
+
+    def test_ti_fpwm_minimum_current_limit_is_enforced(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            case = root / "case"
+            case.mkdir()
+            deck = case / "case.cir"
+            log = case / "case.log"
+            raw = case / "case.raw"
+            model = root / "model.lib"
+            deck.write_text(".tran 0 40m 0 50n\n")
+            log.write_text(GOOD_LOG.replace(
+                "peak_start: MAX(I(L1))=5.4",
+                "peak_start: MAX(I(L1))=9.2",
+            ))
+            raw.write_bytes(b"synthetic raw")
+            model.write_text("* synthetic model\n")
+            row = {
+                "case": "case", "case_type": "inductor_stress",
+                "vin_source_v": "2.8", "exit_code": "0",
+                "mode": "GND_FPWM", "rilim_kohm": "100",
+                "inductor_mpn": "CKST0603-3.3uH/M",
+                "inductance_min_uH": "2.64", "dcr_max_mohm": "26",
+                "isat_typical_a": "9.5", "irms_typical_a": "6.0",
+                "isat_above_programmed_ilim_typical": "false",
+                "input_deck_sha256": sha(deck), "log_sha256": sha(log),
+                "raw_sha256": sha(raw), "model_sha256": sha(model),
+            }
+            result = analyze_case(row, case, model)
+            self.assertEqual(result["screen_result"], "screen_fail")
+            self.assertFalse(result["check_peak_current_below_ti_minimum_limit"])
+            self.assertAlmostEqual(result["peak_current_max_a"], 9.2)
+            self.assertAlmostEqual(result["current_limit_min_a"], 9.0)
+            self.assertAlmostEqual(result["current_limit_margin_a"], -0.2)
+            self.assertAlmostEqual(result["il_rms_a"], 4.02)
+            self.assertEqual(result["inductor_mpn"], "CKST0603-3.3uH/M")
+            self.assertTrue(result["inductor_reference_exceeded"])
 
 if __name__ == "__main__":
     unittest.main()
