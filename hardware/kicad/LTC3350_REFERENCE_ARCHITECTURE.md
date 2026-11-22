@@ -54,8 +54,8 @@ These values are calculation candidates, not a frozen BOM.
 | Backup output | 12.0 V / 1 A | 12 W load. Use 90.0 kΩ top / 10.0 kΩ bottom as a first-pass OUTFB divider for a 1.2 V feedback reference. |
 | Capacitor stack target | 10.0 V | Four cells average 2.5 V. Use 86.6 kΩ top / 11.8 kΩ bottom as the first-pass CAPFB divider: 1.2 × (1 + 86.6 / 11.8) = 10.0068 V. |
 | VCAP worst-case window | 9.782 V–10.231 V | Conservative additive budget: ±2.0% reference, ±0.2% divider ratio, plus 50 nA CAPFB leakage through 86.6 kΩ. |
-| Cell shunt threshold | 2.60 V | Candidate programmable VSHUNT value. With 183.5 µV/LSB, the rounded code is 0x3759; verify register field/reserved bits before firmware use. |
-| Shunt ballast | 2.7 Ω per ballast path | The vendor reference uses 2.7 Ω ballast resistors. At 2.60 V, the first-order shunt-current estimate is 0.481 A nominal and 0.459 A with +5% resistance. |
+| Cell shunt threshold | 2.60 V | Candidate VSHUNT register 0x06 value. With 183.5 µV/LSB, the rounded code is 0x3759; confirm the register field and write ordering in firmware. |
+| Shunt ballast | Five 2.7 Ω / 2 W ballast resistors | One resistor at each CAPRTN/CAP1/CAP2/CAP3/CAP4 tap for the four-cell stack, following the vendor topology. At 2.60 V, the first-order shunt-current estimate is 0.481 A nominal and 0.459 A with +5% resistance. |
 | Ballast dissipation | ≥2 W parts | The data-sheet dissipation estimate is about 0.47 W nominal per active shunt path; use the vendor reference footprint/rating and verify pulse/thermal derating. |
 | Charge current sense | R_SNSC = 8 mΩ | Data-sheet peak-current estimate: 58 mV / 8 mΩ = 7.25 A. This is a starting point for 12 W backup; check ripple and saturation. |
 | Input-current sense | R_SNSI1 = 16 mΩ, R_SNSI2 = 75 mΩ | With the data-sheet two-resistor equation, charger input-current limit is about 0.352 A with no system load and 0.176 A at a 1 A system load. |
@@ -73,9 +73,11 @@ The maximum modeled stack charge current at 100% conversion efficiency is approx
 
 ### Cell balancing and overvoltage
 
-The LTC3350's internal active balancers remove the need for four continuously conducting 2.2 kΩ bleed resistors. Its per-cell shunt regulators provide a hardware path to hold a high cell near the programmed shunt threshold while the other cells continue charging. The external 2.7 Ω parts are shunt ballast resistors, not the old low-current passive balancing network.
+The LTC3350's internal stack balancer is a switched resistive balancer, not an energy-transfer balancer. It discharges the highest-voltage cell at about 10 mA until the cell voltages are within roughly 10 mV; it is disabled in backup mode. This removes the need for four continuously conducting 2.2 kΩ passive bleeders, but balancing is relatively slow.
 
-The controller's shunt-current capability is finite and duty-limited. It is not permission to choose an arbitrary charge current: the charge-current limit must remain below the effective shunt capability, and the thermal behavior must be checked when multiple cells shunt simultaneously.
+A separate per-cell shunt regulator provides the high-current overvoltage path. Up to 500 mA can be diverted around a cell while the other cells continue charging. The five external 2.7 Ω ballast resistors belong at the CAPRTN/CAP1/CAP2/CAP3/CAP4 stack taps; they are not the old passive balance resistors. The shunt switch duty cycle is limited to about 75%, and the controller automatically reduces charge current if a cell remains near its shunt threshold.
+
+At the +5% ballast corner, the instantaneous shunt-current estimate is 0.459 A and the 75%-duty average envelope is about 0.344 A. The modeled no-load charge current is about 0.380 A at 90% buck efficiency, so charge current may be reduced while a shunt is active. At a 1 A system load, the modeled charge current is about 0.190 A and is below that envelope. This is an expected charge-time tradeoff, not a proven transient result.
 
 ## 5. Hold-time model
 
@@ -113,9 +115,9 @@ python3 -m unittest discover -s sim/ltc3350_reference -p 'test_*.py' -v
 
 1. **12 V / 1 A combined validation.** The vendor's 4 × 10 F / 10 V / 1 A and 12 V / 48 W examples are separate designs. The proposed combination needs a fresh power-stage design.
 2. **12 V input overvoltage.** The LTC3350's high input OVLO threshold is not a precise 12 V adapter protector. Retain a separately specified TVS/eFuse/OVP stage based on the actual adapter limits.
-3. **Single-cell undervoltage.** The ADC can report cell voltages and raise programmable alarms, but software polling must not be treated as an independent hardware UV cutoff. Retain the group UVLO and separately decide whether a hard per-cell discharge cutoff is required.
+3. **Single-cell undervoltage.** The ADC exposes individual cell-voltage measurements; the capacitor UV alarm is configured through register 0x07 and enabled through the alarm mask (register 0x01). Measurements are multiplexed, with about 1.6 ms per channel and roughly 18 ms between successive readings of the same channel. Software polling must not be treated as an independent fast hardware UV cutoff. Retain the group UVLO and separately decide whether a hard per-cell discharge cutoff is required.
 4. **Switching loop and thermal design.** Verify MOSFET voltage/current ratings, inductor saturation, sense-resistor Kelvin routing, shunt ballast pulse heating, QFN exposed-pad layout, compensation, and 12 V load-step behavior.
-5. **Startup and I²C configuration.** Verify default VCAP/VSHUNT behavior, program the selected shunt threshold before enabling the intended charge profile, and define safe behavior if the MCU is held in reset or the I²C bus is unavailable.
+5. **Startup and I²C configuration.** VCAPFB defaults to 1.2 V and VSHUNT defaults to 2.7 V (register 0x06 = 0x3999). If the selected 2.60 V threshold is required, write 0x3759 to VSHUNT before relying on that lower threshold. Define safe behavior if the MCU is held in reset or the I²C bus is unavailable. The four-cell selection pins CAP_SLC0/CAP_SLC1 must also be strapped for four capacitors.
 6. **Power-path transitions.** Measure input removal/recovery, output droop/overshoot, reverse current, and source-priority behavior at 1 A.
 7. **Cost.** Current single-unit distributor listings are roughly US$10.36 at LCSC and ¥121.49 at DigiKey for the IC alone. This is a high-reliability reference option, not the low-cost BOM winner.
 
