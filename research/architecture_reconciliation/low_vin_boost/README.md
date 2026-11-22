@@ -54,7 +54,7 @@ TI 数据手册给出 TPS61088 的 2.7–12 V 输入范围。TI PMP9778 页面�
 
 ~~~powershell
 py -3 .\generate_eol_checkpoint_decks.py
-powershell -ExecutionPolicy Bypass -File .\run_low_vin_matrix.ps1 -LtspiceExe "C:\Program Files\ADI\LTspice\LTspice.exe" -NetlistSubdir netlists -NetlistSubdir checkpoints
+powershell -ExecutionPolicy Bypass -File .\run_low_vin_matrix.ps1 -LtspiceExe "C:\Program Files\ADI\LTspice\LTspice.exe" -NetlistSubdir checkpoints
 ~~~
 
 同样使用 analyze_low_vin_results.py 分析该次 results/run_timestamp。运行脚本会从 checkpoints/manifest.csv 读取架构、checkpoint 时间和预期 pack 状态，并写入 run_manifest.csv；分析器会额外要求 pack_ocv_avg、pack_terminal_avg、pack_input_avg、ppack、pack_esr_loss_w、path_loss_w 和 eff_pack 等测量项，并输出实际值与行为模型预测的差异。
