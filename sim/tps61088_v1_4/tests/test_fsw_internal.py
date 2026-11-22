@@ -53,6 +53,55 @@ class CrossingTests(unittest.TestCase):
         )
         self.assertFalse(paired["event_order_valid"])
 
+    def test_event_multiplicity_summary_counts_missing_and_duplicate_complete_cycles(self):
+        fields = {
+            "pvin_cross_count": 1,
+            "comparator_output_rise_count": 1,
+            "u5_toff_0p5V_rise_count": 1,
+            "gate_l_rise_count": 1,
+            "cap_reset_0p5V_fall_count": 1,
+            "sw_fall_10V_count": 1,
+        }
+        clean = {"next_cycle_start_s": 2.0, **fields}
+        damaged = {
+            "next_cycle_start_s": 3.0,
+            **fields,
+            "pvin_cross_count": 0,
+            "u5_toff_0p5V_rise_count": 2,
+        }
+        right_censored = {
+            "next_cycle_start_s": None,
+            **{key: 0 for key in fields},
+        }
+        result = fsw.event_multiplicity_summary(
+            [clean, damaged, right_censored]
+        )
+        self.assertEqual(result["pvin_cross"], {
+            "missing_cycles": 1, "multiple_cycles": 0
+        })
+        self.assertEqual(result["u5_toff_0p5V_rise"], {
+            "missing_cycles": 0, "multiple_cycles": 1
+        })
+        self.assertEqual(result["gate_l_rise"], {
+            "missing_cycles": 0, "multiple_cycles": 0
+        })
+
+    def test_event_multiplicity_summary_excludes_right_censored_period(self):
+        row = {
+            "next_cycle_start_s": None,
+            "pvin_cross_count": 0,
+            "comparator_output_rise_count": 0,
+            "u5_toff_0p5V_rise_count": 0,
+            "gate_l_rise_count": 0,
+            "cap_reset_0p5V_fall_count": 0,
+            "sw_fall_10V_count": 0,
+        }
+        result = fsw.event_multiplicity_summary([row])
+        self.assertTrue(all(
+            item == {"missing_cycles": 0, "multiple_cycles": 0}
+            for item in result.values()
+        ))
+
     def test_first_between_is_half_open(self):
         events = np.array([1.0, 2.0, 3.0])
         self.assertEqual(fsw.first_between(events, 2.0, 3.0), 2.0)
