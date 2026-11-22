@@ -83,7 +83,7 @@ class PairingRunnerTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "Duplicate primary 50 ns RAW"):
                 runner.load_inventory_rows(path)
 
-    def test_event_multiplicity_check_rejects_missing_or_duplicate_events(self):
+    def test_event_multiplicity_gates_primary_events_but_not_diagnostic_comparator(self):
         names = (
             "pvin_cross",
             "comparator_output_rise",
@@ -98,17 +98,21 @@ class PairingRunnerTests(unittest.TestCase):
                 for name in names
             }
         }
-        self.assertTrue(
-            runner.event_multiplicity_check(summary)["no_missing_or_multiple_events"]
-        )
+        summary["event_multiplicity"]["comparator_output_rise"] = {
+            "missing_cycles": 3, "multiple_cycles": 2
+        }
+        check = runner.event_multiplicity_check(summary)
+        self.assertTrue(check["required_events_no_missing_or_multiple"])
+        self.assertFalse(check["diagnostic_only"]["comparator_output_rise"]["hard_gate"])
+
         summary["event_multiplicity"]["u5_toff_0p5V_rise"]["multiple_cycles"] = 1
         self.assertFalse(
-            runner.event_multiplicity_check(summary)["no_missing_or_multiple_events"]
+            runner.event_multiplicity_check(summary)["required_events_no_missing_or_multiple"]
         )
         summary["event_multiplicity"]["u5_toff_0p5V_rise"]["multiple_cycles"] = 0
         summary["event_multiplicity"]["gate_l_rise"]["missing_cycles"] = 1
         self.assertFalse(
-            runner.event_multiplicity_check(summary)["no_missing_or_multiple_events"]
+            runner.event_multiplicity_check(summary)["required_events_no_missing_or_multiple"]
         )
 
     def test_run_configuration_check_rejects_wrong_step_or_parameters(self):
