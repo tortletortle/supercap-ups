@@ -4,6 +4,7 @@ from compare_storage_architectures import (
     DESIGNS,
     minimum_efficiency_for_task,
     pack_equivalent,
+    sample_checkpoint_states,
     simulate,
 )
 
