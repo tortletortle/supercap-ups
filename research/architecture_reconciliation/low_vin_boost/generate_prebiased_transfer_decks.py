@@ -53,8 +53,8 @@ RUP VOUT FB 1.076meg
 RDN FB 0 120k
 COUT VOUT 0 47u Rser=0.003 IC=12
 VLOAD VOUT LOAD 0
-* Load remains connected throughout transfer; 1 A above 10 V.
-BLOAD LOAD 0 I=min(max(V(LOAD)/10,0),1)
+* Load remains connected throughout transfer as a 1 A constant-current sink.
+BLOAD LOAD 0 I=if(V(LOAD)>0.5,1,0)
 VEN EN 0 PWL(0 0 @DELAY_S@ 0 @DELAY_PLUS_S@ 3)
 X1 0 BOOT COMP EN FB FSW ILIM 0 NC0 NC1 0 SS SW SW SW SW VCC VIN VOUT VOUT VOUT TPS61088_TRANS
 .save V(PACK_OC) V(PACK) V(PACK_IN) V(VIN) V(VOUT) V(EN) V(COMP) V(SS) V(SW) I(VSENSE) I(L1) I(VLOAD)
