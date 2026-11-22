@@ -1,0 +1,59 @@
+* EOL 2S pack-coupled TPS61088 local startup window
+* Architecture: 2S30F_KAM_HP_40
+* Behavioral-model checkpoint: t=1.2 s, eta_boost=92%, eta_path=99%
+* Expected pack OCV=4.34072086033 V; expected loaded pack terminal=2.87348959009 V
+* Expected input current=4.5850977195 A; these are prebias estimates, not LTspice results.
+* RFSW=324k is retained for BOM comparability; actual FSW remains under audit.
+.include ../../../../sim/tps61088_v1_3/model/TPS61088_LT.LIB
+CSTORE PACK_OC 0 10.5 IC=4.34072086033
+RESR PACK_OC PACK 0.32
+RPATH PACK PACK_IN 0.002
+VSENSE PACK_IN VIN 0
+CIN VIN 0 35u IC=4.34072086033
+CINHF VIN 0 100n IC=4.34072086033
+L1 VIN LD 3.3u
+RLD LD SW 0.026
+CBOOT BOOT SW 100n
+CVCC VCC 0 4.7u
+CSS SS 0 47n
+RCOMP COMP CM 21.5k
+CCOMP CM 0 13n
+CHF COMP 0 100p
+RFSW FSW SW 324k
+RILIM ILIM 0 100k
+RUP VOUT FB 1.076meg
+RDN FB 0 120k
+COUT VOUT 0 47u Rser=0.003
+VLOAD VOUT LOAD 0
+BLOAD LOAD 0 I=if(V(EN)>1.5,min(max(V(LOAD)/10,0),1),0)
+VEN EN 0 PWL(0 0 100u 0 101u 3)
+X1 0 BOOT COMP EN FB FSW ILIM 0 NC0 NC1 0 SS SW SW SW SW VCC VIN VOUT VOUT VOUT TPS61088_TRANS
+.save V(PACK_OC) V(PACK) V(PACK_IN) V(VIN) V(VOUT) V(EN) V(COMP) V(SS) V(SW) I(VSENSE) I(L1) I(VLOAD)
+.options method=gear reltol=.003 trtol=7 gmin=1e-10 numdgt=7 threads=1 plotwinsize=0
+.tran 0 40m 0 50n uic
+.meas tran t_en WHEN V(EN)=1.2 RISE=1
+.meas tran t98 WHEN V(VOUT)=11.76 RISE=1
+.meas tran t98_delay PARAM t98-t_en
+.meas tran sw_t6001 WHEN V(SW)=10 RISE=6001
+.meas tran sw_t6101 WHEN V(SW)=10 RISE=6101
+.meas tran f_sw_khz PARAM 100/(sw_t6101-sw_t6001)/1000
+.meas tran pack_ocv_avg AVG V(PACK_OC) from 35m to 37m
+.meas tran pack_terminal_avg AVG V(PACK) from 35m to 37m
+.meas tran pack_input_avg AVG V(PACK_IN) from 35m to 37m
+.meas tran vin_avg AVG V(VIN) from 35m to 37m
+.meas tran avg_vout AVG V(VOUT) from 35m to 37m
+.meas tran vmin MIN V(VOUT) from 35m to 37m
+.meas tran vmax MAX V(VOUT) from 35m to 37m
+.meas tran ripple PP V(VOUT) from 35m to 37m
+.meas tran peak_i MAX I(L1) from 35m to 37m
+.meas tran peak_start MAX I(L1) from 0 to 35m
+.meas tran iin_avg AVG I(VSENSE) from 35m to 37m
+.meas tran iout_avg AVG I(VLOAD) from 35m to 37m
+.meas tran pin AVG (V(VIN)*I(VSENSE)) from 35m to 37m
+.meas tran ppack AVG (V(PACK)*I(VSENSE)) from 35m to 37m
+.meas tran pout AVG (V(VOUT)*I(VLOAD)) from 35m to 37m
+.meas tran pack_esr_loss_w AVG (I(VSENSE)*I(VSENSE)*0.32) from 35m to 37m
+.meas tran path_loss_w AVG (I(VSENSE)*I(VSENSE)*0.002) from 35m to 37m
+.meas tran eff PARAM 100*pout/pin
+.meas tran eff_pack PARAM 100*pout/ppack
+.end
