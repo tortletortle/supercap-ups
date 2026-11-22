@@ -14,6 +14,10 @@ REQUIRED_MEASUREMENTS = (
     "peak_start", "iin_avg", "iout_avg", "pin", "pout", "eff",
     "t_en", "t98", "t98_delay", "sw_t6001", "sw_t6101", "f_sw_khz",
 )
+PACK_REQUIRED_MEASUREMENTS = (
+    "pack_ocv_avg", "pack_terminal_avg", "pack_input_avg",
+    "ppack", "pack_esr_loss_w", "path_loss_w", "eff_pack",
+)
 
 
 def sha256_file(path: Path) -> str:
@@ -157,8 +161,11 @@ def analyze_case(row: dict, case_dir: Path, model_path: Path) -> dict:
         if log_path.is_file() else ""
     )
     m = log["measurements"]
-    missing = sorted(set(REQUIRED_MEASUREMENTS) - set(m))
-    failed_required = sorted(set(REQUIRED_MEASUREMENTS) & set(log["failed_measurements"]))
+    required_measurements = set(REQUIRED_MEASUREMENTS)
+    if row.get("architecture"):
+        required_measurements.update(PACK_REQUIRED_MEASUREMENTS)
+    missing = sorted(required_measurements - set(m))
+    failed_required = sorted(required_measurements & set(log["failed_measurements"]))
 
     exit_code = _as_int(row.get("exit_code"))
     process_files_ok = (
@@ -220,9 +227,33 @@ def analyze_case(row: dict, case_dir: Path, model_path: Path) -> dict:
     else:
         result = "screen_fail"
 
+    expected_pack_terminal = row.get("expected_pack_terminal_v", "")
+    expected_pack_ocv = row.get("expected_pack_ocv_v", "")
+    expected_input_current = row.get("expected_input_current_a", "")
+    pack_terminal_actual = m.get("pack_terminal_avg", "")
+    pack_ocv_actual = m.get("pack_ocv_avg", "")
+    pack_terminal_delta = (
+        float(pack_terminal_actual) - float(expected_pack_terminal)
+        if pack_terminal_actual != "" and expected_pack_terminal != "" else ""
+    )
+    input_current_delta = (
+        float(m["iin_avg"]) - float(expected_input_current)
+        if "iin_avg" in m and expected_input_current != "" else ""
+    )
+
     return {
         "case": case,
+        "architecture": row.get("architecture", ""),
+        "checkpoint_s": row.get("checkpoint_s", ""),
         "vin_source_v": row.get("vin_source_v", ""),
+        "expected_pack_ocv_v": expected_pack_ocv,
+        "pack_ocv_avg_v": pack_ocv_actual,
+        "expected_pack_terminal_v": expected_pack_terminal,
+        "pack_terminal_avg_v": pack_terminal_actual,
+        "pack_terminal_delta_v": pack_terminal_delta,
+        "expected_input_current_a": expected_input_current,
+        "input_current_delta_a": input_current_delta,
+        "pack_input_avg_v": m.get("pack_input_avg", ""),
         "exit_code": exit_code,
         "simulation_complete": simulation_complete,
         "warning_count": log["warning_count"],
@@ -245,8 +276,12 @@ def analyze_case(row: dict, case_dir: Path, model_path: Path) -> dict:
         "peak_i_a": m.get("peak_i", ""),
         "peak_start_a": m.get("peak_start", ""),
         "pin_w": m.get("pin", ""),
+        "pack_pin_w": m.get("ppack", ""),
         "pout_w": m.get("pout", ""),
         "eff_model_pct": m.get("eff", ""),
+        "eff_pack_pct": m.get("eff_pack", ""),
+        "pack_esr_loss_w": m.get("pack_esr_loss_w", ""),
+        "path_loss_w": m.get("path_loss_w", ""),
         "f_sw_khz": m.get("f_sw_khz", ""),
         "timing_order_ok": timing_ok,
         **{f"check_{key}": value for key, value in electrical_checks.items()},
@@ -285,18 +320,21 @@ def write_outputs(run_dir: Path, rows: list[dict]) -> None:
         "A screen_pass is only a limited macro-model screening result; it is "
         "not hardware qualification or BOM release.",
         "",
-        "| VIN | VOUT avg | IOUT avg | Ripple | Peak IL | FSW observed | Result |",
-        "|---:|---:|---:|---:|---:|---:|---|",
+        "| Case | Expected pack terminal | Measured VIN | VOUT avg | IOUT avg | Ripple | Peak IL | FSW observed | Result |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|---|",
     ]
     for row in rows:
         def fmt(key, digits=3, suffix=""):
             value = row.get(key, "")
             return f"{float(value):.{digits}f}{suffix}" if value != "" else "—"
+        case_label = row.get("architecture") or row["case"]
+        expected_pack = row.get("expected_pack_terminal_v", "")
+        expected_pack_text = f"{float(expected_pack):.3f} V" if expected_pack != "" else "—"
         lines.append(
-            f"| {row['vin_source_v']} V | {fmt('avg_vout_v')} V | "
-            f"{fmt('iout_avg_a')} A | {fmt('ripple_mVpp')} mVpp | "
-            f"{fmt('peak_start_a')} A | {fmt('f_sw_khz', 2)} kHz | "
-            f"{row['screen_result']} |"
+            f"| {case_label} | {expected_pack_text} | {fmt('vin_avg_v')} V | "
+            f"{fmt('avg_vout_v')} V | {fmt('iout_avg_a')} A | "
+            f"{fmt('ripple_mVpp')} mVpp | {fmt('peak_start_a')} A | "
+            f"{fmt('f_sw_khz', 2)} kHz | {row['screen_result']} |"
         )
     lines.extend([
         "",
@@ -320,6 +358,11 @@ def write_outputs(run_dir: Path, rows: list[dict]) -> None:
             f"- FSW observed: {fmt_value(row.get('f_sw_khz'), 'kHz')}",
             f"- Model power ratio: {fmt_value(row.get('eff_model_pct'), '%')} (not hardware efficiency)",
             f"- Average input current: {fmt_value(row.get('iin_avg_a'), 'A')}",
+            f"- Expected pack terminal: {fmt_value(row.get('expected_pack_terminal_v'), 'V')}",
+            f"- Measured pack terminal: {fmt_value(row.get('pack_terminal_avg_v'), 'V')}",
+            f"- Pack terminal delta vs behavioral checkpoint: {fmt_value(row.get('pack_terminal_delta_v'), 'V')}",
+            f"- Pack ESR loss: {fmt_value(row.get('pack_esr_loss_w'), 'W')}",
+            f"- Macro-model efficiency at converter input: {fmt_value(row.get('eff_model_pct'), '%')}",
             f"- Startup peak inductor current: {fmt_value(row.get('peak_start_a'), 'A')}",
             f"- Warnings: {row['warning_count']}",
             f"- Reasons: {row['screen_reasons'] or 'none'}",
