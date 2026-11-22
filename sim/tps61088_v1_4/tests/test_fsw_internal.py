@@ -40,6 +40,25 @@ class CrossingTests(unittest.TestCase):
         self.assertEqual(fsw.count_between(events, 4.0, 5.0), 1)
         self.assertEqual(fsw.count_between(events, 2.0, 2.0), 0)
 
+    def test_duplicate_diagnostic_comparator_event_does_not_invalidate_primary_cycle(self):
+        reasons = fsw.duplicate_required_event_reasons({
+            "pvin_cross": 1,
+            "comparator_output_rise": 2,
+            "u5_toff_0p5V_rise": 1,
+            "gate_l_rise": 1,
+            "cap_reset_0p5V_fall": 1,
+            "sw_fall_10V": 1,
+        })
+        self.assertEqual(reasons, [])
+
+    def test_duplicate_primary_timing_event_invalidates_cycle(self):
+        reasons = fsw.duplicate_required_event_reasons({
+            "comparator_output_rise": 2,
+            "u5_toff_0p5V_rise": 2,
+            "gate_l_rise": 1,
+        })
+        self.assertEqual(reasons, ["multiple_u5_toff_0p5V_rise"])
+
     def test_pair_cycle_events_rejects_out_of_order_downstream_edges(self):
         paired = fsw.pair_cycle_events(
             cycle_start=0.0,
