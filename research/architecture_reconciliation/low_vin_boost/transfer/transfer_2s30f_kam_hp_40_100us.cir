@@ -34,7 +34,7 @@ X1 0 BOOT COMP EN FB FSW ILIM 0 NC0 NC1 0 SS SW SW SW SW VCC VIN VOUT VOUT VOUT 
 .meas tran t_en WHEN V(EN)=1.2 RISE=1
 .meas tran t98 WHEN V(VOUT)=11.76 RISE=1
 .meas tran t98_delay PARAM t98-t_en
-.meas tran vout_at_enable AVG V(VOUT) from 0.000099 to 0.00009999999999999999
+.meas tran vout_at_enable AVG V(VOUT) from 9.9e-05 to 0.00009999999999999999
 .meas tran vout_pre_enable_min MIN V(VOUT) from 0 to 0.00009999999999999999
 .meas tran vout_first_5ms_min MIN V(VOUT) from 0 to 5m
 .meas tran vout_global_min MIN V(VOUT) from 0 to 40m
