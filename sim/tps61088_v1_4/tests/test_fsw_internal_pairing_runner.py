@@ -115,6 +115,167 @@ class PairingRunnerTests(unittest.TestCase):
             runner.event_multiplicity_check(summary)["required_events_no_missing_or_multiple"]
         )
 
+    def test_csv_summary_consistency_audit_recomputes_rows_and_diagnostic_multiplicity(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "cycles.csv"
+            event_fields = {
+                "pvin_cross": ("pvin_cross_count", "pvin_cross_s"),
+                "comparator_output_rise": (
+                    "comparator_output_rise_count", "comparator_output_rise_s"
+                ),
+                "u5_toff_0p5V_rise": (
+                    "u5_toff_0p5V_rise_count", "u5_toff_0p5V_rise_s"
+                ),
+                "gate_l_rise": ("gate_l_rise_count", "gate_l_rise_s"),
+                "cap_reset_0p5V_fall": (
+                    "cap_reset_0p5V_fall_count", "cap_reset_0p5V_fall_s"
+                ),
+                "sw_fall_10V": ("sw_fall_10V_count", "sw_fall_10V_s"),
+            }
+            fieldnames = (
+                "cycle_start_s", "next_cycle_start_s", "period_s", "sw_high_s",
+                "cycle_status", "cycle_valid", "event_order_valid",
+                "raw_10v_rises_in_period",
+                *[field for pair in event_fields.values() for field in pair],
+            )
+            rows = []
+            for start in (0.0, 2.0):
+                row = {
+                    "cycle_start_s": str(start),
+                    "next_cycle_start_s": str(start + 2.0),
+                    "period_s": "2.0",
+                    "sw_high_s": "1.5",
+                    "cycle_status": "complete",
+                    "cycle_valid": "True",
+                    "event_order_valid": "True",
+                    "raw_10v_rises_in_period": "1",
+                }
+                times = {
+                    "pvin_cross": start + 0.2,
+                    "comparator_output_rise": start + 0.25,
+                    "u5_toff_0p5V_rise": start + 0.4,
+                    "gate_l_rise": start + 0.5,
+                    "cap_reset_0p5V_fall": start + 0.6,
+                    "sw_fall_10V": start + 1.5,
+                }
+                for name, (count_field, time_field) in event_fields.items():
+                    row[count_field] = "2" if (
+                        name == "comparator_output_rise" and start == 0.0
+                    ) else "1"
+                    row[time_field] = str(times[name])
+                rows.append(row)
+
+            censored = {
+                "cycle_start_s": "4.0",
+                "next_cycle_start_s": "",
+                "period_s": "",
+                "sw_high_s": "",
+                "cycle_status": "right_censored_at_raw_end",
+                "cycle_valid": "False",
+                "event_order_valid": "False",
+                "raw_10v_rises_in_period": "1",
+            }
+            for count_field, time_field in event_fields.values():
+                censored[count_field] = "0"
+                censored[time_field] = ""
+            rows.append(censored)
+
+            with path.open("w", newline="", encoding="utf-8") as stream:
+                writer = csv.DictWriter(stream, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerows(rows)
+
+            summary = {
+                "cycle_accounting": {
+                    "candidate_cycles": 3,
+                    "complete_valid_cycles": 2,
+                    "right_censored_cycles": 1,
+                    "invalid_cycles": 0,
+                },
+                "event_completeness": {
+                    "pvin_cross_s": 2,
+                    "comparator_output_rise_s": 2,
+                    "u5_toff_0p5V_rise_s": 2,
+                    "gate_l_rise_s": 2,
+                    "cap_reset_0p5V_fall_s": 2,
+                    "sw_fall_10V_s": 2,
+                },
+                "event_multiplicity": {
+                    name: {
+                        "missing_cycles": 0,
+                        "multiple_cycles": 1 if name == "comparator_output_rise" else 0,
+                    }
+                    for name in event_fields
+                },
+            }
+            audit = runner.csv_summary_consistency_check(path, summary)
+            self.assertTrue(audit["match"], audit)
+            self.assertTrue(audit["checks"]["csv_event_multiplicity_matches_summary"])
+
+    def test_csv_summary_consistency_audit_rejects_primary_event_multiplicity_mismatch(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "cycles.csv"
+            fieldnames = (
+                "cycle_start_s", "next_cycle_start_s", "period_s", "sw_high_s",
+                "cycle_status", "cycle_valid", "event_order_valid",
+                "raw_10v_rises_in_period",
+                "pvin_cross_count", "pvin_cross_s",
+                "comparator_output_rise_count", "comparator_output_rise_s",
+                "u5_toff_0p5V_rise_count", "u5_toff_0p5V_rise_s",
+                "gate_l_rise_count", "gate_l_rise_s",
+                "cap_reset_0p5V_fall_count", "cap_reset_0p5V_fall_s",
+                "sw_fall_10V_count", "sw_fall_10V_s",
+            )
+            row = {
+                "cycle_start_s": "0", "next_cycle_start_s": "2",
+                "period_s": "2", "sw_high_s": "1.5",
+                "cycle_status": "complete", "cycle_valid": "True",
+                "event_order_valid": "True", "raw_10v_rises_in_period": "1",
+                "pvin_cross_count": "1", "pvin_cross_s": "0.2",
+                "comparator_output_rise_count": "1",
+                "comparator_output_rise_s": "0.25",
+                "u5_toff_0p5V_rise_count": "1",
+                "u5_toff_0p5V_rise_s": "0.4",
+                "gate_l_rise_count": "2", "gate_l_rise_s": "0.5",
+                "cap_reset_0p5V_fall_count": "1",
+                "cap_reset_0p5V_fall_s": "0.6",
+                "sw_fall_10V_count": "1", "sw_fall_10V_s": "1.5",
+            }
+            with path.open("w", newline="", encoding="utf-8") as stream:
+                writer = csv.DictWriter(stream, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerow(row)
+            summary = {
+                "cycle_accounting": {
+                    "candidate_cycles": 1,
+                    "complete_valid_cycles": 1,
+                    "right_censored_cycles": 0,
+                    "invalid_cycles": 0,
+                },
+                "event_completeness": {
+                    "pvin_cross_s": 1,
+                    "comparator_output_rise_s": 1,
+                    "u5_toff_0p5V_rise_s": 1,
+                    "gate_l_rise_s": 1,
+                    "cap_reset_0p5V_fall_s": 1,
+                    "sw_fall_10V_s": 1,
+                },
+                "event_multiplicity": {
+                    name: {"missing_cycles": 0, "multiple_cycles": 0}
+                    for name in (
+                        "pvin_cross", "comparator_output_rise",
+                        "u5_toff_0p5V_rise", "gate_l_rise",
+                        "cap_reset_0p5V_fall", "sw_fall_10V",
+                    )
+                },
+            }
+            audit = runner.csv_summary_consistency_check(path, summary)
+            self.assertFalse(audit["match"])
+            self.assertFalse(
+                audit["checks"]["complete_cycles_have_one_primary_event_each"]
+            )
+            self.assertFalse(audit["checks"]["csv_event_multiplicity_matches_summary"])
+
     def test_run_configuration_check_rejects_wrong_step_or_parameters(self):
         summary = {
             "analysis_window_s": [0.024, 0.026],
