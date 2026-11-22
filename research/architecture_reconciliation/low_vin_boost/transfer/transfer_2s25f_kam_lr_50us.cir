@@ -26,7 +26,7 @@ COUT VOUT 0 47u Rser=0.003 IC=12
 VLOAD VOUT LOAD 0
 * Load remains connected throughout transfer as a 1 A constant-current sink.
 BLOAD LOAD 0 I=if(V(LOAD)>0.5,1,0)
-VEN EN 0 PWL(0 0 0.000049999999999999996 0 0.000051 3)
+VEN EN 0 PWL(0 0 5e-05 0 5.1e-05 3)
 X1 0 BOOT COMP EN FB FSW ILIM 0 NC0 NC1 0 SS SW SW SW SW VCC VIN VOUT VOUT VOUT TPS61088_TRANS
 .save V(PACK_OC) V(PACK) V(PACK_IN) V(VIN) V(VOUT) V(EN) V(COMP) V(SS) V(SW) I(VSENSE) I(L1) I(VLOAD)
 .options method=gear reltol=.003 trtol=7 gmin=1e-10 numdgt=7 threads=1 plotwinsize=0
@@ -34,8 +34,8 @@ X1 0 BOOT COMP EN FB FSW ILIM 0 NC0 NC1 0 SS SW SW SW SW VCC VIN VOUT VOUT VOUT 
 .meas tran t_en WHEN V(EN)=1.2 RISE=1
 .meas tran t98 WHEN V(VOUT)=11.76 RISE=1
 .meas tran t98_delay PARAM t98-t_en
-.meas tran vout_at_enable AVG V(VOUT) from 0.000049 to 0.000049999999999999996
-.meas tran vout_pre_enable_min MIN V(VOUT) from 0 to 0.000049999999999999996
+.meas tran vout_at_enable AVG V(VOUT) from 4.9e-05 to 5e-05
+.meas tran vout_pre_enable_min MIN V(VOUT) from 0 to 5e-05
 .meas tran vout_first_5ms_min MIN V(VOUT) from 0 to 5m
 .meas tran vout_global_min MIN V(VOUT) from 0 to 40m
 .meas tran sw_t6001 WHEN V(SW)=10 RISE=6001
