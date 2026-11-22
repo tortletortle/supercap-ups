@@ -1,0 +1,461 @@
+(kicad_sch (version 20250114) (generator "eeschema")
+(uuid "34353ddb-f98b-4784-891d-40c11e89a09f")
+(paper "A4")
+(title_block (title "Supercap UPS | Pack undervoltage lockout") (rev "Review"))
+(lib_symbols (symbol "Device:R"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "R"
+			(at 2.032 0 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "R"
+			(at 0 0 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -1.778 0 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_keywords" "R res resistor"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_fp_filters" "R_*"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(symbol "R_0_1"
+			(rectangle
+				(start -1.016 -2.54)
+				(end 1.016 2.54)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "R_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 1.27)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 1.27)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	) (symbol "Device:C"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0.254)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "C"
+			(at 0.635 2.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "C"
+			(at 0.635 -2.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 0.9652 -3.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_keywords" "cap capacitor"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_fp_filters" "C_*"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(symbol "C_0_1"
+			(polyline
+				(pts
+					(xy -2.032 0.762) (xy 2.032 0.762)
+				)
+				(stroke
+					(width 0.508)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy -2.032 -0.762) (xy 2.032 -0.762)
+				)
+				(stroke
+					(width 0.508)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "C_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 2.794)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 2.794)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	) (symbol "power:PWR_FLAG"
+		(power)
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "#FLG"
+			(at 0 1.905 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 0 3.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Special symbol for telling ERC where power comes from"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_keywords" "flag power"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(symbol "PWR_FLAG_0_0"
+			(pin power_out line
+				(at 0 0 90)
+				(length 0)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(symbol "PWR_FLAG_0_1"
+			(polyline
+				(pts
+					(xy 0 0) (xy 0 1.27) (xy -1.016 1.905) (xy 0 2.54) (xy 1.016 1.905) (xy 0 1.27)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(embedded_fonts no)
+	) (symbol "UPS:TPS3700DDC"
+  (pin_names (offset 1.27))
+  (in_bom yes) (on_board yes)
+  (property "Reference" "U" (at 0 12.7 0) (effects (font (size 1.27 1.27))))
+  (property "Value" "TPS3700DDC" (at 0 10.16 0) (effects (font (size 1.27 1.27))))
+  (property "Footprint" "Package_TO_SOT_SMD:SOT-23-6" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+  (symbol "TPS3700DDC_0_1"
+    (rectangle (start -15.24 8.89) (end 15.24 -8.89)
+      (stroke (width 0.254) (type default)) (fill (type background))))
+  (symbol "TPS3700DDC_1_1"
+    (pin open_collector line (at 20.32 0 180) (length 5.08) (name "OUTA" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.016 1.016)))))
+    (pin power_in line (at 0 -13.97 90) (length 5.08) (name "GND" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.016 1.016)))))
+    (pin input line (at -20.32 0 0) (length 5.08) (name "INA+" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.016 1.016)))))
+    (pin input line (at -20.32 -5.08 0) (length 5.08) (name "INB-" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.016 1.016)))))
+    (pin power_in line (at 0 13.97 270) (length 5.08) (name "VDD" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.016 1.016)))))
+    (pin open_collector line (at 20.32 -5.08 180) (length 5.08) (name "OUTB" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.016 1.016))))))))
+(text "PACK UNDERVOLTAGE LOCKOUT" (at 20.3200 33.0200 0) (effects (font (size 2.45 2.45) (bold yes)) (justify left)) (uuid "0e17c323-248c-4f0f-a0fe-825b1e05249b"))
+(text "Independent analog comparator | 4S pack | Active-high backup permission" (at 20.3200 39.3700 0) (effects (font (size 1.55 1.55) ) (justify left)) (uuid "f4e7eca8-5792-4639-8055-9b490761c1df"))
+(text "Hardware review candidate" (at 20.3200 44.4500 0) (effects (font (size 1.4 1.4) ) (justify left)) (uuid "e48697ad-d218-467c-9c4b-0f86dd769b5b"))
+(wire (pts (xy 31.7500 55.8800) (xy 45.7200 55.8800)) (stroke (width 0) (type default)) (uuid "2e904548-86e1-4c7c-898c-2ec7c35eed3c"))
+(wire (pts (xy 45.7200 55.8800) (xy 82.5500 55.8800)) (stroke (width 0) (type default)) (uuid "fbe1079f-9d25-45f0-b089-ca2cdc067b82"))
+(wire (pts (xy 82.5500 55.8800) (xy 133.3500 55.8800)) (stroke (width 0) (type default)) (uuid "89498a4c-d5e7-46c5-8851-cccbcf610aa2"))
+(wire (pts (xy 133.3500 55.8800) (xy 198.1200 55.8800)) (stroke (width 0) (type default)) (uuid "445d30ef-6cdb-4330-9c51-dff5e6882973"))
+(wire (pts (xy 198.1200 55.8800) (xy 251.4600 55.8800)) (stroke (width 0) (type default)) (uuid "5fe7cb7b-d640-4acb-8e0e-ebd5b7b07206"))
+(wire (pts (xy 31.7500 129.5400) (xy 45.7200 129.5400)) (stroke (width 0) (type default)) (uuid "e5db48be-54ae-458d-93e7-43e4b8fb4072"))
+(wire (pts (xy 45.7200 129.5400) (xy 82.5500 129.5400)) (stroke (width 0) (type default)) (uuid "4c90de31-d23b-44a8-9c8b-1558767512b7"))
+(wire (pts (xy 82.5500 129.5400) (xy 101.6000 129.5400)) (stroke (width 0) (type default)) (uuid "9ac6399b-1af1-4aa8-93d5-2c2f3b442cd6"))
+(wire (pts (xy 101.6000 129.5400) (xy 133.3500 129.5400)) (stroke (width 0) (type default)) (uuid "f4108456-677b-450c-b681-a0b91fc8df5e"))
+(wire (pts (xy 133.3500 129.5400) (xy 148.5900 129.5400)) (stroke (width 0) (type default)) (uuid "bb2b54c6-5428-4538-893f-c027d5858b25"))
+(wire (pts (xy 148.5900 129.5400) (xy 198.1200 129.5400)) (stroke (width 0) (type default)) (uuid "9abdbfe7-127a-4944-9079-7ddb10488667"))
+
+(junction (at 45.7200 55.8800) (diameter 0) (color 0 0 0 0) (uuid "e9c61aee-0318-41d4-93f7-d7a385d26221"))
+(junction (at 82.5500 55.8800) (diameter 0) (color 0 0 0 0) (uuid "48565601-ef66-4b35-bab8-166e3251edff"))
+(junction (at 133.3500 55.8800) (diameter 0) (color 0 0 0 0) (uuid "29deae58-8965-44fc-b9a2-61686099b85e"))
+(junction (at 198.1200 55.8800) (diameter 0) (color 0 0 0 0) (uuid "c7565fdc-96ee-4980-9338-80e4d70f7258"))
+(junction (at 45.7200 129.5400) (diameter 0) (color 0 0 0 0) (uuid "429c279c-292a-43b7-81f9-c8ec94888f82"))
+(junction (at 82.5500 129.5400) (diameter 0) (color 0 0 0 0) (uuid "5c03d897-8d74-4184-bc26-4832941cc055"))
+(junction (at 101.6000 129.5400) (diameter 0) (color 0 0 0 0) (uuid "1e37cf58-8cd2-4d93-8076-7d73b4dddf8e"))
+(junction (at 133.3500 129.5400) (diameter 0) (color 0 0 0 0) (uuid "d0b5c763-294d-4041-84e6-b7b2844075f1"))
+(junction (at 148.5900 129.5400) (diameter 0) (color 0 0 0 0) (uuid "0f2f6cfe-3da6-4460-b0db-4bedd17b517e"))
+(junction (at 198.1200 129.5400) (diameter 0) (color 0 0 0 0) (uuid "1165213f-ee8d-4075-93b1-8cf4c520962d"))
+(global_label "PACK_4S" (shape bidirectional) (at 31.7500 55.8800 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "4bb4ae51-dd66-4672-8b0f-a637b31f53bf") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 31.7500 55.8800 0) (effects (font (size 1.27 1.27)) (hide yes))))
+(global_label "GND" (shape bidirectional) (at 31.7500 129.5400 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "ab43fdb5-de38-4dee-944a-6dcbfd03e739") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 31.7500 129.5400 0) (effects (font (size 1.27 1.27)) (hide yes))))
+(symbol (lib_id "power:PWR_FLAG") (at 251.4600 55.8800 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "fa4345e8-00c8-4493-98d7-c53c8b06f371") (property "Reference" "#FLG0201" (at 251.4600 49.5300 0) (effects (font (size 1.27 1.27)) (justify left) (hide yes))) (property "Value" "PWR_FLAG" (at 251.4600 50.8000 0) (effects (font (size 1.27 1.27)) (justify left) )) (pin "1" (uuid "087ef99c-4802-46cc-9629-daabf8051795")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/0a104c2e-affe-50c6-aea1-0f4e50d2d395" (reference "#FLG0201") (unit 1)))))
+
+(symbol (lib_id "Device:C") (at 45.7200 87.6300 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "e943f2e1-035f-42dd-acdf-3ef8e39016b1") (property "Reference" "C201" (at 50.8000 86.3600 0) (effects (font (size 1.27 1.27)) (justify left) )) (property "Value" "100 nF" (at 50.8000 88.9000 0) (effects (font (size 1.27 1.27)) (justify left) )) (pin "1" (uuid "60b7c5e8-cbf4-474a-9da0-f1809ba7ba99")) (pin "2" (uuid "c41b395a-8b30-42cf-b15e-310677b23c55")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/0a104c2e-affe-50c6-aea1-0f4e50d2d395" (reference "C201") (unit 1)))))
+(wire (pts (xy 45.7200 55.8800) (xy 45.7200 83.8200)) (stroke (width 0) (type default)) (uuid "4194b81d-735a-4ffe-a1b4-89aabea8209d"))
+(wire (pts (xy 45.7200 91.4400) (xy 45.7200 129.5400)) (stroke (width 0) (type default)) (uuid "80995e63-7824-462c-98c4-c40610aeac8a"))
+(symbol (lib_id "Device:R") (at 82.5500 68.5800 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "ad64eba4-7404-4b09-a454-47ddc881f00b") (property "Reference" "R201" (at 87.6300 67.3100 0) (effects (font (size 1.27 1.27)) (justify left) )) (property "Value" "174 k" (at 87.6300 69.8500 0) (effects (font (size 1.27 1.27)) (justify left) )) (pin "1" (uuid "76e71110-01ad-4300-90d0-0dec10f37910")) (pin "2" (uuid "3323d323-c4a1-4011-a080-7f2e07457aea")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/0a104c2e-affe-50c6-aea1-0f4e50d2d395" (reference "R201") (unit 1)))))
+(symbol (lib_id "Device:R") (at 82.5500 113.0300 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "9ebcf4fa-4399-4045-b8b6-f963940b37e9") (property "Reference" "R202" (at 87.6300 111.7600 0) (effects (font (size 1.27 1.27)) (justify left) )) (property "Value" "10.0 k" (at 87.6300 114.3000 0) (effects (font (size 1.27 1.27)) (justify left) )) (pin "1" (uuid "c4acd79e-a413-47e0-b9e2-a846cd1e5eed")) (pin "2" (uuid "b5d10024-cdad-461a-8958-dbe199574693")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/0a104c2e-affe-50c6-aea1-0f4e50d2d395" (reference "R202") (unit 1)))))
+(symbol (lib_id "Device:C") (at 101.6000 113.0300 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "6d1dc9ab-58a2-4e31-8a8d-f4b6a89a2c3c") (property "Reference" "C202" (at 106.6800 111.7600 0) (effects (font (size 1.27 1.27)) (justify left) )) (property "Value" "1 nF" (at 106.6800 114.3000 0) (effects (font (size 1.27 1.27)) (justify left) )) (pin "1" (uuid "7b7e36f8-e57f-429a-b92a-3f2ec086fa1a")) (pin "2" (uuid "b847b6d9-b480-4f52-ab0f-a373ee094aa4")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/0a104c2e-affe-50c6-aea1-0f4e50d2d395" (reference "C202") (unit 1)))))
+(wire (pts (xy 82.5500 55.8800) (xy 82.5500 64.7700)) (stroke (width 0) (type default)) (uuid "99c8e32b-a178-42ee-ab41-1e491e214a80"))
+(wire (pts (xy 82.5500 72.3900) (xy 82.5500 92.7100)) (stroke (width 0) (type default)) (uuid "c40c0ab5-ccb8-4932-96be-abcda0ac4521"))
+(wire (pts (xy 82.5500 92.7100) (xy 101.6000 92.7100)) (stroke (width 0) (type default)) (uuid "5f0c2f8f-7867-4b58-9d23-cf24ef12cff8"))
+(wire (pts (xy 101.6000 92.7100) (xy 113.0300 92.7100)) (stroke (width 0) (type default)) (uuid "2247e21b-d875-4f7a-8dda-0e4122be1430"))
+(wire (pts (xy 113.0300 92.7100) (xy 128.2700 92.7100)) (stroke (width 0) (type default)) (uuid "b5c1fae4-5f92-44c1-89b2-9ae877c214e9"))
+(wire (pts (xy 82.5500 92.7100) (xy 82.5500 109.2200)) (stroke (width 0) (type default)) (uuid "0eee3783-3096-4184-beb6-335258318e68"))
+(wire (pts (xy 82.5500 116.8400) (xy 82.5500 129.5400)) (stroke (width 0) (type default)) (uuid "415a90ed-f493-40b1-b3fb-33f7e06d5d20"))
+(wire (pts (xy 101.6000 92.7100) (xy 101.6000 109.2200)) (stroke (width 0) (type default)) (uuid "892f8d6d-59e2-49fa-a2ea-f1ce41a0806a"))
+(wire (pts (xy 101.6000 116.8400) (xy 101.6000 129.5400)) (stroke (width 0) (type default)) (uuid "214c2ae0-8c69-497d-9999-f9dcd459bd1b"))
+(junction (at 82.5500 92.7100) (diameter 0) (color 0 0 0 0) (uuid "7d2c9e85-1f0a-414c-bc57-0db083113dd1"))
+(junction (at 101.6000 92.7100) (diameter 0) (color 0 0 0 0) (uuid "b6323dc2-fb33-4f58-b2ad-a479a51058db"))
+(junction (at 113.0300 92.7100) (diameter 0) (color 0 0 0 0) (uuid "05ee71aa-5941-4dd2-907f-65f8a8ba1201"))
+(label "UV_SENSE"  (at 101.6000 92.7100 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "39f2e4da-f767-4062-ba57-091226c17ce3") )
+(symbol (lib_id "UPS:TPS3700DDC") (at 148.5900 92.7100 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "70a924fb-bd86-4883-80ca-38f95dda9c50") (property "Reference" "U201" (at 133.3500 78.7400 0) (effects (font (size 1.27 1.27)) (justify left) )) (property "Value" "TPS3700DDC" (at 133.3500 81.2800 0) (effects (font (size 1.27 1.27)) (justify left) )) (property "Footprint" "Package_TO_SOT_SMD:SOT-23-6" (at 148.5900 92.7100 0) (effects (font (size 1.27 1.27)) (hide yes))) (pin "1" (uuid "01ccfba8-0c21-4de7-849c-a34e258d5ffe")) (pin "2" (uuid "188125c6-a59f-4d3a-9f1b-530c3912ddb8")) (pin "3" (uuid "b120bb3f-4ae2-4c91-bd94-582502602816")) (pin "4" (uuid "c07b96d7-bf51-46fb-9cd2-f2ef107a9150")) (pin "5" (uuid "60d2dcf9-5563-43af-b08b-75c1487abce8")) (pin "6" (uuid "1fd6f661-92e7-4e78-9982-fd47af33ef9f")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/0a104c2e-affe-50c6-aea1-0f4e50d2d395" (reference "U201") (unit 1)))))
+(wire (pts (xy 133.3500 55.8800) (xy 133.3500 72.3900)) (stroke (width 0) (type default)) (uuid "6c419d8f-ad05-44d7-8ac3-a5a02cc0104a"))
+(wire (pts (xy 133.3500 72.3900) (xy 148.5900 72.3900)) (stroke (width 0) (type default)) (uuid "112d3250-39aa-4b67-b4e5-35c3a66da35f"))
+(wire (pts (xy 148.5900 72.3900) (xy 148.5900 78.7400)) (stroke (width 0) (type default)) (uuid "f69e85c0-7364-4bbc-996a-cdcca243db28"))
+(wire (pts (xy 148.5900 106.6800) (xy 148.5900 129.5400)) (stroke (width 0) (type default)) (uuid "46879f4d-7ce6-4a3b-b9f0-b122b01ab148"))
+(wire (pts (xy 128.2700 97.7900) (xy 125.7300 97.7900)) (stroke (width 0) (type default)) (uuid "33f795ca-372c-444d-8a62-7baf97eff9ba"))
+(wire (pts (xy 125.7300 97.7900) (xy 125.7300 124.4600)) (stroke (width 0) (type default)) (uuid "8bdb4a45-6d7a-4284-853f-ed62f4b735d8"))
+(wire (pts (xy 125.7300 124.4600) (xy 133.3500 124.4600)) (stroke (width 0) (type default)) (uuid "6c34a454-d015-4e00-a770-56d20bbc13fd"))
+(wire (pts (xy 133.3500 124.4600) (xy 133.3500 129.5400)) (stroke (width 0) (type default)) (uuid "2fec6a16-9d80-4453-b1bc-cd411c374aca"))
+(no_connect (at 168.9100 97.7900) (uuid "f67d0585-c522-436c-b693-97f507b7b458"))
+(symbol (lib_id "Device:R") (at 175.2600 68.5800 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "bd257bfa-d586-42ae-ba4d-19ed2c9e908b") (property "Reference" "R203" (at 175.2600 62.2300 90) (effects (font (size 1.27 1.27)) (justify left) )) (property "Value" "1.50 M" (at 175.2600 64.7700 90) (effects (font (size 1.27 1.27)) (justify left) )) (pin "1" (uuid "a91a021a-803d-40d7-ad91-981b6c1bc02b")) (pin "2" (uuid "d6dd1e81-04b5-4407-a53c-0b8965d15eae")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/0a104c2e-affe-50c6-aea1-0f4e50d2d395" (reference "R203") (unit 1)))))
+(wire (pts (xy 113.0300 92.7100) (xy 113.0300 68.5800)) (stroke (width 0) (type default)) (uuid "287b4929-a017-4f89-b04a-4a4491b488ec"))
+(wire (pts (xy 113.0300 68.5800) (xy 171.4500 68.5800)) (stroke (width 0) (type default)) (uuid "d0cc4f92-fb02-484f-96e3-a9ee4cb39919"))
+(wire (pts (xy 179.0700 68.5800) (xy 187.9600 68.5800)) (stroke (width 0) (type default)) (uuid "66edf762-e2c5-4244-91c8-af59bbdb4886"))
+(wire (pts (xy 187.9600 68.5800) (xy 187.9600 92.7100)) (stroke (width 0) (type default)) (uuid "1293a323-def5-49ce-b13f-3929fda3af22"))
+(wire (pts (xy 168.9100 92.7100) (xy 187.9600 92.7100)) (stroke (width 0) (type default)) (uuid "2911272a-8444-4b4c-b3e4-3d7f0d917d48"))
+(wire (pts (xy 187.9600 92.7100) (xy 198.1200 92.7100)) (stroke (width 0) (type default)) (uuid "a85ddd4c-0c06-4ae1-9a78-bcc5188647ac"))
+(wire (pts (xy 198.1200 92.7100) (xy 233.6800 92.7100)) (stroke (width 0) (type default)) (uuid "0b3329ac-59fa-4768-a0f5-315aa57710d9"))
+(junction (at 187.9600 92.7100) (diameter 0) (color 0 0 0 0) (uuid "ea2c0d96-50ee-4fc3-b35b-152b5bd49999"))
+(junction (at 198.1200 92.7100) (diameter 0) (color 0 0 0 0) (uuid "d7830ce6-62de-4f89-9f04-8a33af0bc50d"))
+(symbol (lib_id "Device:R") (at 198.1200 72.3900 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "3cfa51f2-5efd-44b1-beaa-15681f76507a") (property "Reference" "R204" (at 203.2000 71.1200 0) (effects (font (size 1.27 1.27)) (justify left) )) (property "Value" "100 k" (at 203.2000 73.6600 0) (effects (font (size 1.27 1.27)) (justify left) )) (pin "1" (uuid "ff5a8844-d743-46b5-822c-e7779ed47692")) (pin "2" (uuid "ff9465b9-7f24-495e-845f-9e7a8c2fd282")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/0a104c2e-affe-50c6-aea1-0f4e50d2d395" (reference "R204") (unit 1)))))
+(symbol (lib_id "Device:R") (at 198.1200 113.0300 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "2ae600e1-e023-4e9e-9314-7f904f05193b") (property "Reference" "R205" (at 203.2000 111.7600 0) (effects (font (size 1.27 1.27)) (justify left) )) (property "Value" "68.0 k" (at 203.2000 114.3000 0) (effects (font (size 1.27 1.27)) (justify left) )) (pin "1" (uuid "a57a19f2-48dc-4262-9c5b-8616c7b4cefa")) (pin "2" (uuid "71169f26-c37e-444d-8fe2-4183f25bb817")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/0a104c2e-affe-50c6-aea1-0f4e50d2d395" (reference "R205") (unit 1)))))
+(wire (pts (xy 198.1200 55.8800) (xy 198.1200 68.5800)) (stroke (width 0) (type default)) (uuid "0e599903-bf1d-4350-a696-d8164be1b230"))
+(wire (pts (xy 198.1200 76.2000) (xy 198.1200 92.7100)) (stroke (width 0) (type default)) (uuid "2268ffa8-458d-4c48-975f-986d66ab69a5"))
+(wire (pts (xy 198.1200 92.7100) (xy 198.1200 109.2200)) (stroke (width 0) (type default)) (uuid "a4a21ada-966f-46ee-962c-ec24197ee4c4"))
+(wire (pts (xy 198.1200 116.8400) (xy 198.1200 129.5400)) (stroke (width 0) (type default)) (uuid "b4e98e98-dc28-49de-86e6-78a7b7cd36bd"))
+(global_label "PACK_UV_OK" (shape output) (at 233.6800 92.7100 180) (effects (font (size 1.27 1.27)) (justify left)) (uuid "8e6d8aa4-20d3-46d4-ad7c-41d81339770f") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 233.6800 92.7100 0) (effects (font (size 1.27 1.27)) (hide yes))))
+(text "R201-R205: 0.1% candidates. R203 adds hysteresis to reduce susceptibility to voltage rebound." (at 20.3200 144.7800 0) (effects (font (size 1.45 1.45) ) (justify left)) (uuid "77f95abe-3001-4e96-b050-be5d8363e015"))
+(text "Nominal trip near 7.0 V falling and 7.4 V rising. See threshold corner model and test conditions." (at 20.3200 149.8600 0) (effects (font (size 1.45 1.45) ) (justify left)) (uuid "9937b6cd-78ee-44bf-b014-42b4fc133e2b"))
+(text "PACK_UV_OK is pack-derived, 2.67-3.74 V high in the static model. Use a high-impedance input." (at 20.3200 154.9400 0) (effects (font (size 1.45 1.45) ) (justify left)) (uuid "0e16652d-b0c7-4d72-b013-6c504e6bbab9"))
+(text "Pack supervision only. Per-cell undervoltage and physical load isolation are separate functions." (at 20.3200 160.0200 0) (effects (font (size 1.45 1.45) ) (justify left)) (uuid "95e09b1d-5baa-44ba-a9bf-fe6c16bc494c"))
+)
