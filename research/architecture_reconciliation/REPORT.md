@@ -261,7 +261,7 @@ V_{\rm terminal}=V_{\rm oc}-IR_{\rm pack}
 - low_vin_boost/analyze_low_vin_results.py：逐例解析 LTspice LOG、验证 deck/log/raw/model SHA-256，并对 pack-coupled 案例比较实测与行为模型的电压/电流；
 - low_vin_boost/simulate_calibrated_hold_up.py：要求七个固定 VIN 点全部通过并且证据哈希匹配，以实测宏模型效率—VIN 映射进行连续 2S 储能侧 1.2 s 积分；不允许外推；
 - low_vin_boost/test_low_vin_matrix.py：5 项固定 VIN 网表生成与模型路径测试；
-- low_vin_boost/test_analyze_low_vin_results.py：9 项日志解析、失败保留、哈希完整性、pack 测量与筛查分类测试；
+- low_vin_boost/test_analyze_low_vin_results.py：11 项日志解析、失败保留、哈希完整性、pack 测量、预偏置切换与筛查分类测试；
 - low_vin_boost/test_generate_eol_checkpoint_decks.py：5 项 EOL checkpoint 网表与 manifest 生成测试；
 - low_vin_boost/test_simulate_calibrated_hold_up.py：8 项效率映射、证据门槛、能量平衡、步长一致性和报告生成测试。
 
