@@ -158,6 +158,7 @@ class LowVinLogParserTests(unittest.TestCase):
             result = analyze_case(row, case, model)
             self.assertEqual(result["screen_result"], "screen_pass")
             self.assertAlmostEqual(result["pack_terminal_delta_v"], -0.0035)
+            self.assertAlmostEqual(result["pack_ocv_delta_v"], -0.0007)
             self.assertAlmostEqual(result["input_current_delta_a"], 0.0149)
             self.assertAlmostEqual(result["pack_esr_loss_w"], 6.7712)
             self.assertEqual(result["architecture"], "2S30F_KAM_HP_40")
