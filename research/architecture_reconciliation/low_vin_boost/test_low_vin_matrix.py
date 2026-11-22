@@ -48,6 +48,14 @@ class LowVinMatrixTests(unittest.TestCase):
                 ["3.2", "3.6", "4.0", "4.4", "4.8"],
             )
 
+    def test_model_include_resolves_from_committed_netlist_directory(self):
+        repo_root = Path(__file__).resolve().parents[3]
+        netlist_dir = Path(__file__).resolve().parent / "netlists"
+        resolved = (netlist_dir / MODEL_INCLUDE).resolve()
+        expected = repo_root / "sim" / "tps61088_v1_3" / "model" / "TPS61088_LT.LIB"
+        self.assertEqual(resolved, expected)
+        self.assertTrue(resolved.is_file())
+
     def test_unknown_input_point_is_rejected(self):
         with self.assertRaises(ValueError):
             render_deck(5.0)
