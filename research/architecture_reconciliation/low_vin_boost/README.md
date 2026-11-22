@@ -41,7 +41,7 @@ The 40 ms EOL checkpoint decks above are local startup tests only. They do not e
 
 To close that gap without pretending that a multi-million-cycle switching transient has already been run, the repository now includes a separate time-domain behavioral integration. It consumes the seven-point fixed-VIN LTspice result summary, uses the measured TPS61088 macro-model efficiency versus actual converter VIN, and integrates the EOL capacitor OCV under a 12 W constant output load.
 
-The integration includes:
+The integration assumes the 12 W output load is already being served and the converter remains regulated; it models the storage-side DC trajectory, not output-bus switchover dynamics or a switching waveform. The integration includes:
 - EOL equivalent capacitance and DC ESR for each 2S candidate;
 - the same 2 mΩ series input-path resistance used in the fixed-VIN decks;
 - midpoint integration of capacitor voltage and a numerical operating-point solve at each step;
@@ -71,7 +71,7 @@ The script writes calibrated_hold_up_summary.csv and calibrated_hold_up_report.m
 
 这些 OCV、带载端电压和电流来自同一份恒功率 + ESR 行为模型：12 W 输出、92% 固定 Boost 效率、99% 路径效率。它们是生成 LTspice 初始条件的模型预测，不是器件级仿真结果。
 
-每份网表显式包含 EOL 等效电容、包 DC ESR、2 mΩ 输入路径电阻和输入电容；输入电容按 checkpoint OCV 预充电，避免人为制造上电浪涌。EN 启动后才接入 12 V / 1 A 负载。仿真覆盖 40 ms 局部启动窗口，观察在“已经放电 1.2 s”的储能状态下，实际宏模型输入电流会造成多大 ESR 压降，以及输出能否重新建立。
+每份网表显式包含 EOL 等效电容、包 DC ESR、2 mΩ 输入路径电阻和输入电容；输入电容按 checkpoint OCV 预充电，避免人为制造上电浪涌。当前这两份网表的 COUT 未预偏置，且 BLOAD 由 EN 控制，因此它们是“EOL 状态下冷启动”的压力测试，不是主电源优先系统的预偏置输出切换测试。仿真覆盖 40 ms 局部启动窗口，观察在“已经放电 1.2 s”的储能状态下，实际宏模型输入电流会造成多大 ESR 压降，以及输出能否重新建立。真正的主备切换还需另行验证：输出母线应预偏置到 12 V、负载在切换期间保持连接，并显式扫描实际备电使能延迟。
 
 **重要边界：这不是从满电开始连续运行 1.2 s 的开关级仿真。** 它只验证行为模型给出的 1.2 s EOL 状态附近的局部启动。实际宏模型效率和输入电流可能不同于 92% 行为模型，因此应比较实测 pack terminal、VIN、IIN 与预期值的偏差，不应强行要求数值完全相等。注意：预期 OCV/端电压/电流是 t=1.2 s 的状态；分析窗口在局部仿真 35–37 ms，期间电容会继续放电。分析器同时输出 pack OCV 的窗口均值及其相对初始 checkpoint 的变化量；pack terminal 与 t=1.2 s 参考值的差值包含这段额外放电，不能直接解释为模型误差。
 
@@ -129,7 +129,8 @@ py -3 .\analyze_low_vin_results.py --run-dir .\results\<run_timestamp>
 
 - 当前仓库 V1.3 的器件级实测仿真范围是 7–9.4 V；固定 VIN 矩阵把范围扩展到 2.8–4.8 V，但生成网表不等于完成仿真。
 - 固定 VIN 网表仍使用理想直流源加 2 mΩ 串联电阻；两份 EOL checkpoint 网表才显式加入 2S 等效电容与 EOL DC ESR。
-- 两份 checkpoint 只覆盖 1.2 s EOL 状态附近的 40 ms 局部启动，不是从满电开始的 1.2 s 连续开关级放电仿真。
+- 两份 checkpoint 只覆盖 1.2 s EOL 状态附近的 40 ms 冷启动窗口，不是从满电开始的 1.2 s 连续开关级放电仿真，也不是预偏置输出的主备切换仿真。
+- 连续 1.2 s 积分器仅模拟储能侧 DC 动态，并假设转换器持续维持 12 W 输出；实际输出母线切换延迟、COUT 暂态和主电源优先路径仍需单独建模。
 - 宏模型功率比不是实物效率；没有 PCB 寄生、热态电感饱和、器件分布和真实超级电容端口动态。
 - V1.4 已发现 RFSW 频率偏差仍未定位。本矩阵保持 RFSW=324 kΩ 是为了与现有 BOM 基线可比，不表示该频率设定已经放行。
 - 七份固定 VIN 网表和两份 EOL checkpoint 网表目前均为 not_run。只有实际 LOG/RAW 和复核结果入库后，才能更新状态。
