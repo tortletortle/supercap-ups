@@ -1,6 +1,6 @@
 # TPS61088 2S 低输入电压验证矩阵
 
-状态：**仅完成测试输入准备；5 份 LTspice 网表均未运行。**
+状态：**仅完成测试输入准备；7 份 LTspice 网表均未运行。**
 
 ## 目的
 
@@ -79,6 +79,6 @@ powershell -ExecutionPolicy Bypass -File .\run_low_vin_matrix.ps1 -LtspiceExe "C
 ## 文件
 
 - generate_low_vin_matrix.py：生成矩阵；
-- netlists/：五份 LTspice 输入网表及 manifest.csv；
+- netlists/：七份 LTspice 输入网表及 manifest.csv；
 - run_low_vin_matrix.ps1：Windows 批处理运行和证据归档脚本；
 - test_low_vin_matrix.py：生成器回归测试。
