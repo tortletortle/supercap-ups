@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - architecture-reconciliation-2s-vs-4s
+      - inductor-current-stress-audit
     paths:
       - "research/architecture_reconciliation/**"
       - ".github/workflows/architecture-reconciliation-tests.yml"
@@ -83,6 +84,12 @@ jobs:
             --output-dir /tmp/generated-eol-checkpoints
           diff -ru research/architecture_reconciliation/low_vin_boost/checkpoints \
             /tmp/generated-eol-checkpoints
+      - name: Regenerate and compare inductor stress sweep
+        run: |
+          python research/architecture_reconciliation/low_vin_boost/generate_inductor_sweep.py \
+            --output-dir /tmp/generated-inductor-sweep
+          diff -ru research/architecture_reconciliation/low_vin_boost/inductor_sweep \
+            /tmp/generated-inductor-sweep
       - name: Regenerate and compare prebiased output-transfer decks
         run: |
           python research/architecture_reconciliation/low_vin_boost/generate_prebiased_transfer_decks.py \
