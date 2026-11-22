@@ -1,0 +1,3 @@
+run_order,architecture,case,checkpoint_s,expected_pack_ocv_v,expected_pack_terminal_v,expected_input_current_a,Ceq_F,Rpack_ohm,boost_efficiency,path_efficiency,vin_source_v,vout_target_v,iout_target_a,simulation_end_ms,max_step_ns,steady_window_ms,rfsw_kohm,rilim_kohm,mode,run_status
+1,2S30F_KAM_HP_40,eol_2s30f_hp40_1p2s_92pct,1.2,4.34072086033,2.87348959009,4.5850977195,10.5,0.32,0.92,0.99,,12.0,1.0,40,50,35-37,324,100,GND_FPWM,not_run
+2,2S25F_KAM_LR,eol_2s25f_lr_1p2s_92pct,1.2,4.33537563566,3.60428948923,3.65543073216,8.75,0.2,0.92,0.99,,12.0,1.0,40,50,35-37,324,100,GND_FPWM,not_run
