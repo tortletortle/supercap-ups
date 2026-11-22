@@ -133,6 +133,17 @@ foreach ($deck in $decks) {
         expected_pack_terminal_v = Get-MetadataValue $metadata "expected_pack_terminal_v"
         expected_input_current_a = Get-MetadataValue $metadata "expected_input_current_a"
         vin_source_v = Get-MetadataValue $metadata "vin_source_v"
+        rfsw_kohm = Get-MetadataValue $metadata "rfsw_kohm"
+        rilim_kohm = Get-MetadataValue $metadata "rilim_kohm"
+        mode = Get-MetadataValue $metadata "mode"
+        inductor_mpn = Get-MetadataValue $metadata "inductor_mpn"
+        inductance_nominal_uH = Get-MetadataValue $metadata "inductance_nominal_uH"
+        inductance_min_uH = Get-MetadataValue $metadata "inductance_min_uH"
+        dcr_max_mohm = Get-MetadataValue $metadata "dcr_max_mohm"
+        isat_typical_a = Get-MetadataValue $metadata "isat_typical_a"
+        irms_typical_a = Get-MetadataValue $metadata "irms_typical_a"
+        isat_above_programmed_ilim_typical = Get-MetadataValue $metadata "isat_above_programmed_ilim_typical"
+        programmed_ilim_typical_a = Get-MetadataValue $metadata "programmed_ilim_typical_a"
         input_deck_sha256 = Get-HashOrBlank $deck.FullName
         model_sha256 = Get-HashOrBlank $modelPath
         exit_code = $exitCode
