@@ -242,10 +242,11 @@ V_{\rm terminal}=V_{\rm oc}-IR_{\rm pack}
 按以下顺序推进：
 
 1. **向 KAMCAP 询证 LR-2R7-J256UYJ21：** 容量容差、DC ESR 测量电流/方法、1 s 与 5 s 最大脉冲电流、漏电流、样品价格、批量价格和交期。
-2. **已准备 TPS61088 低输入电压仿真矩阵：** 已扩展为 VIN=2.8/3.0/3.2/3.6/4.0/4.4/4.8 V 七份 12 V/1 A LTspice 网表。2.8/3.0 V 用于覆盖 J306VYJ22 EOL 1.2 s 端电压约 2.873 V 的临界区域；3.6 V 对应 2S25F LR EOL 的 1.2 s 端电压。当前七份均为 not_run，必须在 Windows LTspice 中实际运行。RILIM=100 kΩ 是高限流基线；不能直接套用此前为 4S 工况筛出的 174 kΩ 候选。TI PMP9778 页面特性摘要列出 2.7～4.2 V 输入与 12 V/1.5 A 输出，但同页参数表列出的 VIN 最小/最大值为 3.0/4.4 V，元数据存在口径差异；它只能证明低压 TPS61088 方案有参考设计先例，不能替代本项目效率和热验证。
-3. **修正 4S10F EOL 器件级窗口：** 使用 6.3 F/颗、130 mΩ/颗、9.4 V 初始包电压，检查 7 V 截止附近的输出调节、限流和纹波。原 V1.4 的 eol_1p2s_130m_92pct.cir 是预偏置局部开关窗口，不是连续 1.2 s 仿真。
-4. **用实测效率映射重跑三种架构：** 不再用同一个固定 92% 值替代 4～9 V 输入范围内的效率差异。
-5. **最后才做第一版储能 BOM 决策。**
+2. **运行七点固定 VIN 低压矩阵：** VIN=2.8/3.0/3.2/3.6/4.0/4.4/4.8 V，12 V/1 A。优先运行 2.8 V 和 3.6 V 两个关键点，检查真实启动、稳态频率、输出纹波和电感峰值；不得把 324 kΩ 视为已验证的 500 kHz 设定。
+3. **运行两份 2S EOL pack-coupled checkpoint：** HP40 与 LR 两份网表分别从行为模型给出的 1.2 s EOL OCV 开始，显式包含等效电容和 EOL DC ESR，观察宏模型实际输入电流引起的端电压下陷。它们是 40 ms 局部启动窗口，不是连续 1.2 s 开关级仿真；必须与固定 VIN 矩阵结果联合解释。
+4. **修正 4S10F EOL 器件级窗口：** 使用 6.3 F/颗、130 mΩ/颗、9.4 V 初始包电压，检查 7 V 截止附近的输出调节、限流和纹波。原 V1.4 的 eol_1p2s_130m_92pct.cir 是预偏置局部开关窗口，不是连续 1.2 s 仿真。
+5. **用实测效率映射重跑三种架构：** 不再用同一个固定 92% 值替代 2.8～9.4 V 输入范围内的效率差异。
+6. **最后才做第一版储能 BOM 决策。**
 
 ## 6. 可复现文件
 
@@ -253,11 +254,14 @@ V_{\rm terminal}=V_{\rm oc}-IR_{\rm pack}
 - test_compare_storage_architectures.py：7 项回归测试；
 - results.csv：24 组名义/EOL 与效率敏感性结果，分别区分 30F HP 的 40 mΩ 和 44 mΩ 料号；
 - low_vin_boost/generate_low_vin_matrix.py：七点低输入电压网表生成器；
-- low_vin_boost/netlists/：七份 LTspice 输入网表与 manifest.csv，当前全部 not_run；
-- low_vin_boost/run_low_vin_matrix.ps1：Windows LTspice 批处理与证据归档脚本，尚未在用户本机执行；
-- low_vin_boost/analyze_low_vin_results.py：逐例解析 LTspice LOG、验证 deck/log/raw/model SHA-256，并按限定标准输出筛查结果；
-- low_vin_boost/test_low_vin_matrix.py：5 项网表生成与模型路径测试；
-- low_vin_boost/test_analyze_low_vin_results.py：7 项日志解析、失败保留、哈希完整性与筛查分类测试。
+- low_vin_boost/netlists/：七份固定 VIN LTspice 输入网表与 manifest.csv，当前全部 not_run；
+- low_vin_boost/checkpoints/：两份 2S EOL pack-coupled 局部启动网表与 manifest.csv，当前全部 not_run；
+- low_vin_boost/generate_eol_checkpoint_decks.py：从储能行为模型提取 1.2 s EOL 状态并生成含等效电容、DC ESR 和输入路径的局部开关级网表；
+- low_vin_boost/run_low_vin_matrix.ps1：Windows LTspice 批处理与证据归档脚本，支持选择 netlists/checkpoints 子目录，尚未在用户本机执行；
+- low_vin_boost/analyze_low_vin_results.py：逐例解析 LTspice LOG、验证 deck/log/raw/model SHA-256，并对 pack-coupled 案例比较实测与行为模型的电压/电流；
+- low_vin_boost/test_low_vin_matrix.py：5 项固定 VIN 网表生成与模型路径测试；
+- low_vin_boost/test_analyze_low_vin_results.py：9 项日志解析、失败保留、哈希完整性、pack 测量与筛查分类测试；
+- low_vin_boost/test_generate_eol_checkpoint_decks.py：5 项 EOL checkpoint 网表与 manifest 生成测试。
 
 运行：
 
@@ -267,7 +271,7 @@ python -m unittest discover -s research/architecture_reconciliation -p "test_*.p
 python -m unittest discover -s research/architecture_reconciliation/low_vin_boost -p "test_*.py" -v
 ~~~
 
-CI 共运行 19 项 Python 测试，并重新生成 CSV 与七份低输入电压网表进行一致性比对。默认 0.1 ms CSV 的能量平衡残差小于 0.0004 J；1e-5 s 高精度单元测试中的 EOL 残差小于 0.0001 J；保持时间步长敏感性小于 0.1 ms。以上只验证模型实现和网表生成，不代表 LTspice 电路仿真、硬件或竞赛指标通过。
+CI 共运行 27 项 Python 测试，并重新生成 CSV、七份固定 VIN 网表和两份 EOL pack-coupled checkpoint 网表进行一致性比对。默认 0.1 ms CSV 的能量平衡残差小于 0.0004 J；1e-5 s 高精度单元测试中的 EOL 残差小于 0.0001 J；保持时间步长敏感性小于 0.1 ms。以上只验证模型实现和网表生成，不代表 LTspice 电路仿真、硬件或竞赛指标通过。
 
 ## 参考资料
 
