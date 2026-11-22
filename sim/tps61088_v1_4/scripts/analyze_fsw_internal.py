@@ -730,6 +730,7 @@ def main():
             "roff_ohm": args.roff_ohm,
             "sw_edge_v": args.sw_edge_v,
             "sw_rearm_v": args.sw_rearm_v,
+            "vout_target_v": args.vout_target_v,
             "solver_label": args.solver_label,
             "max_step_ns": args.max_step_ns,
         },
