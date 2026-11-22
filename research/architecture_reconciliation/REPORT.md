@@ -234,7 +234,8 @@ V_{\rm terminal}=V_{\rm oc}-IR_{\rm pack}
 - results.csv：18 组名义/EOL 与效率敏感性结果；
 - low_vin_boost/generate_low_vin_matrix.py：五点低输入电压网表生成器；
 - low_vin_boost/netlists/：五份 LTspice 输入网表与 manifest.csv，当前全部 not_run；
-- low_vin_boost/test_low_vin_matrix.py：4 项网表生成测试。
+- low_vin_boost/run_low_vin_matrix.ps1：Windows LTspice 批处理与证据归档脚本，尚未在用户本机执行；
+- low_vin_boost/test_low_vin_matrix.py：5 项网表生成与模型路径测试。
 
 运行：
 
