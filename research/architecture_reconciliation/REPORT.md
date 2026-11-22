@@ -286,3 +286,23 @@ CI 共运行 35 项 Python 测试，并重新生成 CSV、七份固定 VIN 网�
 - [TI PMP9778 低输入电压 TPS61088 参考设计](https://www.ti.com/lit/ug/tidubt9a/tidubt9a.pdf)
 - 仓库 V1.2：sim/sweep.py、sim/hold_validation/dc_v1_2_hold_report.md
 - 仓库 V1.3：sim/tps61088_v1_3/model/bom.csv、sim/tps61088_v1_3/joint/window_summary.md
+
+
+## 补充：TPS61088 限流与电感额定值协调审计（2026-11-22）
+
+本轮静态核查发现，原 3.3 uH 电感的 Isat 典型值与 TPS61088 的 FPWM 限流设置没有满足 TI 推荐的协调关系：
+
+- TI TPS61088 Rev. D 在 MODE 接地、RILIM=100 kOhm 时，峰值开关限流为 10.3 A typical、9.0 A minimum、11.4 A maximum（VCC=6 V 测试条件）。
+- TI 在电感选型章节明确建议：将器件峰值限流设置高于实际工作峰值，并选择饱和电流高于限流设置的电感。
+- 当前 CKST0603-3.3uH/M 的 Isat 为 9.5 A typical，低于 10.3 A typical 限流设置；CKST0603-2.2uH/M 为 10.0 A typical，也略低于 10.3 A。
+- CKST0603-1.5uH/M 的 Isat 为 12.5 A typical，可能改善限流与饱和额定值协调，但其较低电感量会提高电流纹波，不能只凭 Isat 选型。
+
+此外，CENKER 两份 CKST0603 资料对 3.3 uH 与 2.2 uH 的 Irms 典型值存在差异：一份表列 6 A / 8 A，另一份表列 8.5 A / 9.5 A。本轮候选矩阵采用较低值作为保守参考，并要求向厂家确认适用版本。所有 Isat/Irms 数据均为 typical，不是保证最小值。
+
+新增的 low_vin_boost/inductor_sweep/ 将在 VIN=2.8 V 与 3.6 V 下，对 3.3/2.2/1.5 uH 三种候选进行六组比较；每组使用电感 -20% 容差下限与 DCR 最大值。分析器现在将启动峰值和稳态峰值取最大值，并在 MODE=GND_FPWM、RILIM=100 kOhm 时对照 TI 的 9.0 A 最小限流值；同时记录电感 RMS 电流与典型额定值比例。当前六组网表仍为 not_run，尚无仿真结论，也不据此更改 BOM。
+
+参考：
+- [TI TPS61088 Rev. D datasheet](https://www.ti.com/lit/ds/symlink/tps61088.pdf)，第 7.3.4 节与第 8.2.2.5 节。
+- [CENKER CKST0603 datasheet table](https://datasheet.lcsc.com/datasheet/pdf/7f3524df0c0413329162f7a59f525713.pdf?productCode=C3002591)。
+- [Earlier CENKER CKST0603 datasheet table](https://xonstorage.z8.web.core.windows.net/pdf/cenker_ckst060510uhm_apr22_xonlink.pdf)。
+
