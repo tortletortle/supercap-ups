@@ -35,6 +35,31 @@ TI 数据手册给出 TPS61088 的 2.7–12 V 输入范围。TI PMP9778 页面�
 
 模型文件引用仓库 V1.3 已审计的 TPS61088 官方宏模型，不复制或修改模型文件。
 
+## Continuous 1.2 s hold-up integration (macro-model calibrated)
+
+The 40 ms EOL checkpoint decks above are local startup tests only. They do not establish that the converter can remain in regulation continuously for the complete 1.2 s backup interval.
+
+To close that gap without pretending that a multi-million-cycle switching transient has already been run, the repository now includes a separate time-domain behavioral integration. It consumes the seven-point fixed-VIN LTspice result summary, uses the measured TPS61088 macro-model efficiency versus actual converter VIN, and integrates the EOL capacitor OCV under a 12 W constant output load.
+
+The integration includes:
+- EOL equivalent capacitance and DC ESR for each 2S candidate;
+- the same 2 mΩ series input-path resistance used in the fixed-VIN decks;
+- midpoint integration of capacitor voltage and a numerical operating-point solve at each step;
+- piecewise-linear efficiency interpolation only inside the measured VIN range;
+- no efficiency extrapolation if the pack voltage falls outside the seven-point calibration;
+- energy accounting for capacitor energy removed, converter input energy, pack ESR loss and path loss;
+- an interpolated steady-state inductor peak-current estimate, clearly separated from startup/transient peak current.
+
+It evaluates J306VYJ23 (44 mΩ), J306VYJ22 (40 mΩ), and J256UYJ21 (25 mΩ). A 1.2 s PASS means only that this macro-model-calibrated behavioral model can find a valid 12 W operating point through the endpoint. It is not a continuous switching-level run or hardware qualification. All seven fixed-VIN cases must be screen_pass with matching deck/log/raw/model hashes before the efficiency map is accepted; a failed or missing case blocks the integration rather than being silently interpolated.
+
+After running and analyzing all seven fixed-VIN decks, run:
+
+~~~powershell
+py -3 .\simulate_calibrated_hold_up.py --analysis-csv .\results\<run_timestamp>\analysis_summary.csv
+~~~
+
+The script writes calibrated_hold_up_summary.csv and calibrated_hold_up_report.md beside the input analysis CSV. Preserve the source analysis CSV and its SHA-256 with the report. If the calibrated trajectory leaves the measured VIN range before 1.2 s, the result is NOT VERIFIED; do not extrapolate efficiency or call it a physical cutoff prediction.
+
 ## EOL pack-coupled checkpoint decks
 
 七点固定 VIN 矩阵把输入端视为理想电压源，适合隔离 Boost 在不同 VIN 下的启动和稳态表现，但不包含超级电容组的 ESR 压降。为补上这一缺口，新增两个 1.2 s EOL 局部启动窗口：
@@ -117,4 +142,5 @@ py -3 .\analyze_low_vin_results.py --run-dir .\results\<run_timestamp>
 - generate_eol_checkpoint_decks.py：从储能行为模型生成 EOL checkpoint 网表；
 - run_low_vin_matrix.ps1：Windows 批处理运行和证据归档脚本，支持 -NetlistSubdir；
 - analyze_low_vin_results.py：LOG/RAW/哈希与电气筛查分析器；
-- test_low_vin_matrix.py、test_analyze_low_vin_results.py、test_generate_eol_checkpoint_decks.py：网表生成和结果分析回归测试。
+- simulate_calibrated_hold_up.py：基于七点 LTspice 宏模型效率映射的连续 1.2 s 储能行为积分器；
+- test_low_vin_matrix.py、test_analyze_low_vin_results.py、test_generate_eol_checkpoint_decks.py、test_simulate_calibrated_hold_up.py：网表、证据分析和连续保持时间模型回归测试。
