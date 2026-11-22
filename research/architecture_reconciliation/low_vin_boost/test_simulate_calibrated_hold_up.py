@@ -59,8 +59,8 @@ def write_analysis_csv(path, failed_case=None, omit_case=None):
 class CalibratedHoldUpTests(unittest.TestCase):
     def test_efficiency_and_peak_current_are_interpolated(self):
         mapping = EfficiencyMap([
-            {"case": "a", "vin_v": 2.8, "efficiency": 0.90, "peak_i_a": 3.0},
-            {"case": "b", "vin_v": 3.8, "efficiency": 0.94, "peak_i_a": 5.0},
+            {"case": "a", "vin_v": 2.8, "efficiency": 0.90, "peak_i_a": 3.0, "f_sw_khz": 400.0},
+            {"case": "b", "vin_v": 3.8, "efficiency": 0.94, "peak_i_a": 5.0, "f_sw_khz": 500.0},
         ])
         self.assertAlmostEqual(mapping.efficiency_at(3.3), 0.92)
         self.assertAlmostEqual(mapping.peak_current_at(3.3), 4.0)
@@ -126,6 +126,8 @@ class CalibratedHoldUpTests(unittest.TestCase):
             self.assertEqual(len(metadata["source_csv_sha256"]), 64)
             self.assertAlmostEqual(mapping.min_vin_v, 2.795)
             self.assertAlmostEqual(mapping.max_vin_v, 4.795)
+            self.assertAlmostEqual(metadata["min_f_sw_khz"], 440.0)
+            self.assertAlmostEqual(metadata["max_f_sw_khz"], 500.0)
 
     def test_candidate_energy_balance_and_output_files(self):
         mapping = constant_map(efficiency=0.92, min_vin=2.0, max_vin=6.0)
