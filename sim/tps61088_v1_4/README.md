@@ -184,3 +184,5 @@ py -3 sim/tps61088_v1_4/scripts/run_fsw_internal_pairing_v2.py
 
 预期复核目标为 50 ns 的 883 个、25 ns 的 882 个完整有效周期，且没有 invalid 周期。该计数是审查目标，不是预先认定的结果。只有本机运行后，才能根据 pairing-v2 summary、comparison 和执行报告决定是否追加 12.5 ns 仿真。
 
+自动化回归状态：2026-11-22 GitHub Actions run #7 已通过，Python 3.11 下三个 FSW 模块语法检查成功，21 项 V1.4 单元测试全部通过。该结果不替代 Windows 本机对 50/25 ns RAW 的哈希核验和 pairing-v2 实际后处理。
+
