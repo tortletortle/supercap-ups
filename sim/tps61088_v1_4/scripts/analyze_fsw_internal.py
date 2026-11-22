@@ -31,6 +31,9 @@ CYCLE_FIELDS = (
     "cycle_start_s", "next_cycle_start_s", "period_s", "sw_high_s",
     "cycle_status", "cycle_valid", "event_order_valid", "invalid_reason",
     "raw_10v_rises_in_period", "raw_10v_falls_in_period",
+    "pvin_cross_count", "comparator_output_rise_count",
+    "u5_toff_0p5V_rise_count", "gate_l_rise_count",
+    "cap_reset_0p5V_fall_count", "sw_fall_10V_count",
     "pvin_cross_s", "sw_rise_to_pvin_cross_s",
     "comparator_output_rise_s", "cross_to_comparator_output_rise_s",
     "comparator_output_rise_bracket_width_s",
@@ -181,6 +184,13 @@ def first_between(events, start, end):
     """First event in the half-open interval [start, end)."""
     i = int(np.searchsorted(events, start, side="left"))
     return float(events[i]) if i < len(events) and events[i] < end else None
+
+
+def count_between(events, start, end):
+    """Count events in the half-open interval [start, end)."""
+    left = int(np.searchsorted(events, start, side="left"))
+    right = int(np.searchsorted(events, end, side="left"))
+    return right - left
 
 
 def summary(values):
@@ -466,6 +476,15 @@ def main():
         raw_rises_in_period = raw_rise_hi - raw_rise_lo
         raw_falls_in_period = raw_fall_hi - raw_fall_lo
 
+        event_counts = {
+            "pvin_cross_count": count_between(cap_minus_pvin_rise, up, cycle_limit),
+            "comparator_output_rise_count": count_between(comparator_rise, up, cycle_limit),
+            "u5_toff_0p5V_rise_count": count_between(toff_rise, up, cycle_limit),
+            "gate_l_rise_count": count_between(gate_rise, up, cycle_limit),
+            "cap_reset_0p5V_fall_count": count_between(cap_reset_fall, up, cycle_limit),
+            "sw_fall_10V_count": raw_falls_in_period,
+        }
+
         cross = first_between(cap_minus_pvin_rise, up, cycle_limit)
         paired = pair_cycle_events(
             up, cycle_limit, cross, comparator_rise, toff_rise,
@@ -521,6 +540,9 @@ def main():
             missing_events.append("multiple_raw_10V_rises")
         if raw_falls_in_period != 1:
             missing_events.append("multiple_or_missing_raw_10V_falls")
+        for event_name, event_count in event_counts.items():
+            if event_count > 1:
+                missing_events.append(f"multiple_{event_name}")
 
         if next_up is None:
             cycle_status = "right_censored_at_raw_end"
@@ -588,6 +610,7 @@ def main():
             "invalid_reason": invalid_reason,
             "raw_10v_rises_in_period": int(raw_rises_in_period),
             "raw_10v_falls_in_period": int(raw_falls_in_period),
+            **{key: int(value) for key, value in event_counts.items()},
             "pvin_cross_s": cross,
             "sw_rise_to_pvin_cross_s": cross - up if cross is not None else None,
             "comparator_output_rise_s": comp_on,
@@ -658,6 +681,24 @@ def main():
     event_completeness = {
         key: sum(row[key] is not None for row in rows) for key in event_keys
     }
+    complete_period_rows = [
+        row for row in rows if row["next_cycle_start_s"] is not None
+    ]
+    event_count_fields = {
+        "pvin_cross": "pvin_cross_count",
+        "comparator_output_rise": "comparator_output_rise_count",
+        "u5_toff_0p5V_rise": "u5_toff_0p5V_rise_count",
+        "gate_l_rise": "gate_l_rise_count",
+        "cap_reset_0p5V_fall": "cap_reset_0p5V_fall_count",
+        "sw_fall_10V": "sw_fall_10V_count",
+    }
+    event_multiplicity = {
+        name: {
+            "missing_cycles": sum(row[field] == 0 for row in complete_period_rows),
+            "multiple_cycles": sum(row[field] > 1 for row in complete_period_rows),
+        }
+        for name, field in event_count_fields.items()
+    }
 
     summary_data = {
         "raw_path": str(args.raw.resolve()),
@@ -687,6 +728,7 @@ def main():
         },
         "invalid_cycle_details": invalid_rows,
         "event_completeness": event_completeness,
+        "event_multiplicity": event_multiplicity,
         "prescribed_edge_measurement": {
             "raw_10V_rise_count": int(len(raw_sw_rise)),
             "hysteretic_accepted_rise_count": int(len(sw_rise)),
