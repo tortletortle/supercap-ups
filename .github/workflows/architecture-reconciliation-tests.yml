@@ -77,3 +77,9 @@ jobs:
             --output-dir /tmp/generated-low-vin-netlists
           diff -ru research/architecture_reconciliation/low_vin_boost/netlists \
             /tmp/generated-low-vin-netlists
+      - name: Regenerate and compare EOL pack-coupled checkpoint decks
+        run: |
+          python research/architecture_reconciliation/low_vin_boost/generate_eol_checkpoint_decks.py \
+            --output-dir /tmp/generated-eol-checkpoints
+          diff -ru research/architecture_reconciliation/low_vin_boost/checkpoints \
+            /tmp/generated-eol-checkpoints
