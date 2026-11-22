@@ -122,8 +122,13 @@ foreach ($deck in $decks) {
 
     $records.Add([PSCustomObject]@{
         case = $caseName
+        case_type = Get-MetadataValue $metadata "case_type"
         architecture = Get-MetadataValue $metadata "architecture"
         checkpoint_s = Get-MetadataValue $metadata "checkpoint_s"
+        enable_delay_us = Get-MetadataValue $metadata "enable_delay_us"
+        initial_pack_ocv_v = Get-MetadataValue $metadata "initial_pack_ocv_v"
+        cap_factor = Get-MetadataValue $metadata "cap_factor"
+        esr_factor = Get-MetadataValue $metadata "esr_factor"
         expected_pack_ocv_v = Get-MetadataValue $metadata "expected_pack_ocv_v"
         expected_pack_terminal_v = Get-MetadataValue $metadata "expected_pack_terminal_v"
         expected_input_current_a = Get-MetadataValue $metadata "expected_input_current_a"
