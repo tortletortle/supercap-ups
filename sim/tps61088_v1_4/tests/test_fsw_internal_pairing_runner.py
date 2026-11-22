@@ -83,6 +83,34 @@ class PairingRunnerTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "Duplicate primary 50 ns RAW"):
                 runner.load_inventory_rows(path)
 
+    def test_event_multiplicity_check_rejects_missing_or_duplicate_events(self):
+        names = (
+            "pvin_cross",
+            "comparator_output_rise",
+            "u5_toff_0p5V_rise",
+            "gate_l_rise",
+            "cap_reset_0p5V_fall",
+            "sw_fall_10V",
+        )
+        summary = {
+            "event_multiplicity": {
+                name: {"missing_cycles": 0, "multiple_cycles": 0}
+                for name in names
+            }
+        }
+        self.assertTrue(
+            runner.event_multiplicity_check(summary)["no_missing_or_multiple_events"]
+        )
+        summary["event_multiplicity"]["u5_toff_0p5V_rise"]["multiple_cycles"] = 1
+        self.assertFalse(
+            runner.event_multiplicity_check(summary)["no_missing_or_multiple_events"]
+        )
+        summary["event_multiplicity"]["u5_toff_0p5V_rise"]["multiple_cycles"] = 0
+        summary["event_multiplicity"]["gate_l_rise"]["missing_cycles"] = 1
+        self.assertFalse(
+            runner.event_multiplicity_check(summary)["no_missing_or_multiple_events"]
+        )
+
     def test_run_configuration_check_rejects_wrong_step_or_parameters(self):
         summary = {
             "analysis_window_s": [0.024, 0.026],
