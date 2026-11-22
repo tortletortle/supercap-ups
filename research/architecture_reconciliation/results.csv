@@ -8,9 +8,9 @@ architecture,state,boost_efficiency,Ceq_F,Rpack_ohm,hold_time_s,stop_reason,pass
 2S30F_KAM_HP_44,nominal,0.9,15,0.088,6.7272,pack_cutoff,True,True,4.278621,3.147746,0.985669,-0.000314
 2S30F_KAM_HP_44,nominal,0.92,15,0.088,6.9213,pack_cutoff,True,True,4.291257,3.070249,0.939293,-0.000309
 2S30F_KAM_HP_44,nominal,0.94,15,0.088,7.1154,pack_cutoff,True,True,4.303289,2.996523,0.896131,-0.000304
-2S30F_KAM_HP_44,EOL,0.9,10.5,0.352,0.8276,pack_cutoff,False,False,,,,,-7.5e-05
-2S30F_KAM_HP_44,EOL,0.92,10.5,0.352,0.9479,pack_cutoff,False,False,,,,,-8.1e-05
-2S30F_KAM_HP_44,EOL,0.94,10.5,0.352,1.0693,pack_cutoff,True,False,,,,,-8.7e-05
+2S30F_KAM_HP_44,EOL,0.9,10.5,0.352,0.8276,pack_cutoff,False,False,,,,-7.5e-05
+2S30F_KAM_HP_44,EOL,0.92,10.5,0.352,0.9479,pack_cutoff,False,False,,,,-8.1e-05
+2S30F_KAM_HP_44,EOL,0.94,10.5,0.352,1.0693,pack_cutoff,True,False,,,,-8.7e-05
 2S30F_KAM_HP_40,nominal,0.9,15,0.08,6.7446,pack_cutoff,True,True,4.282358,3.12482,0.899043,-0.000313
 2S30F_KAM_HP_40,nominal,0.92,15,0.08,6.9391,pack_cutoff,True,True,4.295201,3.048517,0.856792,-0.000309
 2S30F_KAM_HP_40,nominal,0.94,15,0.08,7.1335,pack_cutoff,True,True,4.307435,2.975945,0.817027,-0.000304
