@@ -71,6 +71,36 @@ class PairingRunnerTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "Duplicate primary 50 ns RAW"):
                 runner.load_inventory_rows(path)
 
+    def test_run_configuration_check_rejects_wrong_step_or_parameters(self):
+        summary = {
+            "analysis_window_s": [0.024, 0.026],
+            "run_parameters": {
+                "max_step_ns": 50,
+                "solver_label": "Gear",
+                "rfsw_ohm": 324000.0,
+                "cfsw_f": 23e-12,
+                "roff_ohm": 1e6,
+            },
+        }
+        self.assertTrue(runner.run_configuration_check(summary, 50)["match"])
+        self.assertFalse(runner.run_configuration_check(summary, 25)["match"])
+        summary["run_parameters"]["rfsw_ohm"] = 510000.0
+        self.assertFalse(runner.run_configuration_check(summary, 50)["match"])
+
+    def test_prescribed_frequency_check_requires_valid_timing_and_frequency(self):
+        summary = {
+            "prescribed_edge_measurement": {
+                "timing_valid": True,
+                "frequency_kHz": 442.3,
+            }
+        }
+        self.assertTrue(runner.prescribed_frequency_check(summary)["match"])
+        summary["prescribed_edge_measurement"]["timing_valid"] = False
+        self.assertFalse(runner.prescribed_frequency_check(summary)["match"])
+        summary["prescribed_edge_measurement"]["timing_valid"] = True
+        summary["prescribed_edge_measurement"]["frequency_kHz"] = None
+        self.assertFalse(runner.prescribed_frequency_check(summary)["match"])
+
     def test_expected_cycle_accounting_is_exact(self):
         summary = {
             "cycle_accounting": {
