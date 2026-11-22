@@ -134,7 +134,7 @@ V1.3 原联合网表使用 112.5 mΩ/颗，不是采购文档采用的 EOL 压�
 
     py -3 sim/tps61088_v1_4/scripts/build_matrix.py
 
-首轮暴露的三项生成器缺陷已在当前分支修复：VIN=7 V 网表命名统一为 vin7；脚本不再覆盖人工维护的 netlists/README.md；限流 CSV 恢复 minimum_headroom_pct。测试会检查 16 份网表、精确文件名、原限流 CSV 百分比字段、新旧峰值交叉筛选、重复生成一致性和 README 保护。4 项生成器测试与 10 项原始 FSW 分析/RAW 测试曾在目标 Windows / Python 3.12.10 执行并通过；随后增加的配对、事件计数和 runner 测试已纳入 GitHub Actions。当前完整套件为 31 项，最新 run #38 在 Python 3.11 全部通过；Windows / Python 3.12.10 本机复跑仍建议在运行 RAW 后处理前执行。初次 Windows mmap 清理错误、比较字段大小写缺陷及后处理恢复记录均保留在 [内部探针会话目录](results/fsw_internal_probe_session/实验报告.md)，不作电路求解失败。
+首轮暴露的三项生成器缺陷已在当前分支修复：VIN=7 V 网表命名统一为 vin7；脚本不再覆盖人工维护的 netlists/README.md；限流 CSV 恢复 minimum_headroom_pct。测试会检查 16 份网表、精确文件名、原限流 CSV 百分比字段、新旧峰值交叉筛选、重复生成一致性和 README 保护。4 项生成器测试与 10 项原始 FSW 分析/RAW 测试曾在目标 Windows / Python 3.12.10 执行并通过；随后增加的配对、事件计数和 runner 测试已纳入 GitHub Actions。当前完整套件为 34 项，最新 run #52 在 Python 3.11 全部通过；Windows / Python 3.12.10 本机复跑仍建议在运行 RAW 后处理前执行。初次 Windows mmap 清理错误、比较字段大小写缺陷及后处理恢复记录均保留在 [内部探针会话目录](results/fsw_internal_probe_session/实验报告.md)，不作电路求解失败。
 
 然后在 LTspice 中运行 sim/tps61088_v1_4/netlists/ 下的网表。每份日志至少检查：
 
@@ -156,10 +156,10 @@ V1.3 原联合网表使用 112.5 mΩ/颗，不是采购文档采用的 EOL 压�
 | 130 mΩ + 60 mΩ EOL 行为级重算 | 完成；假设待实测 |
 | 16 份频率/限流 LTspice 测试输入 | 四份频率已运行；其中两份规定频率测量 FAIL；12 份限流待运行 |
 | 生成器回归测试 | 4 项；目标 Windows / Python 环境全部通过 |
-| FSW分析与RAW读取回归测试 | 分析器与 runner 共 27 项，连同 4 项生成器测试共 31 项；GitHub Actions run #38 全部通过，Windows / Python 3.12.10 完整复跑待执行 |
+| FSW分析与RAW读取回归测试 | 分析器与 runner 共 30 项，连同 4 项生成器测试共 34 项；GitHub Actions run #52 全部通过，Windows / Python 3.12.10 完整复跑待执行 |
 | 首轮 7 V / RFSW 324 kΩ 频率基准 | 测量时序、调压、稳态纹波通过；实测 442.336 kHz，频偏 −10.844% 待定位 |
 | 官方模型资源二进制对照 | 两个官方 ZIP 实际取得；LIB 仅换行不同，统一后含全部 27 子电路一致 |
-| FSW 定时路径诊断 | 两档内部探针已完成；23pF/1MΩ ODE、电流路径与节点关系高度自洽；比较器输出边沿已明确为诊断项，五个主要时序事件作为硬门禁；最新后处理代码 31 项 CI 测试通过，RAW 重分析待本机执行；输入至TOFF仍有约3.6ns步长差，根因和收敛性未闭合 |
+| FSW 定时路径诊断 | 两档内部探针已完成；23pF/1MΩ ODE、电流路径与节点关系高度自洽；比较器输出边沿已明确为诊断项，五个主要时序事件作为硬门禁；最新后处理代码 34 项 CI 测试通过，并新增 CSV/JSON 独立交叉审计；真实 RAW 重分析待本机执行；输入至TOFF仍有约3.6ns步长差，根因和收敛性未闭合 |
 | 直接内部节点探针与 50/25 ns Gear 敏感性对照 | 两份均完成26ms；50ns逐点复现原基线，频率442.336492/441.757819kHz；全周期复核发现输入至TOFF中位数相差3.598ns，尚未收敛 |
 | 130 mΩ EOL 局部开关窗口 | 网表已生成；待运行 |
 | 连续 1.2 s 器件级联合仿真 | 未完成 |
@@ -186,9 +186,11 @@ py -3 sim/tps61088_v1_4/scripts/run_fsw_internal_pairing_v2.py
 
 历史自动化回归：GitHub Actions run #7 曾在 21-test revision 上通过。
 
-最新验证：GitHub Actions run #42（run ID 44981847963，job ID 137083841155）已在当前 31-test revision 上通过；三个模块语法检查和 31 项单元测试全部成功。执行报告中的重复 analysis_status 键也已清理。该结果不替代 Windows 本机对 50/25 ns RAW 的哈希核验和 pairing-v2 实际后处理。
+最新验证：GitHub Actions run #52（run ID 44982623033，job ID 137086230188）已在当前 34-test revision 上通过；三个模块语法检查和 34 项单元测试全部成功。新增 runner 会独立重算 CSV 并与 JSON 汇总对照。该结果不替代 Windows 本机对 50/25 ns RAW 的哈希核验和 pairing-v2 实际后处理。
 
 pairing-v2 还会对每个完整周期计数输入交点、比较器输出、TOFF、GATE、复位和 SW 下降事件。任何事件缺失或重复都会触发审查门禁；不再只取第一个事件而忽略后续重复脉冲。真实 RAW 的这项检查仍待 Windows 本机运行。
 
 事件验收边界：PVIN 输入交点、U5_TOFF、GATE_L、定时电容复位和 SW 下降是五个硬性事件；比较器输出 0.5-V 插值边沿仅作诊断统计。即使其缺失或重复，也不单独否决主时序链，以免把欠分辨的比较器输出边沿误当作电路故障。
+
+pairing-v2 证据一致性检查：runner 现在会从每档 \`fsw_internal_cycles.csv\` 独立重算周期计数、六类事件覆盖数与 multiplicity，并核对周期边界、五个主要事件的半开区间归属和时序顺序，再与 \`fsw_internal_summary.json\` 对照。该检查用于发现 CSV/JSON 记录不一致；不替代真实 RAW 的哈希校验、周期验收或步长收敛判断。
 
