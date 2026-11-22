@@ -35,7 +35,21 @@ TI 数据手册给出 TPS61088 的 2.7–12 V 输入范围；TI PMP9778 参考�
 
 ## 运行方式
 
-使用 Windows LTspice 26.1.1，按 manifest.csv 顺序逐个运行 netlists 目录下的五份网表。每份运行都应保存原始 LOG、RAW、退出状态、模型哈希、网表哈希和 LTspice 版本；不要覆盖先前结果。
+使用 Windows LTspice 26.1.1。推荐通过 PowerShell 批处理脚本运行，脚本会按 manifest.csv 顺序逐个调用 LTspice、归档每份输入网表与 LOG/RAW，并记录退出码及 SHA-256：
+
+~~~powershell
+powershell -ExecutionPolicy Bypass -File .\run_low_vin_matrix.ps1 -LtspiceExe "C:\Program Files\ADI\LTspice\LTspice.exe"
+~~~
+
+如果 LTspice 安装在用户目录，请把 -LtspiceExe 改为实际的 LTspice.exe 路径。也可以只运行一个测试点，例如：
+
+~~~powershell
+powershell -ExecutionPolicy Bypass -File .\run_low_vin_matrix.ps1 -LtspiceExe "C:\Program Files\ADI\LTspice\LTspice.exe" -Case tps61088_vin_3p6v
+~~~
+
+脚本使用 LTspice 的 -b batch 模式。官方命令行说明见 [Analog Devices LTspice Quick Reference](https://www.analog.com/media/en/news-marketing-collateral/solutions-bulletins-brochures/ltspice-keyboard-shortcuts.pdf)。每次运行会创建独立的 results/run_timestamp 目录，不覆盖旧结果；脚本状态只表示进程与文件收集情况，不代表电气验收通过。大型 RAW 文件默认由本目录 .gitignore 排除，避免意外提交超大二进制文件。
+
+每份运行都应保留原始 LOG/RAW、退出状态、模型哈希、网表哈希和 LTspice 版本；不要覆盖先前结果。
 
 仿真时长 40 ms，最大步长 50 ns；稳态统计窗口为 35–37 ms。网表还请求测量 t98、6001/6101 次 SW=10 V 上升沿及两者计算的开关频率。若某个 .meas 返回 FAIL，保留原始失败，不得通过改边沿序号或阈值把它改写成通过。
 
@@ -64,4 +78,5 @@ TI 数据手册给出 TPS61088 的 2.7–12 V 输入范围；TI PMP9778 参考�
 
 - generate_low_vin_matrix.py：生成矩阵；
 - netlists/：五份 LTspice 输入网表及 manifest.csv；
+- run_low_vin_matrix.ps1：Windows 批处理运行和证据归档脚本；
 - test_low_vin_matrix.py：生成器回归测试。
