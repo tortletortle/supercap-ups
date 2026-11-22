@@ -1,0 +1,35 @@
+Command:
+python3 sim/ltc3350_reference/evaluate.py
+
+Output:
+LTC3350 4S x 10F first-order candidate
+VCAP target: 10.0068 V; worst-case window: 9.7823..10.2313 V (2.243%)
+VOUT target: 12.0000 V; worst-case window: 11.7315..12.2685 V (2.237%)
+VSHUNT code: 0x3759; quantized value: 2.600011 V
+Shunt current: 0.481 A nominal, 0.459 A at +5% ballast
+Shunt average-current envelope at 75% duty: 0.344 A
+Maximum ballast resistor dissipation estimate: 0.494 W (use >=2 W part)
+R_SNSC peak current-limit estimate: 7.25 A
+Input/charge budget:
+  no-load input charge current: 0.352 A
+  at 1 A system load input charge current: 0.176 A
+  no-load stack charge current at 90% buck efficiency: 0.380 A
+  at 1 A load stack charge current at 90% buck efficiency: 0.190 A
+  total input current at 1 A load: 1.176 A
+EOL pack C=1.5750 F, ESR=0.4500 ohm
+Hold time at worst-low VCAP, 80% backup efficiency: 1.4437 s
+Hold time at worst-low VCAP, 85% backup efficiency: 1.5890 s
+Hold time at worst-low VCAP, 90% backup efficiency: 1.7345 s
+Required initial VCAP for 1.2 s at 80% efficiency: 9.5183 V
+Equalized-start weak-cell case (6.3 F + 3 x 9 F):
+  time to pack cutoff: 2.1490 s
+  pack loaded voltage at cutoff: 7.1019 V
+  weakest loaded cell at cutoff: 1.5732 V
+
+Tests:
+python3 -m unittest discover -s sim/ltc3350_reference -p 'test_*.py' -v
+
+Ran 5 tests: OK
+
+Scope note:
+These are model results only. They are not switching simulation, bench measurement, or a completed KiCad implementation.
