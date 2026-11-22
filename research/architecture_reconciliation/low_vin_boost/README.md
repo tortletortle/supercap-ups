@@ -1,6 +1,6 @@
 # TPS61088 2S 低输入电压验证矩阵
 
-状态：**仅完成测试输入准备；7 份 LTspice 网表均未运行。**
+状态：**仅完成测试输入准备；7 份固定 VIN 网表和 2 份 EOL pack-coupled 网表均未运行。**
 
 ## 目的
 
@@ -34,6 +34,30 @@ TI 数据手册给出 TPS61088 的 2.7–12 V 输入范围。TI PMP9778 页面�
 - 负载启动后为 12 V / 1 A。
 
 模型文件引用仓库 V1.3 已审计的 TPS61088 官方宏模型，不复制或修改模型文件。
+
+## EOL pack-coupled checkpoint decks
+
+七点固定 VIN 矩阵把输入端视为理想电压源，适合隔离 Boost 在不同 VIN 下的启动和稳态表现，但不包含超级电容组的 ESR 压降。为补上这一缺口，新增两个 1.2 s EOL 局部启动窗口：
+
+| 候选 | EOL 等效电容 | EOL 包 DC ESR | 行为模型预期 OCV | 预期带载端电压 | 预期输入电流 |
+|---|---:|---:|---:|---:|---:|
+| 2S30F HP J306VYJ22（40 mΩ） | 10.5 F | 320 mΩ | 4.341 V | 2.873 V | 4.585 A |
+| 2S25F LR J256UYJ21（25 mΩ） | 8.75 F | 200 mΩ | 4.335 V | 3.604 V | 3.655 A |
+
+这些 OCV、带载端电压和电流来自同一份恒功率 + ESR 行为模型：12 W 输出、92% 固定 Boost 效率、99% 路径效率。它们是生成 LTspice 初始条件的模型预测，不是器件级仿真结果。
+
+每份网表显式包含 EOL 等效电容、包 DC ESR、2 mΩ 输入路径电阻和输入电容；输入电容按 checkpoint OCV 预充电，避免人为制造上电浪涌。EN 启动后才接入 12 V / 1 A 负载。仿真覆盖 40 ms 局部启动窗口，观察在“已经放电 1.2 s”的储能状态下，实际宏模型输入电流会造成多大 ESR 压降，以及输出能否重新建立。
+
+**重要边界：这不是从满电开始连续运行 1.2 s 的开关级仿真。** 它只验证行为模型给出的 1.2 s EOL 状态附近的局部启动。实际宏模型效率和输入电流可能不同于 92% 行为模型，因此应比较实测 pack terminal、VIN、IIN 与预期值的偏差，不应强行要求数值完全相等。
+
+生成与运行：
+
+~~~powershell
+py -3 .\generate_eol_checkpoint_decks.py
+powershell -ExecutionPolicy Bypass -File .\run_low_vin_matrix.ps1 -LtspiceExe "C:\Program Files\ADI\LTspice\LTspice.exe" -NetlistSubdir netlists -NetlistSubdir checkpoints
+~~~
+
+同样使用 analyze_low_vin_results.py 分析该次 results/run_timestamp。运行脚本会从 checkpoints/manifest.csv 读取架构、checkpoint 时间和预期 pack 状态，并写入 run_manifest.csv；分析器会额外要求 pack_ocv_avg、pack_terminal_avg、pack_input_avg、ppack、pack_esr_loss_w、path_loss_w 和 eff_pack 等测量项，并输出实际值与行为模型预测的差异。
 
 ## 运行方式
 
@@ -78,16 +102,19 @@ py -3 .\analyze_low_vin_results.py --run-dir .\results\<run_timestamp>
 
 ## 证据边界
 
-- 当前仓库 V1.3 的器件级实测仿真范围是 7–9.4 V；本矩阵把范围扩展到 2.8–4.8 V，但生成网表不等于完成仿真。
-- 这些是固定输入电压的短时 Boost 测试，不是 1.2 s 超级电容连续放电仿真。网表使用理想直流源加 2 mΩ 串联电阻，不包含 2S 电容组的动态电压和 EOL ESR；储能动态由前述行为模型单独计算，后续需要把两者结合。
+- 当前仓库 V1.3 的器件级实测仿真范围是 7–9.4 V；固定 VIN 矩阵把范围扩展到 2.8–4.8 V，但生成网表不等于完成仿真。
+- 固定 VIN 网表仍使用理想直流源加 2 mΩ 串联电阻；两份 EOL checkpoint 网表才显式加入 2S 等效电容与 EOL DC ESR。
+- 两份 checkpoint 只覆盖 1.2 s EOL 状态附近的 40 ms 局部启动，不是从满电开始的 1.2 s 连续开关级放电仿真。
 - 宏模型功率比不是实物效率；没有 PCB 寄生、热态电感饱和、器件分布和真实超级电容端口动态。
 - V1.4 已发现 RFSW 频率偏差仍未定位。本矩阵保持 RFSW=324 kΩ 是为了与现有 BOM 基线可比，不表示该频率设定已经放行。
-- 七份网表目前均为 not_run。只有实际 LOG/RAW 和复核结果入库后，才能更新状态。
+- 七份固定 VIN 网表和两份 EOL checkpoint 网表目前均为 not_run。只有实际 LOG/RAW 和复核结果入库后，才能更新状态。
 
 ## 文件
 
 - generate_low_vin_matrix.py：生成矩阵；
-- netlists/：七份 LTspice 输入网表及 manifest.csv；
-- run_low_vin_matrix.ps1：Windows 批处理运行和证据归档脚本；
+- netlists/：七份固定 VIN LTspice 输入网表及 manifest.csv；
+- checkpoints/：两份 2S EOL pack-coupled 局部启动网表及 manifest.csv；
+- generate_eol_checkpoint_decks.py：从储能行为模型生成 EOL checkpoint 网表；
+- run_low_vin_matrix.ps1：Windows 批处理运行和证据归档脚本，支持 -NetlistSubdir；
 - analyze_low_vin_results.py：LOG/RAW/哈希与电气筛查分析器；
-- test_low_vin_matrix.py、test_analyze_low_vin_results.py：网表生成和结果分析回归测试。
+- test_low_vin_matrix.py、test_analyze_low_vin_results.py、test_generate_eol_checkpoint_decks.py：网表生成和结果分析回归测试。
