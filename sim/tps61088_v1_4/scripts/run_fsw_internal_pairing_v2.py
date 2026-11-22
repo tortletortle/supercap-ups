@@ -9,6 +9,7 @@ import argparse
 import csv
 import hashlib
 import json
+import math
 import subprocess
 import sys
 from pathlib import Path
@@ -159,6 +160,43 @@ def event_completeness_check(summary):
     }
 
 
+def run_configuration_check(summary, step):
+    parameters = summary.get("run_parameters", {})
+    observed = {
+        "max_step_ns": parameters.get("max_step_ns"),
+        "solver_label": parameters.get("solver_label"),
+        "rfsw_ohm": parameters.get("rfsw_ohm"),
+        "cfsw_f": parameters.get("cfsw_f"),
+        "roff_ohm": parameters.get("roff_ohm"),
+        "analysis_window_s": summary.get("analysis_window_s"),
+    }
+    expected = {
+        "max_step_ns": float(step),
+        "solver_label": "Gear",
+        "rfsw_ohm": 324000.0,
+        "cfsw_f": 23e-12,
+        "roff_ohm": 1e6,
+        "analysis_window_s": [0.024, 0.026],
+    }
+    return {"observed": observed, "expected": expected, "match": observed == expected}
+
+
+def prescribed_frequency_check(summary):
+    measurement = summary.get("prescribed_edge_measurement", {})
+    frequency = measurement.get("frequency_kHz")
+    valid_frequency = (
+        isinstance(frequency, (int, float))
+        and math.isfinite(frequency)
+        and frequency > 0
+    )
+    return {
+        "timing_valid": measurement.get("timing_valid") is True,
+        "frequency_khz": frequency,
+        "finite_positive_frequency": bool(valid_frequency),
+        "match": measurement.get("timing_valid") is True and bool(valid_frequency),
+    }
+
+
 def comparison_extract(comparison):
     deltas = comparison.get("distribution_deltas", {})
     wanted = (
@@ -277,6 +315,10 @@ def main():
     accounting25 = cycle_accounting_check(summary25, 25)
     events50 = event_completeness_check(summary50)
     events25 = event_completeness_check(summary25)
+    config50 = run_configuration_check(summary50, 50)
+    config25 = run_configuration_check(summary25, 25)
+    frequency50 = prescribed_frequency_check(summary50)
+    frequency25 = prescribed_frequency_check(summary25)
     same_parameters = comparison.get("same_electrical_parameters") is True
 
     checks = {
@@ -287,6 +329,10 @@ def main():
         "25ns_expected_cycle_accounting": accounting25["match"],
         "50ns_event_completeness": events50["all_event_counts_cover_valid_cycles"],
         "25ns_event_completeness": events25["all_event_counts_cover_valid_cycles"],
+        "50ns_run_configuration": config50["match"],
+        "25ns_run_configuration": config25["match"],
+        "50ns_prescribed_frequency_measurement": frequency50["match"],
+        "25ns_prescribed_frequency_measurement": frequency25["match"],
         "same_electrical_parameters": same_parameters,
     }
     all_checks = all(checks.values())
@@ -324,14 +370,17 @@ def main():
                 "analysis_status": summary50.get("analysis_status"),
                 "cycle_accounting": accounting50,
                 "event_completeness": events50,
-                "frequency_khz": summary50.get("prescribed_edge_measurement", {}).get("frequency_kHz"),
+                "run_configuration": config50,
+                "prescribed_frequency_measurement": frequency50,
+                "analysis_status": summary50.get("analysis_status"),
             },
             "25ns": {
                 "summary": str(summary25_path),
-                "analysis_status": summary25.get("analysis_status"),
                 "cycle_accounting": accounting25,
                 "event_completeness": events25,
-                "frequency_khz": summary25.get("prescribed_edge_measurement", {}).get("frequency_kHz"),
+                "run_configuration": config25,
+                "prescribed_frequency_measurement": frequency25,
+                "analysis_status": summary25.get("analysis_status"),
             },
         },
         "comparison": {
