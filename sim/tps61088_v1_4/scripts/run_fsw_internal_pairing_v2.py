@@ -160,6 +160,30 @@ def event_completeness_check(summary):
     }
 
 
+def event_multiplicity_check(summary):
+    counts = summary.get("event_multiplicity", {})
+    required = (
+        "pvin_cross",
+        "comparator_output_rise",
+        "u5_toff_0p5V_rise",
+        "gate_l_rise",
+        "cap_reset_0p5V_fall",
+        "sw_fall_10V",
+    )
+    observed = {}
+    for name in required:
+        item = counts.get(name, {})
+        observed[name] = {
+            "missing_cycles": int(item.get("missing_cycles", -1)),
+            "multiple_cycles": int(item.get("multiple_cycles", -1)),
+        }
+    clean = all(
+        item["missing_cycles"] == 0 and item["multiple_cycles"] == 0
+        for item in observed.values()
+    )
+    return {"observed": observed, "no_missing_or_multiple_events": clean}
+
+
 def run_configuration_check(summary, step):
     parameters = summary.get("run_parameters", {})
     observed = {
@@ -315,6 +339,8 @@ def main():
     accounting25 = cycle_accounting_check(summary25, 25)
     events50 = event_completeness_check(summary50)
     events25 = event_completeness_check(summary25)
+    multiplicity50 = event_multiplicity_check(summary50)
+    multiplicity25 = event_multiplicity_check(summary25)
     config50 = run_configuration_check(summary50, 50)
     config25 = run_configuration_check(summary25, 25)
     frequency50 = prescribed_frequency_check(summary50)
@@ -329,6 +355,8 @@ def main():
         "25ns_expected_cycle_accounting": accounting25["match"],
         "50ns_event_completeness": events50["all_event_counts_cover_valid_cycles"],
         "25ns_event_completeness": events25["all_event_counts_cover_valid_cycles"],
+        "50ns_no_missing_or_multiple_events": multiplicity50["no_missing_or_multiple_events"],
+        "25ns_no_missing_or_multiple_events": multiplicity25["no_missing_or_multiple_events"],
         "50ns_run_configuration": config50["match"],
         "25ns_run_configuration": config25["match"],
         "50ns_prescribed_frequency_measurement": frequency50["match"],
@@ -370,6 +398,7 @@ def main():
                 "analysis_status": summary50.get("analysis_status"),
                 "cycle_accounting": accounting50,
                 "event_completeness": events50,
+                "event_multiplicity": multiplicity50,
                 "run_configuration": config50,
                 "prescribed_frequency_measurement": frequency50,
                 "analysis_status": summary50.get("analysis_status"),
@@ -378,6 +407,7 @@ def main():
                 "summary": str(summary25_path),
                 "cycle_accounting": accounting25,
                 "event_completeness": events25,
+                "event_multiplicity": multiplicity25,
                 "run_configuration": config25,
                 "prescribed_frequency_measurement": frequency25,
                 "analysis_status": summary25.get("analysis_status"),
