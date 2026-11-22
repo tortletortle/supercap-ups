@@ -12,7 +12,8 @@ python3 -m unittest discover -s sim/ltc3350_reference -p 'test_*.py' -v
 ## What is modeled
 
 - VCAP and VOUT feedback-divider setpoints, including conservative reference, resistor-ratio, and feedback-leakage budgets.
-- VSHUNT register quantization and first-order shunt-current / ballast-resistor power estimates.
+- VSHUNT register quantization and first-order shunt-current / ballast-resistor power estimates, including the data-sheet 75% shunt-duty envelope.
+- The separate ~10 mA switched-resistive cell balancer is not simulated; equalized initial cell voltage is an explicit assumption in the weak-cell discharge case.
 - LTC3350 two-resistor input-current-limit equation for system-load priority.
 - 4S EOL constant-power hold time with series ESR and a loaded-terminal cutoff.
 - A separate equalized-start weak-cell discharge case.
