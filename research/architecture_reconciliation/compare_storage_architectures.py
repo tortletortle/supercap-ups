@@ -177,6 +177,76 @@ def simulate(
     }
 
 
+def sample_checkpoint_states(
+    design: dict,
+    cap_factor: float,
+    esr_factor: float,
+    boost_efficiency: float,
+    checkpoint_times: tuple[float, ...] | list[float],
+    dt_s: float = 1e-5,
+    p_out_w: float = P_OUT_W,
+    path_efficiency: float = PATH_EFFICIENCY,
+) -> list[dict]:
+    """Sample open-circuit and loaded pack states for local switching windows.
+
+    This uses the same constant-power/ESR assumptions as simulate(). It
+    produces prebias conditions only; it does not simulate the converter.
+    """
+    if not 0.0 < boost_efficiency <= 1.0:
+        raise ValueError("boost_efficiency must be in (0, 1]")
+    if dt_s <= 0.0:
+        raise ValueError("dt_s must be positive")
+    times = tuple(float(value) for value in checkpoint_times)
+    if any(value < 0.0 for value in times):
+        raise ValueError("checkpoint times must be non-negative")
+    if tuple(sorted(set(times))) != times:
+        raise ValueError("checkpoint times must be strictly increasing")
+
+    c_eq_f, r_pack_ohm = pack_equivalent(design, cap_factor, esr_factor)
+    v_oc_v = design["n_series"] * design["cell_start_v"]
+    p_cap_w = p_out_w / (boost_efficiency * path_efficiency)
+    time_s = 0.0
+    states = []
+
+    for target_s in times:
+        while time_s < target_s - 1e-12:
+            state = solve_state(v_oc_v, r_pack_ohm, p_cap_w)
+            if state is None:
+                raise ValueError(
+                    f"constant-power solution lost before checkpoint {target_s}s"
+                )
+            current_a, terminal_v = state
+            if terminal_v <= design["pack_cutoff_v"]:
+                raise ValueError(
+                    f"pack cutoff reached before checkpoint {target_s}s"
+                )
+            step_s = min(dt_s, target_s - time_s)
+            v_oc_v -= current_a * step_s / c_eq_f
+            time_s += step_s
+
+        state = solve_state(v_oc_v, r_pack_ohm, p_cap_w)
+        if state is None:
+            raise ValueError(
+                f"constant-power solution unavailable at checkpoint {target_s}s"
+            )
+        current_a, terminal_v = state
+        if terminal_v <= design["pack_cutoff_v"]:
+            raise ValueError(
+                f"pack cutoff reached at checkpoint {target_s}s"
+            )
+        states.append({
+            "time_s": target_s,
+            "v_oc_v": v_oc_v,
+            "v_terminal_v": terminal_v,
+            "input_current_a": current_a,
+            "c_eq_f": c_eq_f,
+            "r_pack_ohm": r_pack_ohm,
+            "p_cap_w": p_cap_w,
+        })
+
+    return states
+
+
 def minimum_efficiency_for_task(
     design: dict,
     cap_factor: float,
