@@ -9,7 +9,7 @@ import argparse
 import csv
 from pathlib import Path
 
-INPUT_POINTS_V = (3.2, 3.6, 4.0, 4.4, 4.8)
+INPUT_POINTS_V = (2.8, 3.0, 3.2, 3.6, 4.0, 4.4, 4.8)
 MODEL_INCLUDE = "../../../../sim/tps61088_v1_3/model/TPS61088_LT.LIB"
 
 TEMPLATE = """* Architecture review low-VIN case: VIN=@VIN@ V, 12 V / 1 A
