@@ -116,11 +116,15 @@ def input_charge_budget(design: Design) -> dict[str, float]:
     i_pack_at_load = (
         i_charge_at_load * design.vin_v * design.charge_efficiency / vcap_nominal
     )
+    i_pack_no_load_ideal = i_charge_no_load * design.vin_v / vcap_nominal
+    i_pack_at_load_ideal = i_charge_at_load * design.vin_v / vcap_nominal
     return {
         "input_charge_current_no_load_a": i_charge_no_load,
         "input_charge_current_at_1a_load_a": i_charge_at_load,
         "pack_charge_current_no_load_a": i_pack_no_load,
         "pack_charge_current_at_1a_load_a": i_pack_at_load,
+        "pack_charge_current_no_load_100pct_eff_a": i_pack_no_load_ideal,
+        "pack_charge_current_at_1a_load_100pct_eff_a": i_pack_at_load_ideal,
         "total_input_current_at_1a_load_a": design.system_load_a + i_charge_at_load,
     }
 
@@ -195,6 +199,7 @@ def main() -> None:
     print(f"Shunt current: {shunt_nom:.3f} A nominal, {shunt_min:.3f} A at +5% ballast")
     print(f"Shunt average-current envelope at 75% duty: {shunt_avg_ceiling:.3f} A")
     print(f"Maximum ballast resistor dissipation estimate: {shunt_pmax:.3f} W (use >=2 W part)")
+    print(f"R_SNSC peak current-limit estimate: {0.058 / d.r_sns_c_ohm:.2f} A")
     print(f"Input/charge budget: {charge}")
     print(f"EOL pack C={pack_capacitance(d):.4f} F, ESR={pack_esr(d):.4f} ohm")
     print(f"Hold time at worst-low VCAP, 80% backup efficiency: {hold_time_s(vmin, d, 0.80):.4f} s")
@@ -213,8 +218,8 @@ def main() -> None:
     assert hold_time_s(vmin, d, 0.80) > 1.2
     assert weak["reason"] == "pack-cutoff"
     assert weak["min_cell_v"] > 1.0
-    assert shunt_avg_ceiling < charge["pack_charge_current_no_load_a"]
-    assert shunt_avg_ceiling > charge["pack_charge_current_at_1a_load_a"]
+    assert shunt_avg_ceiling < charge["pack_charge_current_no_load_100pct_eff_a"]
+    assert shunt_avg_ceiling > charge["pack_charge_current_at_1a_load_100pct_eff_a"]
     assert charge["total_input_current_at_1a_load_a"] < 1.5
     assert 0x0000 <= vshunt_code <= 0xFFFF
 
