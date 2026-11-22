@@ -23,7 +23,7 @@ class PairingRunnerTests(unittest.TestCase):
                 hashlib.sha256(b"fsw-probe").hexdigest(),
             )
 
-    def test_inventory_selects_50ns_and_25ns_rows(self):
+    def test_inventory_selects_primary_raw_and_ignores_sidecars(self):
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "inventory.csv"
             with path.open("w", newline="", encoding="utf-8") as stream:
@@ -31,15 +31,27 @@ class PairingRunnerTests(unittest.TestCase):
                     stream, fieldnames=("max_step_ns", "path", "bytes", "sha256")
                 )
                 writer.writeheader()
-                writer.writerow({"max_step_ns": "50", "path": "a.raw", "bytes": "10", "sha256": "a"})
-                writer.writerow({"max_step_ns": "25", "path": "b.raw", "bytes": "20", "sha256": "b"})
-                writer.writerow({"max_step_ns": "12.5", "path": "c.raw", "bytes": "30", "sha256": "c"})
+                rows_to_write = (
+                    ("50", r"C:\\sim\\probe50.db", "10", "db"),
+                    ("50", r"C:\\sim\\probe50.log", "20", "log"),
+                    ("50", r"C:\\sim\\probe50.op.raw", "30", "op"),
+                    ("50", r"C:\\sim\\freq_vin7_rfsw324k_internal_probe_50ns.raw", "40", "raw50"),
+                    ("25", r"C:\\sim\\probe25.db", "11", "db"),
+                    ("25", r"C:\\sim\\probe25.op.raw", "31", "op"),
+                    ("25", r"C:\\sim\\freq_vin7_rfsw324k_internal_probe_25ns.raw", "41", "raw25"),
+                    ("12.5", r"C:\\sim\\other.raw", "50", "other"),
+                )
+                for step, raw_path, size, digest in rows_to_write:
+                    writer.writerow({
+                        "max_step_ns": step, "path": raw_path,
+                        "bytes": size, "sha256": digest,
+                    })
             rows = runner.load_inventory_rows(path)
             self.assertEqual(set(rows), {50, 25})
-            self.assertEqual(rows[50]["path"], "a.raw")
-            self.assertEqual(rows[25]["path"], "b.raw")
+            self.assertTrue(rows[50]["path"].endswith("50ns.raw"))
+            self.assertTrue(rows[25]["path"].endswith("25ns.raw"))
 
-    def test_inventory_rejects_duplicate_step(self):
+    def test_inventory_rejects_duplicate_primary_raw_for_same_step(self):
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "inventory.csv"
             with path.open("w", newline="", encoding="utf-8") as stream:
@@ -47,17 +59,16 @@ class PairingRunnerTests(unittest.TestCase):
                     stream, fieldnames=("max_step_ns", "path", "bytes", "sha256")
                 )
                 writer.writeheader()
-                for raw_path in ("a.raw", "b.raw"):
-                    writer.writerow({
-                        "max_step_ns": "50",
-                        "path": raw_path,
-                        "bytes": "10",
-                        "sha256": "a",
-                    })
                 writer.writerow({
-                    "max_step_ns": "25", "path": "c.raw", "bytes": "20", "sha256": "b"
+                    "max_step_ns": "50", "path": "first.raw", "bytes": "10", "sha256": "a"
                 })
-            with self.assertRaisesRegex(ValueError, "Duplicate 50 ns"):
+                writer.writerow({
+                    "max_step_ns": "50", "path": "second.raw", "bytes": "10", "sha256": "a"
+                })
+                writer.writerow({
+                    "max_step_ns": "25", "path": "other25.raw", "bytes": "20", "sha256": "b"
+                })
+            with self.assertRaisesRegex(ValueError, "Duplicate primary 50 ns RAW"):
                 runner.load_inventory_rows(path)
 
     def test_expected_cycle_accounting_is_exact(self):
