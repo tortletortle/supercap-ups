@@ -1,6 +1,6 @@
 # TPS61088 2S 低输入电压验证矩阵
 
-状态：**仅完成测试输入准备；7 份固定 VIN 网表和 2 份 EOL pack-coupled 网表均未运行。**
+状态：**测试输入已准备；7 份固定 VIN、2 份 EOL pack-coupled、9 份预偏置切换和 6 份电感应力网表均未运行。**
 
 ## 目的
 
@@ -87,6 +87,42 @@ py -3 .\analyze_low_vin_results.py --run-dir .\results\<run_timestamp>
 
 This 40 ms test covers initial switchover and recovery only. It does not replace the continuous 1.2 s storage-side integration or the separate EOL local operating-point check.
 
+
+## Inductor and current-limit stress sweep
+
+A static review found that the baseline 3.3 uH inductor is not comfortably coordinated with the TPS61088 programmed current limit:
+
+- TI TPS61088 Rev. D, MODE grounded (FPWM), RILIM=100 kOhm: 10.3 A typical peak switch limit and 9.0 A minimum.
+- TI recommends selecting the inductor saturation current above the programmed peak-current limit.
+- The current 3.3 uH CENKER CKST0603-3.3uH/M lists 9.5 A typical Isat, below the 10.3 A typical programmed limit. The 2.2 uH variant lists 10.0 A typical Isat, also slightly below it.
+- The 1.5 uH variant lists 12.5 A typical Isat and is therefore included as a candidate, but its lower inductance increases ripple and must be simulated.
+- CENKER source tables disagree on the 3.3 uH and 2.2 uH Irms typical figures (6/8 A in one revision versus 8.5/9.5 A in another). The sweep deliberately uses the lower values pending written manufacturer confirmation.
+
+The new six-case pilot matrix uses VIN=2.8 V and 3.6 V for three candidates. Each deck uses the inductance minimum after -20% tolerance and the datasheet maximum DCR, while keeping the rest of the power stage fixed:
+
+| Candidate | Nominal L | Simulated L (min) | DCR max | Isat typical | Conservative Irms reference |
+|---|---:|---:|---:|---:|---:|
+| CKST0603-3.3uH/M | 3.3 uH | 2.64 uH | 26 mOhm | 9.5 A | 6 A |
+| CKST0603-2.2uH/M | 2.2 uH | 1.76 uH | 17.5 mOhm | 10.0 A | 8 A |
+| CKST0603-1.5uH/M | 1.5 uH | 1.20 uH | 12.1 mOhm | 12.5 A | 11 A |
+
+The analyzer now reports the maximum of steady and startup inductor peak current, IL RMS, the 9.0 A TI FPWM minimum-limit margin (only when MODE=GND_FPWM and RILIM=100 kOhm), and ratios against the inductor's typical reference values. A current-limit floor exceedance blocks screen_pass. The analyzer also blocks screen_pass for an inductor candidate whose typical Isat does not exceed the programmed 10.3 A typical limit, following TI's selection recommendation. Typical Isat/Irms values are advisory references, not guaranteed minimum ratings; an exceedance is flagged separately and must not be interpreted as a production qualification.
+
+Generate and run the pilot matrix:
+
+~~~powershell
+py -3 .\generate_inductor_sweep.py
+powershell -ExecutionPolicy Bypass -File .\run_low_vin_matrix.ps1 -LtspiceExe "C:\Program Files\ADI\LTspice\LTspice.exe" -NetlistSubdir inductor_sweep
+py -3 .\analyze_low_vin_results.py --run-dir .\results\<run_timestamp>
+~~~
+
+Do not change the BOM based on the datasheet comparison alone. The 1.5 uH candidate must also pass the low-VIN switching simulation, loop-stability review, thermal checks and a prototype measurement.
+
+Sources:
+- [TI TPS61088 Rev. D datasheet, current limit and inductor selection](https://www.ti.com/lit/ds/symlink/tps61088.pdf)
+- [CENKER CKST0603 datasheet table (LCSC-hosted PDF)](https://datasheet.lcsc.com/datasheet/pdf/7f3524df0c0413329162f7a59f525713.pdf?productCode=C3002591)
+- [Earlier CENKER CKST0603 datasheet table](https://xonstorage.z8.web.core.windows.net/pdf/cenker_ckst060510uhm_apr22_xonlink.pdf)
+
 ## EOL pack-coupled checkpoint decks
 
 七点固定 VIN 矩阵把输入端视为理想电压源，适合隔离 Boost 在不同 VIN 下的启动和稳态表现，但不包含超级电容组的 ESR 压降。为补上这一缺口，新增两个 1.2 s EOL 局部启动窗口：
@@ -149,6 +185,7 @@ py -3 .\analyze_low_vin_results.py --run-dir .\results\<run_timestamp>
 4. 平均输入电流、输入功率、输出功率和宏模型窗口功率比。
 5. 电感峰值电流及启动峰值；对照 CENKER CKST0603-3.3uH/M 的 Isat 9.5 A typical、Irms 6 A typical 时，必须注明这些是数据手册典型值，不能当作保证值，也不能用线性电感模型证明未饱和。
 6. 记录是否出现输出塌陷、明显限流、启动失败或稳态振荡。
+7. 对 MODE=GND_FPWM、RILIM=100 kΩ 的案例，取启动与稳态峰值电流中的较大值，与 TI 数据手册 9.0 A 最小限流值比较；同时记录电感 RMS 电流。
 
 暂定筛查目标：稳态平均输出电压 11.9–12.1 V、平均输出电流 0.98–1.02 A、纹波不超过 100 mVpp。任何单项不满足都应保留原始波形并分析原因，不要只看效率数值。
 
@@ -169,8 +206,10 @@ py -3 .\analyze_low_vin_results.py --run-dir .\results\<run_timestamp>
 - checkpoints/：两份 2S EOL pack-coupled 局部启动网表及 manifest.csv；
 - generate_eol_checkpoint_decks.py：从储能行为模型生成 EOL checkpoint 网表；
 - generate_prebiased_transfer_decks.py：生成 3 种 2S 料号 × 3 种备电使能延迟的预偏置 12 V 输出切换矩阵；
+- generate_inductor_sweep.py：生成 3 种 CENKER 电感候选 × 2 个关键 VIN 点的最小电感/最大 DCR 应力矩阵；
+- inductor_sweep/：6 份电感应力 LTspice 网表与 manifest.csv；
 - transfer/：9 份预偏置输出切换 LTspice 网表及 manifest.csv；
 - run_low_vin_matrix.ps1：Windows 批处理运行和证据归档脚本，支持 -NetlistSubdir；
 - analyze_low_vin_results.py：LOG/RAW/哈希与电气筛查分析器；
 - simulate_calibrated_hold_up.py：基于七点 LTspice 宏模型效率映射的连续 1.2 s 储能行为积分器；
-- test_low_vin_matrix.py、test_analyze_low_vin_results.py、test_generate_eol_checkpoint_decks.py、test_generate_prebiased_transfer_decks.py、test_simulate_calibrated_hold_up.py：网表、证据分析、输出切换矩阵和连续保持时间模型回归测试。
+- test_low_vin_matrix.py、test_analyze_low_vin_results.py、test_generate_eol_checkpoint_decks.py、test_generate_prebiased_transfer_decks.py、test_inductor_sweep.py、test_simulate_calibrated_hold_up.py：网表、限流/电流应力、证据分析、输出切换矩阵和连续保持时间模型回归测试。
