@@ -89,6 +89,29 @@ class ArchitectureModelTests(unittest.TestCase):
                 abs(coarse["hold_s"] - fine["hold_s"]), 1.1e-4, design_id
             )
 
+    def test_eol_checkpoint_states_match_1p2s_model_state(self):
+        lr = sample_checkpoint_states(
+            DESIGNS["2S25F_KAM_LR"], 0.70, 4.0, 0.92, [0.0, 1.2]
+        )
+        hp40 = sample_checkpoint_states(
+            DESIGNS["2S30F_KAM_HP_40"], 0.70, 4.0, 0.92, [0.0, 1.2]
+        )
+        self.assertAlmostEqual(lr[1]["v_oc_v"], 4.3353756, delta=2e-5)
+        self.assertAlmostEqual(lr[1]["v_terminal_v"], 3.6042895, delta=2e-5)
+        self.assertAlmostEqual(lr[1]["input_current_a"], 3.6554307, delta=2e-5)
+        self.assertAlmostEqual(hp40[1]["v_oc_v"], 4.3407209, delta=2e-5)
+        self.assertAlmostEqual(hp40[1]["v_terminal_v"], 2.8734896, delta=2e-5)
+        self.assertAlmostEqual(hp40[1]["input_current_a"], 4.5850977, delta=2e-5)
+
+        with self.assertRaises(ValueError):
+            sample_checkpoint_states(
+                DESIGNS["2S30F_KAM_HP_44"], 0.70, 4.0, 0.92, [1.2]
+            )
+        with self.assertRaises(ValueError):
+            sample_checkpoint_states(
+                DESIGNS["2S25F_KAM_LR"], 0.70, 4.0, 0.92, [1.2, 0.6]
+            )
+
     def test_minimum_efficiency_thresholds(self):
         hcc_eta = minimum_efficiency_for_task(
             DESIGNS["4S10F_HCC"], 0.63, 2.0, 1.2
