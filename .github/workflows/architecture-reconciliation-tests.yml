@@ -66,3 +66,9 @@ jobs:
                       )
           print(f"CSV matches regenerated model output: {len(expected)} rows")
           PY
+      - name: Regenerate and compare low-VIN netlists
+        run: |
+          python research/architecture_reconciliation/low_vin_boost/generate_low_vin_matrix.py \
+            --output-dir /tmp/generated-low-vin-netlists
+          diff -ru research/architecture_reconciliation/low_vin_boost/netlists \
+            /tmp/generated-low-vin-netlists
