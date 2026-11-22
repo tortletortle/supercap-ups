@@ -333,7 +333,7 @@ def main() -> None:
     parser.add_argument(
         "--model-path",
         type=Path,
-        default=Path(__file__).resolve().parents[2] / "sim" / "tps61088_v1_3" / "model" / "TPS61088_LT.LIB",
+        default=Path(__file__).resolve().parents[3] / "sim" / "tps61088_v1_3" / "model" / "TPS61088_LT.LIB",
     )
     args = parser.parse_args()
     rows = analyze_run_dir(args.run_dir, args.model_path)
