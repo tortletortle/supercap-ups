@@ -14,10 +14,10 @@ from generate_low_vin_matrix import (
 
 class LowVinMatrixTests(unittest.TestCase):
     def test_five_required_input_points(self):
-        self.assertEqual(INPUT_POINTS_V, (3.2, 3.6, 4.0, 4.4, 4.8))
+        self.assertEqual(INPUT_POINTS_V, (2.8, 3.0, 3.2, 3.6, 4.0, 4.4, 4.8))
         self.assertEqual(
             [format_vin(v) for v in INPUT_POINTS_V],
-            ["3p2", "3p6", "4p0", "4p4", "4p8"],
+            ["2p8", "3p0", "3p2", "3p6", "4p0", "4p4", "4p8"],
         )
 
     def test_deck_keeps_same_power_stage_and_fpwm_configuration(self):
@@ -38,14 +38,14 @@ class LowVinMatrixTests(unittest.TestCase):
             out = Path(tmp)
             write_matrix(out)
             decks = sorted(out.glob("*.cir"))
-            self.assertEqual(len(decks), 5)
+            self.assertEqual(len(decks), 7)
             with (out / "manifest.csv").open(newline="", encoding="utf-8") as f:
                 rows = list(csv.DictReader(f))
-            self.assertEqual(len(rows), 5)
+            self.assertEqual(len(rows), 7)
             self.assertTrue(all(row["run_status"] == "not_run" for row in rows))
             self.assertEqual(
                 [row["vin_source_v"] for row in rows],
-                ["3.2", "3.6", "4.0", "4.4", "4.8"],
+                ["2.8", "3.0", "3.2", "3.6", "4.0", "4.4", "4.8"],
             )
 
     def test_model_include_resolves_from_committed_netlist_directory(self):
