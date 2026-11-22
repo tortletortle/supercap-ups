@@ -15,7 +15,7 @@ from pathlib import Path
 
 
 V14_ROOT = Path(__file__).resolve().parents[1]
-REPO_ROOT = V14_ROOT.parents[2]
+REPO_ROOT = V14_ROOT.parents[1]
 INVENTORY = V14_ROOT / "results" / "fsw_internal_probe_session" / "native_files_local_inventory.csv"
 ANALYZER = V14_ROOT / "scripts" / "analyze_fsw_internal.py"
 TEST_ROOT = V14_ROOT / "tests"
