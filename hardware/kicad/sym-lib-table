@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "Supercap_UPS")(type "KiCad")(uri "${KIPRJMOD}/TPS61088RHL.kicad_sym")(options "")(descr "TPS61088 RHL pinout"))
+)
