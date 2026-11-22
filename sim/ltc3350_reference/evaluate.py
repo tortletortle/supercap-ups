@@ -91,14 +91,16 @@ def vout_window(design: Design) -> tuple[float, float, float, float]:
     return nominal, nominal * (1.0 - total_fraction), nominal * (1.0 + total_fraction), total_fraction
 
 
-def shunt_budget(design: Design) -> tuple[float, float, float]:
+def shunt_budget(design: Design) -> tuple[float, float, float, float]:
     r_max = design.ballast_ohm * (1.0 + design.ballast_tolerance)
     r_min = design.ballast_ohm * (1.0 - design.ballast_tolerance)
     # LTC3350 typical shunt-current approximation: VSHUNT / (2 * RSHUNT).
     min_current = design.vshunt_v / (2.0 * r_max)
+    # The data sheet states that the shunt switches have up to 75% duty cycle.
+    average_current_ceiling = 0.75 * min_current
     max_resistor_power = 3.0 * design.vshunt_v**2 / (16.0 * r_min)
     nominal_current = design.vshunt_v / (2.0 * design.ballast_ohm)
-    return nominal_current, min_current, max_resistor_power
+    return nominal_current, min_current, average_current_ceiling, max_resistor_power
 
 
 def input_charge_budget(design: Design) -> dict[str, float]:
@@ -181,7 +183,7 @@ def main() -> None:
     d = Design()
     vnom, vmin, vmax, vtol = vcap_window(d)
     out_nom, out_min, out_max, out_tol = vout_window(d)
-    shunt_nom, shunt_min, shunt_pmax = shunt_budget(d)
+    shunt_nom, shunt_min, shunt_avg_ceiling, shunt_pmax = shunt_budget(d)
     charge = input_charge_budget(d)
     vshunt_code = round(d.vshunt_v / 183.5e-6)
     vshunt_actual = vshunt_code * 183.5e-6
@@ -191,6 +193,7 @@ def main() -> None:
     print(f"VOUT target: {out_nom:.4f} V; worst-case window: {out_min:.4f}..{out_max:.4f} V ({out_tol*100:.3f}%)")
     print(f"VSHUNT code: 0x{vshunt_code:04X}; quantized value: {vshunt_actual:.6f} V")
     print(f"Shunt current: {shunt_nom:.3f} A nominal, {shunt_min:.3f} A at +5% ballast")
+    print(f"Shunt average-current envelope at 75% duty: {shunt_avg_ceiling:.3f} A")
     print(f"Maximum ballast resistor dissipation estimate: {shunt_pmax:.3f} W (use >=2 W part)")
     print(f"Input/charge budget: {charge}")
     print(f"EOL pack C={pack_capacitance(d):.4f} F, ESR={pack_esr(d):.4f} ohm")
@@ -210,7 +213,8 @@ def main() -> None:
     assert hold_time_s(vmin, d, 0.80) > 1.2
     assert weak["reason"] == "pack-cutoff"
     assert weak["min_cell_v"] > 1.0
-    assert shunt_min > charge["pack_charge_current_no_load_a"]
+    assert shunt_avg_ceiling < charge["pack_charge_current_no_load_a"]
+    assert shunt_avg_ceiling > charge["pack_charge_current_at_1a_load_a"]
     assert charge["total_input_current_at_1a_load_a"] < 1.5
     assert 0x0000 <= vshunt_code <= 0xFFFF
 
