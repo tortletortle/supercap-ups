@@ -51,6 +51,18 @@ class PairingRunnerTests(unittest.TestCase):
             self.assertTrue(rows[50]["path"].endswith("50ns.raw"))
             self.assertTrue(rows[25]["path"].endswith("25ns.raw"))
 
+    def test_committed_inventory_resolves_the_two_primary_raw_files(self):
+        rows = runner.load_inventory_rows()
+        self.assertEqual(set(rows), {50, 25})
+        basename50 = rows[50]["path"].replace("\\", "/").rsplit("/", 1)[-1].lower()
+        basename25 = rows[25]["path"].replace("\\", "/").rsplit("/", 1)[-1].lower()
+        self.assertEqual(
+            basename50, "freq_vin7_rfsw324k_internal_probe_50ns.raw"
+        )
+        self.assertEqual(
+            basename25, "freq_vin7_rfsw324k_internal_probe_25ns.raw"
+        )
+
     def test_inventory_rejects_duplicate_primary_raw_for_same_step(self):
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "inventory.csv"
