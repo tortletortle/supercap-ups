@@ -63,7 +63,7 @@ X1 0 BOOT COMP EN FB FSW ILIM 0 NC0 NC1 0 SS SW SW SW SW VCC VIN VOUT VOUT VOUT 
 .meas tran t_en WHEN V(EN)=1.2 RISE=1
 .meas tran t98 WHEN V(VOUT)=11.76 RISE=1
 .meas tran t98_delay PARAM t98-t_en
-.meas tran vout_at_enable FIND V(VOUT) AT=@DELAY_S@
+.meas tran vout_at_enable AVG V(VOUT) from @DELAY_MINUS_1US@ to @DELAY_S@
 .meas tran vout_pre_enable_min MIN V(VOUT) from 0 to @DELAY_S@
 .meas tran vout_first_5ms_min MIN V(VOUT) from 0 to 5m
 .meas tran vout_global_min MIN V(VOUT) from 0 to 40m
@@ -113,6 +113,7 @@ def render_deck(architecture: str, delay_us: int) -> tuple[str, dict]:
     c_eq_f, r_pack_ohm = pack_equivalent(design, cap_factor, esr_factor)
     initial_ocv_v = design["n_series"] * design["cell_start_v"]
     delay_s = delay_us * 1e-6
+    delay_minus_1us_s = (delay_us - 1) * 1e-6
     delay_plus_s = (delay_us + 1) * 1e-6
     substitutions = {
         "@ARCH@": architecture,
@@ -122,6 +123,7 @@ def render_deck(architecture: str, delay_us: int) -> tuple[str, dict]:
         "@RPATH@": _num(PATH_RESISTANCE_OHM),
         "@DELAY_US@": str(delay_us),
         "@DELAY_S@": _num(delay_s),
+        "@DELAY_MINUS_1US@": _num(delay_minus_1us_s),
         "@DELAY_PLUS_S@": _num(delay_plus_s),
     }
     deck = TEMPLATE
