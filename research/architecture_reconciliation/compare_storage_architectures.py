@@ -28,10 +28,20 @@ DESIGNS = {
         "life_esr_factor": 2.0,
         "pack_cutoff_v": 7.0,
     },
-    "2S30F_KAM_HP": {
+    "2S30F_KAM_HP_44": {
         "n_series": 2,
         "cell_cap_f": 30.0,
         "cell_dc_esr_ohm": 0.044,
+        "cell_start_v": 2.40,
+        "capacity_tolerance_min": 1.00,
+        "life_cap_factor": 0.70,
+        "life_esr_factor": 4.0,
+        "pack_cutoff_v": 2.7,
+    },
+    "2S30F_KAM_HP_40": {
+        "n_series": 2,
+        "cell_cap_f": 30.0,
+        "cell_dc_esr_ohm": 0.040,
         "cell_start_v": 2.40,
         "capacity_tolerance_min": 1.00,
         "life_cap_factor": 0.70,
