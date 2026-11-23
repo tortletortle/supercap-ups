@@ -1,6 +1,6 @@
 # 4S 超级电容 UPS 电源候选图
 
-在 KiCad 9 中打开 [工程](supercap-ups-4s.kicad_pro)，进入 Schematic Editor。当前顶层工程包含八个子页；仓库中的 [原理图 PDF](supercap-ups-4s.pdf) 是上一轮七页导出，需在本轮 ERC 后重新生成。
+在 KiCad 9 中打开 [工程](supercap-ups-4s.kicad_pro)，进入 Schematic Editor。当前顶层工程包含八个子页；仓库中的 [原理图 PDF](supercap-ups-4s.pdf) 是上一轮七页导出，需在本轮 ERC 后重新生成。 项目自定义 BQ76905 符号库与库表分别见 [BQ76905.kicad_sym](BQ76905.kicad_sym) 和 [sym-lib-table](sym-lib-table)。
 
 | 图页 | 电路覆盖 | 验证边界 |
 | --- | --- | --- |

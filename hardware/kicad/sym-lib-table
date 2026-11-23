@@ -1,9 +1,4 @@
 (sym_lib_table
   (version 7)
-  (lib (name "Supercap_UPS")(type "KiCad")(uri "${KIPRJMOD}/TPS61088RHL.kicad_sym")(options "")(descr "TPS61088 RHL pinout"))
-  (lib (name "UPS")(type "KiCad")(uri "${KIPRJMOD}/TPS3700DDC.kicad_sym")(options "")(descr "TI TPS3700DDC power supervisor"))
-(lib (name "Cell_OVP")(type "KiCad")(uri "${KIPRJMOD}/Cell_OVP.kicad_sym")(options "")(descr ""))
-(lib (name "UPS_Disconnect")(type "KiCad")(uri "${KIPRJMOD}/Si7149DP.kicad_sym")(options "")(descr "Vishay PowerPAK switch MOSFET"))
-(lib (name "Precision") (type "KiCad") (uri "${KIPRJMOD}/precision-comparator.kicad_sym") (options "") (descr ""))
-(lib (name "UPS_Aux") (type "KiCad") (uri "${KIPRJMOD}/UPS_Aux.kicad_sym") (options "") (descr ""))
+  (lib (name "BQ76905") (type "KiCad") (uri "${KIPRJMOD}/BQ76905.kicad_sym") (options "") (descr "Project-local BQ76905 4S supercapacitor monitor candidate"))
 )

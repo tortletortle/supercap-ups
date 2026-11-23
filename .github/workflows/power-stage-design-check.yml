@@ -55,14 +55,20 @@ jobs:
             -e HOME=/tmp/kicad-home \
             -e XDG_CONFIG_HOME=/tmp/kicad-home/.config \
             -e XDG_CACHE_HOME=/tmp/kicad-home/.cache \
-            -e KICAD_CONFIG_HOME=/tmp/kicad-home/.config/kicad/9.0 \
+            -e KICAD9_SYMBOL_DIR=/usr/share/kicad/symbols \
+            -e KICAD9_FOOTPRINT_DIR=/usr/share/kicad/footprints \
+            -e KICAD9_3DMODEL_DIR=/usr/share/kicad/3dmodels \
             -v "$RUNNER_TEMP/kicad-home:/tmp/kicad-home" -v "$PWD:/work" -w /work kicad/kicad:9.0 \
             sh -lc '
               mkdir -p "$HOME/.config/kicad/9.0" "$HOME/.cache/fontconfig"
-              SYM_TABLE="$(find /usr/share/kicad -name sym-lib-table -type f | head -n1)"
-              FP_TABLE="$(find /usr/share/kicad -name fp-lib-table -type f | head -n1)"
-              test -n "$SYM_TABLE" && cp "$SYM_TABLE" "$HOME/.config/kicad/9.0/sym-lib-table"
-              test -n "$FP_TABLE" && cp "$FP_TABLE" "$HOME/.config/kicad/9.0/fp-lib-table"
+              set -e
+              test -s /usr/share/kicad/template/sym-lib-table
+              test -s /usr/share/kicad/template/fp-lib-table
+              cp /usr/share/kicad/template/sym-lib-table "$HOME/.config/kicad/9.0/sym-lib-table"
+              cp /usr/share/kicad/template/fp-lib-table "$HOME/.config/kicad/9.0/fp-lib-table"
+              grep -q '(lib (name "Device")' "$HOME/.config/kicad/9.0/sym-lib-table"
+              grep -q '(lib (name "power")' "$HOME/.config/kicad/9.0/sym-lib-table"
+              echo "KiCad symbol libraries configured: $(grep -c '(lib (name' "$HOME/.config/kicad/9.0/sym-lib-table")"
               kicad-cli sch erc --severity-all --format json --output /work/artifacts/erc.json hardware/kicad/supercap-ups-4s.kicad_sch
               kicad-cli sch export netlist --format kicadxml --output /work/artifacts/netlist.xml hardware/kicad/supercap-ups-4s.kicad_sch
               kicad-cli sch export pdf --output /work/artifacts/supercap-ups-4s.pdf hardware/kicad/supercap-ups-4s.kicad_sch

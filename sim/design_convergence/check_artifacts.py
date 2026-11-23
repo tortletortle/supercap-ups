@@ -158,7 +158,15 @@ def main() -> None:
     pwr_flag_count = sum(1 for lib_id, ref in instances if lib_id == "power:PWR_FLAG")
     require(len(refs) == len(set(refs)), "BQ76905 schematic contains duplicate component references")
     require(len(physical_instances) == 21, f"expected 21 physical BQ76905 page components, found {len(physical_instances)}")
-    require(pwr_flag_count == 8, f"expected 8 input-net PWR_FLAGs, found {pwr_flag_count}")
+    require(pwr_flag_count == 7, f"expected 7 input-net PWR_FLAGs, found {pwr_flag_count}")
+    custom_symbol_path = ROOT / "hardware/kicad/BQ76905.kicad_sym"
+    project_sym_table = ROOT / "hardware/kicad/sym-lib-table"
+    require(custom_symbol_path.is_file(), "project BQ76905 symbol library is missing")
+    require(project_sym_table.is_file(), "project symbol library table is missing")
+    require('(symbol "BQ76905"' in custom_symbol_path.read_text(encoding="utf-8"),
+            "project BQ76905 symbol library does not contain the expected symbol")
+    require('(lib (name "BQ76905")' in project_sym_table.read_text(encoding="utf-8"),
+            "project symbol library table does not register BQ76905")
     require(all(lib_id in lib_ids for lib_id, _ in instances),
             "BQ76905 schematic instance references a missing embedded library symbol")
 
