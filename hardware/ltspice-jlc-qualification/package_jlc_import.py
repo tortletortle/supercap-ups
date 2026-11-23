@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Package a verified LTspice ASC and every referenced ASY for JLC EDA import.
 
-This script deliberately fails closed when a symbol file is missing or ambiguous.
-It does not validate circuit behavior, pin-to-footprint mapping, or PCB readiness.
+This script deliberately fails closed when a symbol file is missing, ambiguous,
+or has an invalid pin-order table. It does not validate circuit behavior,
+pin-to-footprint mapping, or PCB readiness.
 """
 from __future__ import annotations
 
@@ -16,6 +17,8 @@ import zipfile
 from pathlib import Path
 
 SYMBOL_RE = re.compile(r"^\s*SYMBOL\s+(\S+)", re.IGNORECASE | re.MULTILINE)
+PIN_ORDER_RE = re.compile(r"PINATTR\s+SpiceOrder\s+(\d+)", re.IGNORECASE)
+EXPECTED_PIN_COUNTS = {"bi": 2, "cap": 2, "ind": 2, "res": 2, "voltage": 2}
 SIM_DIRECTIVE_RE = re.compile(
     r"^\s*TEXT\b.*!\.(include|ic|save|options|tran|meas)\b",
     re.IGNORECASE,
@@ -112,12 +115,36 @@ def main() -> int:
         else:
             resolved[symbol] = candidates[0]
 
-    if missing or ambiguous:
+    invalid: dict[str, str] = {}
+    pin_orders_by_symbol: dict[str, list[int]] = {}
+    for symbol, source in resolved.items():
+        try:
+            asy_text = source.read_text(encoding="latin-1")
+            if not asy_text.lstrip().startswith("Version "):
+                raise ValueError("missing LTspice Version header")
+            orders = [int(x) for x in PIN_ORDER_RE.findall(asy_text)]
+            if not orders:
+                raise ValueError("no PINATTR SpiceOrder records")
+            if sorted(orders) != list(range(1, len(orders) + 1)):
+                raise ValueError(f"SpiceOrder must be unique and contiguous: {orders}")
+            expected = EXPECTED_PIN_COUNTS.get(symbol.lower())
+            block_match = re.fullmatch(r"__block(\d+)", symbol, re.IGNORECASE)
+            if block_match:
+                expected = int(block_match.group(1))
+            if expected is not None and len(orders) != expected:
+                raise ValueError(f"expected {expected} pins, found {len(orders)}")
+            pin_orders_by_symbol[symbol] = orders
+        except (OSError, UnicodeError, ValueError) as exc:
+            invalid[symbol] = str(exc)
+
+    if missing or ambiguous or invalid:
         if missing:
             print("MISSING_ASY=" + ",".join(missing), file=sys.stderr)
         if ambiguous:
             print("AMBIGUOUS_ASY=" + json.dumps(ambiguous, ensure_ascii=False), file=sys.stderr)
-        print("ERROR: refusing to create an incomplete or ambiguous JLC import ZIP", file=sys.stderr)
+        if invalid:
+            print("INVALID_ASY=" + json.dumps(invalid, ensure_ascii=False), file=sys.stderr)
+        print("ERROR: refusing to create an incomplete, ambiguous, or pin-invalid JLC import ZIP", file=sys.stderr)
         return 3
 
     output = args.output.resolve()
@@ -150,7 +177,8 @@ def main() -> int:
         "stripped_simulation_directives": stripped_directives,
         "symbols": [
             {"name": name, "file": symbol_relpath(name).as_posix(),
-             "source": str(resolved[name]), "sha256": sha256(resolved[name])}
+             "source": str(resolved[name]), "sha256": sha256(resolved[name]),
+             "pin_orders": pin_orders_by_symbol[name]}
             for name in symbols
         ],
         "zip": {"file": str(output), "sha256": sha256(output)},
