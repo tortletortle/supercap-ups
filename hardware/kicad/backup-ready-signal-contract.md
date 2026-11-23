@@ -32,9 +32,10 @@
 
 现有 `system-interlock.kicad_sch` 包含 U910（SN74LVC1G74DCT）与 U915（SN74LVC1G17DBVR）：
 
-1. `ARM_PERMIT = PACK_UV_OK AND CELL_MON_PG AND CELL_CONFIG_VALID AND CELL_MON_ALERT_L`。
+1. 实际许可网为 `ARM_PERMIT = PACK_UV_OK AND CELL_MON_PG AND CELL_CONFIG_VALID AND CELL_MON_ALERT_L`。
 2. 任一许可撤销时，U910 的异步 CLR_N 清除 `DISCHARGE_ARM`；故障解除本身不会产生新的 MANUAL_ARM_REQ 上升沿，因此不会自动重新 ARM。
 3. U915 将 R910/C910 的延迟节点整形成 `BOOST_EN`；D910 为 C910 提供快速放电通路。设计说明中的约 60 ms 是启动延迟估计，ILK-007 的小于 1 ms 关断目标尚无实测证据。
+4. 重要边界：当前跨页功率级尚未完成，`BOOST_EN` 目前只是互锁页输出/测试点；它到 TPS61088 EN 的真实连接尚未在完整顶层网表中得到证明。不能把逻辑页的 BOOST_EN 生成等同于 Boost 已被实际关断。
 
 ### 2.2 文档描述的后半段仍只是候选
 
@@ -94,9 +95,10 @@ V_{IN2}(1\text{ ms})=12e^{-0.001/(10k\cdot100\mu F)}
 
 ```text
 BACKUP_READY =
-    ARM_LATCHED
+    DISCHARGE_ARM
  && PACK_UV_OK
- && CELL_PROTECT_VALID
+ && CELL_MON_PG
+ && CELL_CONFIG_VALID
  && CELL_MON_ALERT_L
  && DISCHARGE_ARM
  && BOOST_EN
@@ -113,7 +115,7 @@ BACKUP_READY =
 | 条件 | 定义 |
 |---|---|
 | `PACK_UV_OK` | 组端欠压保护许可有效 |
-| `CELL_PROTECT_VALID` | 单体监测电源、配置和诊断均有效；未配置/复位/开线时必须为低 |
+| `CELL_MON_PG` + `CELL_CONFIG_VALID` | 单体监测器电源有效且配置/诊断校验完成；任一低或开线时均不得 READY。测试脚本中的 `cell_protect_valid` 是这两项的逻辑合取 |
 | `CELL_MON_ALERT_L` | BQ76905 ALERT 低有效信号处于无告警状态，即逻辑高 |
 | `DISCHARGE_ARM` | 硬件放电许可锁存已置位 |
 | `BOOST_EN` | Boost 已被硬件允许启动 |
