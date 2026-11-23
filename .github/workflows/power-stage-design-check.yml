@@ -6,6 +6,7 @@ on:
       - power-stage-integration
     paths:
       - "sim/design_convergence/**"
+      - "sim/backup_transfer/**"
       - "hardware/kicad/**"
       - ".github/workflows/power-stage-design-check.yml"
   pull_request:
@@ -32,6 +33,12 @@ jobs:
           python-version: "3.12"
       - name: Run EOL power-stage budget
         run: python3 -B sim/design_convergence/power_stage_budget.py
+
+      - name: Run backup-transfer residual and qualification regressions
+        run: |
+          python3 -B sim/backup_transfer/check_residual_input.py
+          python3 -B sim/backup_transfer/check_ov2_bias.py
+          python3 -B sim/backup_transfer/test_backup_ready_fault.py
       - name: Validate BOM, protection map, acceptance matrix, and schematic structure
         run: python3 -B sim/design_convergence/check_artifacts.py
       - name: Create KiCad artifact directory
