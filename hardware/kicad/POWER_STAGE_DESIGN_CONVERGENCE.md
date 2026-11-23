@@ -41,7 +41,7 @@ Eaton 2025/2026 版 ELX1538 数据表列出 20 F 单体最大 DC ESR 53 mΩ（25
 
 - 现有 TPS3700 组端 UVLO 加入实际开关接收负载后，下降动作角点约 **6.840–7.110 V**，上升恢复约 **7.285–7.499 V**。组端 UVLO 不能替代单体 UV。
 - 当前硬件候选中没有已落图的四路单体欠压保护。行为模型已有弱单体反例：初始单体 1.45/2.65/2.65/2.65 V 时，弱单体约在 1.033 s 到达 1.0 V，而组端仍约 8.024 V。
-- 单体 UV 优先验证候选：TI BQ76905。器件支持 2S–5S，BAT 供电范围 3–27.5 V，可由 PACK_4S 供电；CUV 阈值寄存器范围 0–5.5 V、1 mV 步进，支持开线检测、ALERT 和自主保护。TI 资料：https://www.ti.com/lit/ds/symlink/bq76905.pdf ；技术参考手册：https://www.ti.com/lit/ug/sluuci8a/sluuci8a.pdf
+- 单体 UV 优先验证候选：TI BQ76905。器件支持 2S–5S，BAT 供电范围 3–27.5 V，可由 PACK_4S 供电；CUV 阈值寄存器范围 0–5.5 V、1 mV 步进，支持开线检测、ALERT 和自主保护。4S 非连续 VC 引脚映射及未用引脚短接见 [BQ76905 4S 接口设计](cell-uv-monitor-design.md)。TI 资料：https://www.ti.com/lit/ds/symlink/bq76905.pdf ；技术参考手册：https://www.ti.com/lit/ug/sluuci8a/sluuci8a.pdf
 - 初始配置候选：4S 输入，CUV=1.050 V 标称，最终实测动作窗口暂定 1.00–1.10 V/单体，CUV delay=1 个 ADSCAN，恢复设为不自动恢复；ALERT 进入硬件放电许可锁存。该阈值窗口仍须结合 Eaton 单体最低端电压和 BQ76905 在 1.0 V 附近的全温误差确认。BQ76905 的 COV 可作为诊断/第二道保护，但现有独立模拟 OVP 继续保留，直到 BQ 的 2.7 V 超级电容应用、ADC 低端误差、配置保持和动作延迟全部通过验证。
 - 采用 100 Ω 串联输入电阻和 100 nF 滤波电容作为首轮输入网络起点（均在数据表推荐的 cell input RC 范围内），最终按 TI 参考设计、采样扫描时间和开线测试复核。
 - 重要限制：BQ76905 是电池监测/保护器件，不是已验证的超级电容保护方案；TI 的典型应用示例把最小单体工作电压设为 2.5 V，但 CUV 寄存器允许设到 1.0 V。必须实测 1.0 V 附近的精度与延迟。上电时若配置未完成、REGOUT/参考无效、I²C 配置校验失败或器件复位，CELL_PROTECT_VALID 必须为低并阻止 DISCHARGE_ARM。不得让“MCU 尚未配置好”变成允许放电。
@@ -115,7 +115,8 @@ TPS54302 的外部 CV（OPA333）与 CC（TLV9001/INA180）均通过注入 FB �
 | 顺序 | 文件 | 变更 |
 |---:|---|---|
 | 1 | `hardware/kicad/supercap-ups-4s.kicad_sch` | 新增 Cell UV Monitor、Power MUX/Backup eFuse、System Interlock 三个层级页；保留现有 Boost/充电/OVP/UVLO 页。 |
-| 2 | `hardware/kicad/cell-uv-monitor.kicad_sch`（新增） | BQ76905 4S 输入、VC0–VC4 滤波、未用通道处理、REGOUT/ALERT/通信、配置有效反馈和 TP。 |
+| 2 | `hardware/kicad/cell-uv-monitor-design.md`（本轮新增） | 明确 BQ76905 4S VC 映射、短接规则、BAT/REGSRC/REGOUT、ALERT/I²C、CUV 设置和上电配置状态。 |
+| 3 | `hardware/kicad/cell-uv-monitor.kicad_sch`（下一轮新增） | 按接口设计文档落图 BQ76905 4S 输入、VC RC、供电、ALERT/通信、配置有效反馈和 TP。 |
 | 3 | `hardware/kicad/system-interlock.kicad_sch`（新增） | PACK_UV_OK、CELL_UV_FAULT、CELL_PROTECT_VALID、BOOST_READY、手动 ARM、故障锁存和 DISCHARGE_ARM 输出；任何电源/参考/采样无效时默认禁止。 |
 | 4 | `hardware/kicad/power-mux.kicad_sch`（新增） | TPS2121、TPS25947、IN2 残压否决、BACKUP_READY、LOAD_12V 和反灌测点。 |
 | 5 | `hardware/kicad/pack-discharge-switch.kicad_sch` | DISCHARGE_ARM 改接锁存输出；CELL_UV_FAULT 与 PACK_UV_OK 硬件撤销许可；复核 P-MOS VGS、热态 RDS(on) 和单管短路故障。 |
@@ -139,7 +140,7 @@ TPS54302 的外部 CV（OPA333）与 CC（TLV9001/INA180）均通过注入 FB �
 | 任一单体 UV / BQ76905 掉电或诊断失败 | DISCHARGE_ARM 清除，BOOST_EN 拉低，背靠背放电开关断开；故障锁存 |
 | PACK_UV_OK 拉低 | 同步撤销 BOOST_EN 和放电开关许可；负载移除后的组压回弹不得重新 ARM |
 | 参考/采样电源无效、抽头开路 | 禁止充电；若影响单体 UV 监测有效性，同时禁止放电 |
-| Boost 未达到有效输出窗口或 eFuse 未 PG | OV2 保持否决，TPS2121 不得把残压 IN2 当成可用备源 |
+| Boost 未达到有效输出窗口或 eFuse 未 PG | OV2 保持否决，TPS2121 不得把残压 IN2 当成可用备源；若启动超时，撤销 DISCHARGE_ARM_LATCHED 并断开放电路径 |
 | 主源恢复 | 主源稳定后由 TPS2121 回到主源；备源可按策略退出，但不得形成两路反灌 |
 | 故障解除 | 必须先观察 ARM 请求为低，再接受新的 ARM 上升沿；保护解除本身不等于自动重启 |
 
