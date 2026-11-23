@@ -90,11 +90,33 @@ jobs:
           text = asc.read_text(encoding="latin-1")
           symbols = sorted(set(re.findall(r"^\s*SYMBOL\s+(\S+)", text, re.M)), key=str.lower)
           asy_files = {p.stem.lower(): p.name for p in joint.glob("*.asy")}
+          lib_text = model.read_text(encoding="latin-1")
+          lib_lines = lib_text.splitlines()
+          sub_idx = next(i for i, line in enumerate(lib_lines)
+                         if re.match(r"(?i)^\\.subckt\\s+TPS61088_TRANS\\b", line))
+          subckt_header = lib_lines[sub_idx]
+          for line in lib_lines[sub_idx + 1:]:
+            if line.lstrip().startswith("+"):
+              subckt_header += " " + line.lstrip()[1:].strip()
+            else:
+              break
+          subckt_pins = subckt_header.split()[2:]
+          x1_tokens = next(line.split() for line in net.read_text(encoding="latin-1").splitlines()
+                           if line.startswith("X1 "))
+          assert x1_tokens[-1].lower() == "tps61088_trans"
+          x1_nodes = x1_tokens[1:-1]
+          block_asy = joint / "__block21.asy"
+          asy_orders = [int(x) for x in re.findall(
+              r"PINATTR\\s+SpiceOrder\\s+(\\d+)", block_asy.read_text(encoding="latin-1"))]
+          assert len(subckt_pins) == len(x1_nodes) == len(asy_orders), (
+              f"macro-model pin mismatch: subckt={len(subckt_pins)} X1={len(x1_nodes)} ASY={len(asy_orders)}")
+          assert sorted(asy_orders) == list(range(1, len(subckt_pins) + 1)), "synthetic ASY SpiceOrder is not contiguous"
           report = [
             "# Weave conversion preflight",
             "",
             "- NET to ASC: PASS",
             "- Weave round-trip connectivity: MATCH",
+            f"- TPS61088 model ports / X1 call nodes / synthetic ASY pins: {len(subckt_pins)} / {len(x1_nodes)} / {len(asy_orders)} (SpiceOrder 1..{len(asy_orders)} PASS)",
             "- LTspice ASC smoke simulation: NOT RUN (no LTspice runtime in Linux CI)",
             "- JLCEDA GUI import: NOT RUN (requires local EDA application)",
             "- Production schematic / PCB readiness: NOT CLAIMED",
@@ -129,6 +151,9 @@ jobs:
             "model": {"file": "source/model/TPS61088_LT.LIB", "sha256": sha(model)},
             "asc": {"file": "source/joint/eol_1p2s.asc", "sha256": sha(asc)},
             "symbols": symbols,
+            "tps61088_model_pin_count": len(subckt_pins),
+            "x1_call_node_count": len(x1_nodes),
+            "synthetic_asy_pin_count": len(asy_orders),
             "asy_files_generated": sorted(p.name for p in joint.glob("*.asy")),
             "weave_connectivity": "MATCH",
             "ltspice_smoke": "NOT_RUN",
