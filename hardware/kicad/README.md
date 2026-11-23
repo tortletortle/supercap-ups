@@ -22,11 +22,11 @@ TPS61088 原功率级依据见 [V1.4 EOL 局部窗口网表](https://github.com/
 
 [单体过压设计](cell-ovp-design.md) · [放电隔离设计](pack-discharge-switch-design.md) · [精密恒压及独立总压截止候选](precision-cv-ovp/README.md) · [主备预启动与切换候选](backup-pre-ready-switching.md) · [充电、UVLO 与串联损耗联合计算](../../sim/charge_window/README.md) · [容量失配降流分流估算](../../sim/balance_recovery/README.md)
 
-精密恒压候选的最低静态组压为 9.2825 V。按现有 EOL、12 W 负载、Boost 90% 效率和最早欠压动作角点，新增放电串联电阻需低于约 23.5 mΩ 才能保有 1.2 s 的模型时间，并需另留动态余量。精密充电和主备接管的候选资料保留供评审，主备接管仍待落图。
+旧 10 F 基线下的 9.2825 V / 23.5 mΩ 结果已由 20 F 候选取代，不再作为当前设计门槛。当前 4×20 F EOL 联合预算采用每颗 11.2 F、106 mΩ DC ESR 压力假设、9.0 V 最低初始 OCV、85% Boost 效率及 145 mΩ 输出路径：新增输入串联路径 100 mΩ 时保持约 1.375 s，150 mΩ 时约 1.216 s。当前热态输入路径设计目标为 ≤100 mΩ；150 mΩ 仅作边界测试。详情见 [电源级收敛评审](POWER_STAGE_DESIGN_CONVERGENCE.md) 和 [可复跑预算](../../sim/design_convergence/README.md)。
 
 ## 20 F 储能候选
 
-C1–C4 选用 Eaton HVH1230-2R7206-R（20 F、2.7 V），配 12.5 mm 径向电容封装、5 mm 引脚间距。9.0 V 是模型要求的最低初始开路组压，充电页仍需调整和验证以实际达到此值。样机按容量比不超过 1.08 分选，并核验实际 DC ESR。[计算及选型边界](../../sim/charge_window/storage-candidates.md)
+C1–C4 选用 Eaton HVH1230-2R7206-R（20 F、2.7 V），配 12.5 mm 径向电容封装、5 mm 引脚间距。9.0 V 是最低初始静置开路组压目标；每颗 EOL 有效容量按 11.2 F 建模。106 mΩ/颗是初始最大 DC ESR 的两倍压力假设，不是厂家保证的 EOL DC ESR，必须对样品测量。样机按容量比不超过 1.08 分选。[计算及选型边界](../../sim/charge_window/storage-candidates.md)
 
 ## 精密充电整合
 
