@@ -21,6 +21,9 @@ jobs:
       - name: Check out power-stage baseline
         uses: actions/checkout@v4
 
+      - name: Test JLC import packager
+        run: python3 -m unittest discover -s tests -p 'test_package_jlc_import.py' -v
+
       - name: Check out pinned Weave converter
         uses: actions/checkout@v4
         with:
