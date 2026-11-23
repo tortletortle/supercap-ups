@@ -84,7 +84,7 @@ BQ76905 电芯电压 ADC 是逐个差分测量，16-bit 输出单位为 1 mV，�
 
 建议增加以下逻辑信号：
 
-- `CELL_MON_PG`：由外部硬件电压监控器确认 REGOUT 有效且 BAT 电压在推荐范围；BQ76905 本身没有专用 PGOOD 引脚，不能用 MCU 软件位代替此硬件有效信号。
+- `CELL_MON_PG`：由 [System Interlock 页](system-interlock-design.md) U914 TPS3839G33 监控 REGOUT 产生；BQ76905 本身没有专用 PGOOD 引脚，不能用 MCU 软件位代替此硬件有效信号。
 - `CELL_CONFIG_VALID`：MCU 已写入 4S、CUV/COV、delay、recovery、watchdog 等寄存器，并逐项读回匹配。
 - `CELL_UV_FAULT_L`：ALERT 报告 CUV/诊断/看门狗故障时的低有效故障线。
 - `CELL_PROTECT_VALID`：硬件组合 `CELL_MON_PG AND CELL_CONFIG_VALID AND NOT CELL_ANY_FAULT`；CELL_ANY_FAULT 包括 CUV、COV、open-wire、温度、参考/ADC 诊断、host watchdog 和配置校验错误。任何输入开路或掉电都必须默认低。
