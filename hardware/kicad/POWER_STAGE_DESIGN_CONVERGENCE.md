@@ -3,7 +3,7 @@
 基线仓库：`tortletortle/supercap-ups`  
 基线分支：`power-stage-integration`  
 基线提交：`d2da3e66406901a1970123faa9b69342a0f76ba8`  
-对照分支：`main`，提交 `4d1c83e9ca00c750bcbef4eb7fb76134a87d64da`。当前集成分支领先 main 2 个提交。
+对照分支：`main`，提交 `4d1c83e9ca00c750bcbef4eb7fb76134a87d64da`。该基线快照当时领先 main 2 个提交；本轮工程资料提交在该快照后追加。
 
 本文件把现有 KiCad 页、模型和器件资料收敛成可执行的工程候选。它**不代表原理图已完成**，也不把宏模型或静态计算当作台架验收。
 
