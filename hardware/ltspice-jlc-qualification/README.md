@@ -59,7 +59,7 @@ py -3 .\hardware\ltspice-jlc-qualification\package_jlc_import.py `
 - 只有全部符号唯一匹配时才生成 ZIP；
 - 输出 ZIP SHA256 和 manifest。
 
-CI 对打包器运行 3 个单元测试：完整符号集成功打包、缺失符号时拒绝、同名冲突时拒绝。当前远端 Linux CI 没有本机 LTspice 符号库，因此只生成 preflight artifact，没有伪造最终 JLC ZIP。
+CI 对打包器运行 4 个单元测试：完整符号集成功打包、缺失符号时拒绝、同名冲突时拒绝、SpiceOrder 错乱时拒绝。打包器同时检查标准两引脚符号和合成 21 引脚块的引脚数量及连续编号。当前远端 Linux CI 没有本机 LTspice 符号库，因此只生成 preflight artifact，没有伪造最终 JLC ZIP。
 
 ## 不在自动化验收范围内
 
