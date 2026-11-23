@@ -128,7 +128,7 @@ def main() -> None:
     allowed_status = {"MODEL_ONLY", "NOT_TESTED", "BLOCKED_SPEC"}
     require(all(row["status"] in allowed_status for row in tests),
             "acceptance matrix contains an unknown or release-like status")
-    require({"SYS-001", "CHG-002", "CELL-UV-001", "MUX-002", "SAFE-001", "ILK-001", "ILK-009"}.issubset(set(test_ids)),
+    require({"SYS-001", "CHG-002", "CELL-UV-001", "MUX-002", "SAFE-001", "ILK-001", "ILK-009", "MUX-005", "MUX-006", "MUX-007", "MUX-008", "MUX-009"}.issubset(set(test_ids)),
             "acceptance matrix is missing a critical subsystem test")
 
     design = design_path.read_text(encoding="utf-8")
@@ -144,7 +144,7 @@ def main() -> None:
         require(token in cell_uv, f"4S cell-monitor design missing interface/filter rule: {token}")
     require("cell-uv-monitor.kicad_sch" in design and "cell-uv-monitor.kicad_sch" in readme,
             "BQ76905 schematic page must be linked from design review and README")
-    for token in ("ARM_PERMIT", "SN74LVC1G74", "TPS3839G33", "D910", "STARTUP_TIMEOUT", "not implemented"):
+    for token in ("ARM_PERMIT", "SN74LVC1G74", "TPS3839G33", "D910", "启动超时", "not implemented"):
         require(token.lower() in interlock_design.lower(), f"interlock design missing rule: {token}")
     require("system-interlock.kicad_sch" in readme, "system interlock schematic must be linked from README")
     require('(lib (name "Power_Interlock")' in sym_table, "symbol table is missing Power_Interlock library")
