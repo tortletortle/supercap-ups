@@ -60,7 +60,7 @@ Eaton 2025/2026 版 ELX1538 数据表列出 20 F 单体最大 DC ESR 53 mΩ（25
 
 - 候选拓扑：VIN_MAIN → TPS2121 IN1；TPS61088 BOOST_12V → TPS25947 eFuse → BOOST_READY_12V → TPS2121 IN2；TPS2121 OUT → LOAD_12V。充电输入继续独立取 VIN_MAIN。
 - TPS2121：外部 CP2 参考、PR1 主源优先判定；当前 35.7 kΩ/10.0 kΩ 与 2.5 V 参考的名义主源比较点约 11.425 V，仅为候选起点。44.2 kΩ ILIM 候选对应约 2–3 A 范围，需按负载和浪涌实测。
-- TPS25947：备源 eFuse，82.5 kΩ/10 kΩ UVLO 分压和 1.65 kΩ ILM 为已有候选值；OVLO、dV/dt、ITIMER 和 PG/READY 逻辑仍待冻结。
+- 当前 BOM U902 为 TPS259470ARPW（470A：AUXOFF/FLT、主动限流、自动重试、无 PG）；下一轮优先评估 TPS259474LRPW（PG/PGTH、Circuit Breaker、Latch-Off）。474L 的 1.65 kΩ R_ILM 电流阈值为 1.8–2.2 A，但输出短路不内部锁存，PG 去抖 12 µs 仅为典型值；PGTH 输出窗口、外部故障锁存和 EN 复位路径必须先验证。详见主备切换评审。
 - 备源就绪不能只看 IN2 电压。eFuse 断开后 100 µF 输入电容可在 1 ms 后仍保持约 11.988 V，足以被 MUX 误判为有效备源。必须有独立 BACKUP_READY/OV2 否决：PACK_UV_OK、CELL_PROTECT_VALID、Boost 输出窗口、eFuse 状态全部成立才允许 IN2 参与选路；故障撤销后应维持否决，直到明确重新武装。
 - 145 mΩ 输出路径模型由 MUX/eFuse 热态电阻预算组成，1 A 时约 145 mV 压降。当前 Boost 12.0 V 设定经此路径可能只有约 11.855 V 到达负载。**负载允许的最小/最大电压尚未给出，因此 12.0 V Boost 反馈值不能最终冻结**；先取得负载电压窗口，再决定输出设定和 OVLO。
 - 备源应在主源存在时预启动并验证 READY。TPS61088 模型 EN→98% 约 11.23–11.28 ms；若等主源掉电后才冷启动，按 1 A、0.5 V 允许跌落估算需要约 22.56 mF 理想保持电容，故不作为无缝接管方案。
@@ -140,7 +140,7 @@ TPS54302 的外部 CV（OPA333）与 CC（TLV9001/INA180）均通过注入 FB �
 | 任一单体 UV / BQ76905 掉电或诊断失败 | DISCHARGE_ARM 清除，BOOST_EN 拉低，背靠背放电开关断开；故障锁存 |
 | PACK_UV_OK 拉低 | 同步撤销 BOOST_EN 和放电开关许可；负载移除后的组压回弹不得重新 ARM |
 | 参考/采样电源无效、抽头开路 | 禁止充电；若影响单体 UV 监测有效性，同时禁止放电 |
-| Boost 未达到有效输出窗口或 eFuse 未 PG | OV2 保持否决，TPS2121 不得把残压 IN2 当成可用备源；若启动超时，撤销 DISCHARGE_ARM_LATCHED 并断开放电路径 |
+| Boost 未达到有效输出窗口或 eFuse 变体状态/输出窗口无效 | OV2 保持否决，TPS2121 不得把残压 IN2 当成可用备源；若启动超时，撤销 DISCHARGE_ARM_LATCHED 并断开放电路径 |
 | 主源恢复 | 主源稳定后由 TPS2121 回到主源；备源可按策略退出，但不得形成两路反灌 |
 | 故障解除 | 必须先观察 ARM 请求为低，再接受新的 ARM 上升沿；保护解除本身不等于自动重启 |
 
