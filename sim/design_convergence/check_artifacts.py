@@ -30,6 +30,22 @@ def require(condition: bool, message: str) -> None:
         raise SystemExit("FAIL: " + message)
 
 
+def validate_acceptance_rows(tests: list[dict[str, str]]) -> None:
+    test_ids = [row["test_id"] for row in tests]
+    require(len(test_ids) == len(set(test_ids)), "acceptance test IDs must be unique")
+    require(all(all(value.strip() for value in row.values()) for row in tests),
+            "every acceptance test field must be populated")
+    allowed_status = {"MODEL_ONLY", "NOT_TESTED", "BLOCKED_SPEC"}
+    require(all(row["status"] in allowed_status for row in tests),
+            "acceptance matrix contains an unknown or release-like status")
+    required_ids = {
+        "SYS-001", "CHG-002", "CELL-UV-001", "MUX-002", "SAFE-001",
+        "MUX-005", "MUX-006", "MUX-007", "MUX-008", "MUX-009",
+    }
+    require(required_ids.issubset(set(test_ids)),
+            "acceptance matrix is missing a critical subsystem test")
+
+
 def balanced_sexpr(text: str) -> bool:
     depth = 0
     quoted = False
@@ -110,15 +126,7 @@ def main() -> None:
             "preliminary BOM must not silently mark unqualified parts as released")
 
     _, tests = read_table(acceptance_path, 7)
-    test_ids = [row["test_id"] for row in tests]
-    require(len(test_ids) == len(set(test_ids)), "acceptance test IDs must be unique")
-    require(all(all(value.strip() for value in row.values()) for row in tests),
-            "every acceptance test field must be populated")
-    allowed_status = {"MODEL_ONLY", "NOT_TESTED", "BLOCKED_SPEC"}
-    require(all(row["status"] in allowed_status for row in tests),
-            "acceptance matrix contains an unknown or release-like status")
-    require({"SYS-001", "CHG-002", "CELL-UV-001", "MUX-002", "SAFE-001"}.issubset(set(test_ids)),
-            "acceptance matrix is missing a critical subsystem test")
+    validate_acceptance_rows(tests)
 
     design = design_path.read_text(encoding="utf-8")
     cell_uv = cell_uv_path.read_text(encoding="utf-8")
