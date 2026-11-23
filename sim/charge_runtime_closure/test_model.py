@@ -102,6 +102,42 @@ class ChargeRuntimeClosureTests(unittest.TestCase):
             )
         )
 
+
+    def test_capacity_mismatch_can_force_early_cell_ovp(self):
+        # EOL capacities corresponding to one -10%-tolerance cell and
+        # three +30%-tolerance cells after the same 30% life-capacity fade.
+        capacities = [6.3, 9.1, 9.1, 9.1]
+        state_25 = first_cell_ovp_charge_state(capacities, 2.5)
+        state_27 = first_cell_ovp_charge_state(capacities, 2.7)
+
+        self.assertAlmostEqual(state_25["pack_ocv_v"], 7.6923077, delta=1e-6)
+        self.assertAlmostEqual(state_27["pack_ocv_v"], 8.3076923, delta=1e-6)
+        self.assertAlmostEqual(state_27["equivalent_capacitance_f"], 2.0475, places=9)
+        self.assertAlmostEqual(state_27["first_trip_cell_v"], 2.7, places=9)
+        self.assertAlmostEqual(state_27["maximum_cell_v"], 2.7, places=9)
+        self.assertGreater(state_27["cell_voltages_v"][1], 1.86)
+
+        hold_27 = hold_time_from_pack_equivalents_s(
+            state_27["pack_ocv_v"],
+            state_27["equivalent_capacitance_f"],
+            0.52,
+            0.92,
+        )
+        hold_25 = hold_time_from_pack_equivalents_s(
+            state_25["pack_ocv_v"],
+            state_25["equivalent_capacitance_f"],
+            0.52,
+            0.92,
+        )
+        self.assertAlmostEqual(hold_27, 0.36758, delta=0.001)
+        self.assertEqual(hold_25, 0.0)
+        self.assertLess(hold_27, 1.2)
+
+    def test_2p2k_bleeder_is_negligible_against_0p5a_charge_current(self):
+        bleed_a = passive_balancer_current_a(2.5, 2200.0)
+        self.assertAlmostEqual(bleed_a, 0.00113636, delta=1e-7)
+        self.assertAlmostEqual(100.0 * bleed_a / 0.5, 0.22727, delta=0.001)
+
     def test_voltage_matrix_has_all_declared_scenarios(self):
         rows = build_voltage_matrix(pack=self.pack)
         self.assertEqual(len(rows), 12)
