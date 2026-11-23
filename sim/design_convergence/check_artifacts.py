@@ -154,8 +154,11 @@ def main() -> None:
     lib_ids = set(re.findall(r'\(symbol "([^"]+)"', cell_sch))
     instances = re.findall(r'\(symbol \(lib_id "([^"]+)"\)[\s\S]*?\(property "Reference" "([^"]+)"', cell_sch)
     refs = [ref for _, ref in instances]
+    physical_instances = [(lib_id, ref) for lib_id, ref in instances if not ref.startswith("#FLG")]
+    pwr_flag_count = sum(1 for lib_id, ref in instances if lib_id == "power:PWR_FLAG")
     require(len(refs) == len(set(refs)), "BQ76905 schematic contains duplicate component references")
-    require(len(instances) == 21, f"expected 21 BQ76905 page components, found {len(instances)}")
+    require(len(physical_instances) == 21, f"expected 21 physical BQ76905 page components, found {len(physical_instances)}")
+    require(pwr_flag_count == 8, f"expected 8 input-net PWR_FLAGs, found {pwr_flag_count}")
     require(all(lib_id in lib_ids for lib_id, _ in instances),
             "BQ76905 schematic instance references a missing embedded library symbol")
 
@@ -166,19 +169,42 @@ def main() -> None:
     uuid_values = re.findall(r'\(uuid "([^"]+)"\)', cell_sch)
     require(len(uuid_values) == len(set(uuid_values)), "BQ76905 page contains duplicate UUIDs")
 
-    labels = re.findall(r'\(global_label "([^"]+)"', cell_sch)
-    required_labels = {
-        "GND", "CELL_1", "CELL_2", "CELL_3", "PACK_4S",
+    global_labels = re.findall(r'\(global_label "([^"]+)"', cell_sch)
+    local_labels = re.findall(r'\(label "([^"]+)"', cell_sch)
+    required_global = {"GND", "CELL_1", "CELL_2", "CELL_3", "PACK_4S"}
+    required_local = {
         "VC0_SENSE", "VC1_SENSE", "CELL2_SENSE", "CELL3_SENSE", "PACK_SENSE",
         "BAT_FILTERED", "REGSRC_FILTERED", "CELL_3V3",
         "CELL_I2C_SCL", "CELL_I2C_SDA", "CELL_MON_ALERT_L",
     }
-    require(required_labels.issubset(set(labels)),
-            f"BQ76905 page is missing global labels: {sorted(required_labels - set(labels))}")
-    require(labels.count("CELL2_SENSE") >= 6,
+    require(required_global.issubset(set(global_labels)),
+            f"BQ76905 page is missing inter-sheet power/tap labels: {sorted(required_global - set(global_labels))}")
+    require(required_local.issubset(set(local_labels)),
+            f"BQ76905 page is missing local filtered/interface labels: {sorted(required_local - set(local_labels))}")
+    require(local_labels.count("CELL2_SENSE") >= 6,
             "VC2/VC3A/VC3B and adjacent filter network are not visibly shorted as a 4S group")
-    require(labels.count("CELL3_SENSE") >= 4,
+    require(local_labels.count("CELL3_SENSE") >= 4,
             "VC4A/VC4B and adjacent filter network are not visibly shorted as a 4S group")
+    require(not re.search(r'\(global_label "(?:VC0_SENSE|VC1_SENSE|CELL2_SENSE|CELL3_SENSE|PACK_SENSE|BAT_FILTERED|REGSRC_FILTERED|CELL_3V3|CELL_I2C_SCL|CELL_I2C_SDA|CELL_MON_ALERT_L)"', cell_sch),
+            "page-internal or unconnected MCU placeholder nets must not be dangling global labels")
+    lib_expr = extract_expr(cell_sch, "(lib_symbols")
+    coord_source = cell_sch.replace(lib_expr, "")
+    off_grid = []
+    for pattern in (r'\(at\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s+-?\d+(?:\.\d+)?',
+                    r'\(xy\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)'):
+        for x, y in re.findall(pattern, coord_source):
+            if abs(float(x) / 1.27 - round(float(x) / 1.27)) > 1e-5 or abs(float(y) / 1.27 - round(float(y) / 1.27)) > 1e-5:
+                off_grid.append((x, y))
+    require(not off_grid, f"BQ76905 page has off-grid connection coordinates: {off_grid[:5]}")
+    for y in ("129.5400", "134.6200", "139.7000", "144.7800", "149.8600"):
+        require(f"(xy 204.4700 {y}) (xy 214.6300 {y})" in cell_sch,
+                f"left BQ76905 pin wire is not landed at y={y}")
+        require(f"(xy 245.1100 {y}) (xy 262.8900 {y})" in cell_sch,
+                f"right BQ76905 pin wire is not landed at y={y}")
+    for x in ("224.7900", "227.3300", "229.8700", "232.4100", "234.9500"):
+        require(f"(xy {x} 121.9200)" in cell_sch, f"top BQ76905 pin wire missing at x={x}")
+    for x in ("224.7900", "227.3300", "229.8700"):
+        require(f"(xy {x} 157.4800)" in cell_sch, f"bottom BQ76905 pin wire missing at x={x}")
     require(len(re.findall(r'\(no_connect ', cell_sch)) == 2,
             "unused BQ76905 DSG/CHG pins must be explicitly no-connect")
     for ref in ("R801", "R802", "R803", "R804", "R805", "R806", "R807", "R808", "R809", "R810",
@@ -200,7 +226,7 @@ def main() -> None:
     require(0.150 < r_limit < 0.160, "calculated 85% path-resistance limit drifted outside expected range")
 
     print(f"PASS: BOM rows={len(bom_rows)}, acceptance tests={len(tests)}")
-    print(f"PASS: KiCad BQ76905 page components={len(instances)}, pins={len(pin_numbers)}, global labels={len(labels)}")
+    print(f"PASS: KiCad BQ76905 page physical components={len(physical_instances)}, PWR_FLAGs={pwr_flag_count}, pins={len(pin_numbers)}")
     print(f"PASS: EOL hold at 85% / 100 mOhm = {corner['hold_s']:.6f} s")
     print(f"PASS: 85% path limit for 1.2 s = {r_limit * 1000:.2f} mOhm")
     print("PASS: 9.4 V ceiling, 4S pin map, supply filters, interlock contract, and hierarchy links")

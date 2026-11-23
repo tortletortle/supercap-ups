@@ -46,28 +46,28 @@ jobs:
         run: python3 -m unittest discover -s sim/design_convergence -p 'test_*.py' -v
       - name: Run eFuse and backup-ready tests
         run: python3 -m unittest discover -s sim/backup_transfer -p 'test_*.py' -v
-      - name: Create KiCad artifact directory
-        run: mkdir -p artifacts
-      - name: Run KiCad 9 hierarchical ERC report
+      - name: Create KiCad artifact and user-config directories
         run: |
-          docker run --rm --user "$(id -u):$(id -g)" -v "$PWD:/work" -w /work kicad/kicad:9.0 \
-            kicad-cli sch erc --severity-all --format json --output /work/artifacts/erc.json \
-            hardware/kicad/supercap-ups-4s.kicad_sch
-      - name: Export hierarchical netlist
+          mkdir -p artifacts "$RUNNER_TEMP/kicad-home/.config/kicad/9.0" "$RUNNER_TEMP/kicad-home/.cache/fontconfig"
+      - name: Run KiCad 9 ERC, netlist, and PDF with standard libraries
         run: |
-          docker run --rm --user "$(id -u):$(id -g)" -v "$PWD:/work" -w /work kicad/kicad:9.0 \
-            kicad-cli sch export netlist --format kicadxml --output /work/artifacts/netlist.xml \
-            hardware/kicad/supercap-ups-4s.kicad_sch
-      - name: Export updated schematic PDF
-        run: |
-          docker run --rm --user "$(id -u):$(id -g)" -v "$PWD:/work" -w /work kicad/kicad:9.0 \
-            kicad-cli sch export pdf --output /work/artifacts/supercap-ups-4s.pdf \
-            hardware/kicad/supercap-ups-4s.kicad_sch
-      - name: Enforce zero ERC violations
-        run: |
-          docker run --rm --user "$(id -u):$(id -g)" -v "$PWD:/work" -w /work kicad/kicad:9.0 \
-            kicad-cli sch erc --severity-all --exit-code-violations \
-            hardware/kicad/supercap-ups-4s.kicad_sch
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/kicad-home \
+            -e XDG_CONFIG_HOME=/tmp/kicad-home/.config \
+            -e XDG_CACHE_HOME=/tmp/kicad-home/.cache \
+            -e KICAD_CONFIG_HOME=/tmp/kicad-home/.config/kicad/9.0 \
+            -v "$RUNNER_TEMP/kicad-home:/tmp/kicad-home" -v "$PWD:/work" -w /work kicad/kicad:9.0 \
+            sh -lc '
+              mkdir -p "$HOME/.config/kicad/9.0" "$HOME/.cache/fontconfig"
+              SYM_TABLE="$(find /usr/share/kicad -name sym-lib-table -type f | head -n1)"
+              FP_TABLE="$(find /usr/share/kicad -name fp-lib-table -type f | head -n1)"
+              test -n "$SYM_TABLE" && cp "$SYM_TABLE" "$HOME/.config/kicad/9.0/sym-lib-table"
+              test -n "$FP_TABLE" && cp "$FP_TABLE" "$HOME/.config/kicad/9.0/fp-lib-table"
+              kicad-cli sch erc --severity-all --format json --output /work/artifacts/erc.json hardware/kicad/supercap-ups-4s.kicad_sch
+              kicad-cli sch export netlist --format kicadxml --output /work/artifacts/netlist.xml hardware/kicad/supercap-ups-4s.kicad_sch
+              kicad-cli sch export pdf --output /work/artifacts/supercap-ups-4s.pdf hardware/kicad/supercap-ups-4s.kicad_sch
+              kicad-cli sch erc --severity-all --exit-code-violations hardware/kicad/supercap-ups-4s.kicad_sch
+            '
       - name: Upload ERC, netlist, and PDF artifacts
         if: always()
         uses: actions/upload-artifact@v4

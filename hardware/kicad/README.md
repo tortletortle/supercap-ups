@@ -11,7 +11,7 @@
 | 放电隔离 | Si7149DP 背靠背开关，由 PACK_UV_OK 与 DISCHARGE_ARM 控制 | DISCHARGE_ARM 仍待驱动。热态通路电阻、浪涌和欠压回跳仍待验证 |
 | 四串单体欠压监测 | BQ76905、4S VC 映射、输入 RC、独立 BAT/REGSRC 供电、I²C/ALERT | 原理图候选已挂入顶层；CUV 1.05 V 精度、配置失效默认状态、硬件锁存和动态关断待验证 |
 
-此前 KiCad 9.0.2 的七页整合图 ERC 为 0 错误、0 警告，且已核对 PACK_4S/GND、VIN_BOOST 隔离及精密反馈网表。新增 BQ76905 第八子页尚未完成本轮 ERC、PDF 和层级网表复核；不得把旧七页 ERC 结果当作新八页工程的验证结果。
+此前 KiCad 9.0.2 的八页整合图 ERC 为 0 错误、0 警告，且已核对 PACK_4S/GND、VIN_BOOST 隔离及精密反馈网表。新增 BQ76905 第八子页尚未完成本轮 ERC、PDF 和层级网表复核；不得把旧七页 ERC 结果当作新八页工程的验证结果。
 
 TPS61088 原功率级依据见 [V1.4 EOL 局部窗口网表](https://github.com/tortletortle/supercap-ups/blob/f3ed57162d2f10beb377a69f5ff68a8f5a07595e/sim/tps61088_v1_4/joint/eol_1p2s_130m_92pct.cir) 和 [TI 数据手册](https://www.ti.com/lit/ds/symlink/tps61088.pdf)。RILIM 仍是研究候选，输入和输出电容采用网表有效值。
 
