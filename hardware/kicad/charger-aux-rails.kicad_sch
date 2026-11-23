@@ -1,0 +1,719 @@
+(kicad_sch (version 20250114) (generator "eeschema") (uuid "ac1854fc-a8ab-4cb2-9ede-3aaebc4e9d62") (paper "A4")
+(title_block (title "Supercap UPS | Charger Auxiliary Rails") (rev "Review"))
+(lib_symbols (symbol "Device:C"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0.254)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "C"
+			(at 0.635 2.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "C"
+			(at 0.635 -2.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 0.9652 -3.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_keywords" "cap capacitor"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_fp_filters" "C_*"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(symbol "C_0_1"
+			(polyline
+				(pts
+					(xy -2.032 0.762) (xy 2.032 0.762)
+				)
+				(stroke
+					(width 0.508)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy -2.032 -0.762) (xy 2.032 -0.762)
+				)
+				(stroke
+					(width 0.508)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "C_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 2.794)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 2.794)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	) (symbol "UPS_Aux:TPS70950DBVR" (pin_names (offset 0.7)) (in_bom yes) (on_board yes)
+(property "Reference" "U" (at 0 7.62 0) (effects (font (size 1.27 1.27))))
+(property "Value" "TPS70950DBVR" (at 0 5.08 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+(property "Datasheet" "https://www.ti.com/lit/ds/symlink/tps709.pdf" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+(symbol "TPS70950DBVR_0_1" (rectangle (start -7.62 3.81) (end 7.62 -6.35) (stroke (width 0.254) (type default)) (fill (type background))))
+(symbol "TPS70950DBVR_1_1"(pin power_in line (at -12.7 1.27 0) (length 5.08)
+(name "IN" (effects (font (size 1.02 1.02)))) (number "1" (effects (font (size 1.02 1.02)))))(pin power_in line (at 0 -8.89 90) (length 5.08)
+(name "GND" (effects (font (size 1.02 1.02)))) (number "2" (effects (font (size 1.02 1.02)))))(pin input line (at -12.7 -3.81 0) (length 5.08)
+(name "EN" (effects (font (size 1.02 1.02)))) (number "3" (effects (font (size 1.02 1.02)))))(pin no_connect line (at 12.7 -3.81 180) (length 5.08)
+(name "NC" (effects (font (size 1.02 1.02)))) (number "4" (effects (font (size 1.02 1.02)))))(pin power_out line (at 12.7 1.27 180) (length 5.08)
+(name "OUT" (effects (font (size 1.02 1.02)))) (number "5" (effects (font (size 1.02 1.02)))))))
+(symbol "Device:R"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "R"
+			(at 2.032 0 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "R"
+			(at 0 0 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -1.778 0 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_keywords" "R res resistor"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_fp_filters" "R_*"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(symbol "R_0_1"
+			(rectangle
+				(start -1.016 -2.54)
+				(end 1.016 2.54)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "R_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 1.27)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 1.27)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+(symbol "Transistor_FET:Q_NMOS_GSD"
+		(pin_names
+			(offset 0)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "Q"
+			(at 5.08 1.905 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Q_NMOS_GSD"
+			(at 5.08 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 5.08 2.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "N-MOSFET transistor, gate/source/drain"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_keywords" "transistor NMOS N-MOS N-MOSFET"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(symbol "Q_NMOS_GSD_0_1"
+			(polyline
+				(pts
+					(xy 0.254 1.905) (xy 0.254 -1.905)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0.254 0) (xy -2.54 0)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0.762 2.286) (xy 0.762 1.27)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0.762 0.508) (xy 0.762 -0.508)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0.762 -1.27) (xy 0.762 -2.286)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0.762 -1.778) (xy 3.302 -1.778) (xy 3.302 1.778) (xy 0.762 1.778)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 1.016 0) (xy 2.032 0.381) (xy 2.032 -0.381) (xy 1.016 0)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+			(circle
+				(center 1.651 0)
+				(radius 2.794)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 2.54 2.54) (xy 2.54 1.778)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(circle
+				(center 2.54 1.778)
+				(radius 0.254)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+			(circle
+				(center 2.54 -1.778)
+				(radius 0.254)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+			(polyline
+				(pts
+					(xy 2.54 -2.54) (xy 2.54 0) (xy 0.762 0)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 2.921 0.381) (xy 3.683 0.381)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 3.302 0.381) (xy 2.921 -0.254) (xy 3.683 -0.254) (xy 3.302 0.381)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "Q_NMOS_GSD_1_1"
+			(pin input line
+				(at -5.08 0 0)
+				(length 2.54)
+				(name "G"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 2.54 5.08 270)
+				(length 2.54)
+				(name "D"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 2.54 -5.08 90)
+				(length 2.54)
+				(name "S"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+(symbol "UPS_Aux:SN74LVC1G17DBVR" (pin_names (offset 0.63)) (in_bom yes) (on_board yes)
+(property "Reference" "U" (at 0 7.62 0) (effects (font (size 1.27 1.27))))
+(property "Value" "SN74LVC1G17DBVR" (at 0 5.08 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+(property "Datasheet" "https://www.ti.com/lit/ds/symlink/sn74lvc1g17.pdf" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+(symbol "SN74LVC1G17DBVR_0_1" (rectangle (start -5.08 3.81) (end 5.08 -3.81) (stroke (width 0.254) (type default)) (fill (type background))))
+(symbol "SN74LVC1G17DBVR_1_1"(pin no_connect line (at -8.89 -2.54 0) (length 3.81) (name "NC" (effects (font (size 0.9 0.9)))) (number "1" (effects (font (size 0.9 0.9)))))(pin input line (at -8.89 0 0) (length 3.81) (name "A" (effects (font (size 0.9 0.9)))) (number "2" (effects (font (size 0.9 0.9)))))(pin power_in line (at 0 -6.35 90) (length 3.81) (name "GND" (effects (font (size 0.9 0.9)))) (number "3" (effects (font (size 0.9 0.9)))))(pin output line (at 8.89 0 180) (length 3.81) (name "Y" (effects (font (size 0.9 0.9)))) (number "4" (effects (font (size 0.9 0.9)))))(pin power_in line (at 0 6.35 270) (length 3.81) (name "VCC" (effects (font (size 0.9 0.9)))) (number "5" (effects (font (size 0.9 0.9))))))))
+(text "CHARGER AUXILIARY SUPPLIES" (at 25.4 25.4 0) (effects (font (size 3.2 3.2)) (justify left)) (uuid "93c0170b-9ae0-44ed-9bc7-3aac5d5be197"))
+(text "Two separately regulated 5 V rails from VIN_MAIN" (at 25.4 33.02 0) (effects (font (size 1.7 1.7)) (justify left)) (uuid "0493a43b-e5a2-4e9b-ba25-79c8b594fa53"))
+(symbol (lib_id "UPS_Aux:TPS70950DBVR") (at 114.3 63.5 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "87163b12-14d1-4a73-a834-901eab3c120c")
+(property "Reference" "U701" (at 114.3 53.34 0) (effects (font (size 1.27 1.27)) ))
+(property "Value" "TPS70950DBVR" (at 114.3 55.88 0) (effects (font (size 1.27 1.27)) ))
+(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5" (at 114.3 63.5 0) (effects (font (size 1.27 1.27)) (hide yes)))
+(pin "1" (uuid "f29d54b8-0069-49d2-8b0c-ca88ca079aad")) (pin "2" (uuid "f8a63d3a-a322-456b-8f1b-a7190b46d286")) (pin "3" (uuid "395f923c-b092-412b-8838-75e88ed20c61")) (pin "4" (uuid "56f12c5c-134c-4578-aa06-b484ecd76260")) (pin "5" (uuid "ac559288-a32e-4490-ad93-e6db51c53b91"))
+(instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/b8eae3b7-bce1-5ec7-923d-91463b699d8b" (reference "U701") (unit 1)))))
+(symbol (lib_id "Device:C") (at 74.93 77.47 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "331f9a3a-37ea-4b10-8ee4-1cd83fb92c46")
+(property "Reference" "C701" (at 78.74 76.2 0) (effects (font (size 1.27 1.27)) (justify left)))
+(property "Value" "1 uF / 50 V" (at 78.74 78.74 0) (effects (font (size 1.27 1.27)) (justify left)))
+(property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 74.93 77.47 0) (effects (font (size 1.27 1.27)) (hide yes)))
+(pin "1" (uuid "6a38f397-b13c-4c23-b0bf-23a20679acd1")) (pin "2" (uuid "c06ebc6b-043e-4c1b-b6fe-3052893e45c2"))
+(instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/b8eae3b7-bce1-5ec7-923d-91463b699d8b" (reference "C701") (unit 1)))))
+(wire (pts (xy 74.93 62.23) (xy 74.93 73.66)) (stroke (width 0) (type default)) (uuid "d6d80aa2-6512-4498-8590-c798fe390f81"))
+(wire (pts (xy 74.93 81.28) (xy 74.93 91.44)) (stroke (width 0) (type default)) (uuid "19ed0f14-ac77-4fcd-8a17-80ecb3356725"))
+(junction (at 74.93 62.23) (diameter 0) (color 0 0 0 0) (uuid "d8ab4c5a-c0bf-4ae4-a71a-ccfe0803fcd8"))
+(junction (at 74.93 91.44) (diameter 0) (color 0 0 0 0) (uuid "6f1b0677-a76d-4425-b97b-8917cc49dc07"))
+(symbol (lib_id "Device:C") (at 154.94 77.47 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "5e2a0a48-199f-4335-aae3-f6a607003894")
+(property "Reference" "C702" (at 158.75 76.2 0) (effects (font (size 1.27 1.27)) (justify left)))
+(property "Value" "4.7 uF / 16 V" (at 158.75 78.74 0) (effects (font (size 1.27 1.27)) (justify left)))
+(property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 154.94 77.47 0) (effects (font (size 1.27 1.27)) (hide yes)))
+(pin "1" (uuid "9928a233-1160-4945-a3c8-bfb7313b25a2")) (pin "2" (uuid "2cc9b459-3998-4b0e-bb01-2b889245906c"))
+(instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/b8eae3b7-bce1-5ec7-923d-91463b699d8b" (reference "C702") (unit 1)))))
+(wire (pts (xy 154.94 62.23) (xy 154.94 73.66)) (stroke (width 0) (type default)) (uuid "507c351d-4131-4570-9b9e-5ed3bb83d57d"))
+(wire (pts (xy 154.94 81.28) (xy 154.94 91.44)) (stroke (width 0) (type default)) (uuid "44e1fedc-3104-43e4-9c59-2dbc523c77a0"))
+(junction (at 154.94 62.23) (diameter 0) (color 0 0 0 0) (uuid "849e558c-42e9-4eaf-8a8c-3057bf44b1d5"))
+(wire (pts (xy 55.88 62.23) (xy 74.93 62.23)) (stroke (width 0) (type default)) (uuid "6d5a2887-9309-4379-9652-8f6fce6d740a"))
+(wire (pts (xy 74.93 62.23) (xy 101.6 62.23)) (stroke (width 0) (type default)) (uuid "ae85f49b-98ae-4cfc-9312-361ea38f1f24"))
+(global_label "VIN_MAIN" (shape input) (at 55.88 62.23 0) (effects (font (size 1.2 1.2)) (justify right)) (uuid "d693ae04-f032-4d12-ad73-af7fd2e92acf")
+(property "Intersheetrefs" "${INTERSHEET_REFS}" (at 55.88 62.23 0) (effects (font (size 1 1)) (hide yes))))
+(wire (pts (xy 127 62.23) (xy 154.94 62.23)) (stroke (width 0) (type default)) (uuid "8428d1a9-dd52-46d9-9865-93b16e4f638d"))
+(wire (pts (xy 154.94 62.23) (xy 184.15 62.23)) (stroke (width 0) (type default)) (uuid "0bd1d837-d871-4664-bcf6-41e1cb0168cf"))
+(global_label "5V_CV" (shape output) (at 184.15 62.23 180) (effects (font (size 1.2 1.2)) (justify left)) (uuid "36d29827-de43-4393-8cd5-1a2d066e10ef")
+(property "Intersheetrefs" "${INTERSHEET_REFS}" (at 184.15 62.23 0) (effects (font (size 1 1)) (hide yes))))
+(wire (pts (xy 55.88 91.44) (xy 74.93 91.44)) (stroke (width 0) (type default)) (uuid "1095b13f-826b-4f1b-8814-a0e37cf954a1"))
+(wire (pts (xy 74.93 91.44) (xy 114.3 91.44)) (stroke (width 0) (type default)) (uuid "bb7ebae4-dca9-43cd-a63a-64170b3c236b"))
+(wire (pts (xy 114.3 91.44) (xy 154.94 91.44)) (stroke (width 0) (type default)) (uuid "245797f2-d6db-4bb7-863f-9e534668b47a"))
+(wire (pts (xy 114.3 72.39) (xy 114.3 91.44)) (stroke (width 0) (type default)) (uuid "54cc792c-579e-40d2-a311-cff507980b03"))
+(junction (at 114.3 91.44) (diameter 0) (color 0 0 0 0) (uuid "31d0fbf6-2315-446c-8400-0a18db5697a8"))
+(global_label "GND" (shape bidirectional) (at 55.88 91.44 0) (effects (font (size 1.2 1.2)) (justify right)) (uuid "083603b9-6d79-4db2-972e-1f8e75340f1a")
+(property "Intersheetrefs" "${INTERSHEET_REFS}" (at 55.88 91.44 0) (effects (font (size 1 1)) (hide yes))))
+(no_connect (at 101.6 67.31) (uuid "2d2761d2-95b1-43ef-822f-711df7fd1b83"))
+(no_connect (at 127 67.31) (uuid "d3bda8f4-daf2-4a6a-8de1-9a8f7cd11514"))
+(symbol (lib_id "UPS_Aux:TPS70950DBVR") (at 114.3 119.38 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "8c81a2a9-1f74-479a-91b5-75ae4bd5cba8")
+(property "Reference" "U702" (at 114.3 109.22 0) (effects (font (size 1.27 1.27)) ))
+(property "Value" "TPS70950DBVR" (at 114.3 111.76 0) (effects (font (size 1.27 1.27)) ))
+(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5" (at 114.3 119.38 0) (effects (font (size 1.27 1.27)) (hide yes)))
+(pin "1" (uuid "6920aea8-532d-4469-8dc2-8e062863151e")) (pin "2" (uuid "84b3b51f-9fb0-4309-9d5d-eb68a54a64be")) (pin "3" (uuid "84dd49a4-ce15-46f2-8a0e-c8a86c13ac49")) (pin "4" (uuid "11ff9d21-2cc6-48c6-a4a3-d00bbb6e0f3d")) (pin "5" (uuid "9ab99972-aea7-49db-aa72-bc44304bcc8e"))
+(instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/b8eae3b7-bce1-5ec7-923d-91463b699d8b" (reference "U702") (unit 1)))))
+(symbol (lib_id "Device:C") (at 74.93 133.35 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "549d511d-7a7e-45ce-bdf4-980a3bb77f55")
+(property "Reference" "C703" (at 78.74 132.08 0) (effects (font (size 1.27 1.27)) (justify left)))
+(property "Value" "1 uF / 50 V" (at 78.74 134.62 0) (effects (font (size 1.27 1.27)) (justify left)))
+(property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 74.93 133.35 0) (effects (font (size 1.27 1.27)) (hide yes)))
+(pin "1" (uuid "789d9b8e-84a5-4fb3-9938-3dd649471d5b")) (pin "2" (uuid "91840e35-b9dd-4bae-a293-0c3c26fd35f6"))
+(instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/b8eae3b7-bce1-5ec7-923d-91463b699d8b" (reference "C703") (unit 1)))))
+(wire (pts (xy 74.93 118.11) (xy 74.93 129.54)) (stroke (width 0) (type default)) (uuid "f6b32b68-3deb-4a44-bc7c-1dc41616f720"))
+(wire (pts (xy 74.93 137.16) (xy 74.93 147.32)) (stroke (width 0) (type default)) (uuid "7fd99ec8-382d-4e91-b10d-fdd9602ea950"))
+(junction (at 74.93 118.11) (diameter 0) (color 0 0 0 0) (uuid "b63d75bc-1916-42c0-8f4a-9fdca50d45ff"))
+(junction (at 74.93 147.32) (diameter 0) (color 0 0 0 0) (uuid "b9584045-99dd-4b7f-ac38-8772650de8e5"))
+(symbol (lib_id "Device:C") (at 154.94 133.35 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "7452090d-b3f0-4b8d-99ed-653b9e1cba32")
+(property "Reference" "C704" (at 158.75 132.08 0) (effects (font (size 1.27 1.27)) (justify left)))
+(property "Value" "4.7 uF / 16 V" (at 158.75 134.62 0) (effects (font (size 1.27 1.27)) (justify left)))
+(property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 154.94 133.35 0) (effects (font (size 1.27 1.27)) (hide yes)))
+(pin "1" (uuid "a959ac2d-48f6-4bcf-859e-c8d84b4f845d")) (pin "2" (uuid "d04b5924-fc5e-4106-b5be-dc3ca960674b"))
+(instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/b8eae3b7-bce1-5ec7-923d-91463b699d8b" (reference "C704") (unit 1)))))
+(wire (pts (xy 154.94 118.11) (xy 154.94 129.54)) (stroke (width 0) (type default)) (uuid "798e111c-4ce5-4874-8904-430d3b5697fa"))
+(wire (pts (xy 154.94 137.16) (xy 154.94 147.32)) (stroke (width 0) (type default)) (uuid "90ee1e32-49fa-4361-aa6f-3f6295dc8764"))
+(junction (at 154.94 118.11) (diameter 0) (color 0 0 0 0) (uuid "2a8bb397-5b31-47f8-b827-8afd9f2faa3b"))
+(wire (pts (xy 55.88 118.11) (xy 74.93 118.11)) (stroke (width 0) (type default)) (uuid "0d028262-5476-43aa-8af0-942ac92ff7ab"))
+(wire (pts (xy 74.93 118.11) (xy 101.6 118.11)) (stroke (width 0) (type default)) (uuid "7775351e-b947-40cc-953b-1cdfd000f03a"))
+(global_label "VIN_MAIN" (shape input) (at 55.88 118.11 0) (effects (font (size 1.2 1.2)) (justify right)) (uuid "89046983-0cf4-4a42-aadc-63781d23eb94")
+(property "Intersheetrefs" "${INTERSHEET_REFS}" (at 55.88 118.11 0) (effects (font (size 1 1)) (hide yes))))
+(wire (pts (xy 127 118.11) (xy 154.94 118.11)) (stroke (width 0) (type default)) (uuid "56ccb599-a9be-46ce-a0f5-692c7ac2976b"))
+(wire (pts (xy 154.94 118.11) (xy 184.15 118.11)) (stroke (width 0) (type default)) (uuid "d1f2bd80-ebf8-48a4-959f-73e745056379"))
+(global_label "5V_OVP" (shape output) (at 184.15 118.11 180) (effects (font (size 1.2 1.2)) (justify left)) (uuid "e9f66e4b-bcb8-497f-923a-bfefe2fe0238")
+(property "Intersheetrefs" "${INTERSHEET_REFS}" (at 184.15 118.11 0) (effects (font (size 1 1)) (hide yes))))
+(wire (pts (xy 55.88 147.32) (xy 74.93 147.32)) (stroke (width 0) (type default)) (uuid "89132316-18b2-435d-9f5d-baae212f6dda"))
+(wire (pts (xy 74.93 147.32) (xy 114.3 147.32)) (stroke (width 0) (type default)) (uuid "e765b948-70b8-4eae-871a-29fae2ceb504"))
+(wire (pts (xy 114.3 147.32) (xy 154.94 147.32)) (stroke (width 0) (type default)) (uuid "fbc0fc81-421c-4da6-90a3-528777cf8efe"))
+(wire (pts (xy 114.3 128.27) (xy 114.3 147.32)) (stroke (width 0) (type default)) (uuid "01771b36-bfc9-4642-9bfa-fbc53639b515"))
+(junction (at 114.3 147.32) (diameter 0) (color 0 0 0 0) (uuid "a6fb2e4c-1820-4ca6-84b1-8559ee1f57c7"))
+(global_label "GND" (shape bidirectional) (at 55.88 147.32 0) (effects (font (size 1.2 1.2)) (justify right)) (uuid "9076da22-bb19-45ec-a229-df035d2ddc51")
+(property "Intersheetrefs" "${INTERSHEET_REFS}" (at 55.88 147.32 0) (effects (font (size 1 1)) (hide yes))))
+(no_connect (at 101.6 123.19) (uuid "e6591f75-c8ef-4169-8a2b-53214e325691"))
+(no_connect (at 127 123.19) (uuid "9fc99d5d-69ab-48fe-8cf2-ac9f4e1b7a96"))
+(text "EN left open as specified for TPS709. Do not tie EN to VIN_MAIN." (at 25.4 163.83 0) (effects (font (size 1.4 1.4)) (justify left)) (uuid "8488e0e5-ab96-42d7-9a0a-323c9af79324"))
+(text "Verify effective COUT >= 2.2 uF over bias and temperature. J601 rails are monitor only." (at 25.4 170.18 0) (effects (font (size 1.4 1.4)) (justify left)) (uuid "d344d07f-a717-4208-bdbf-5a2f04f30d1b"))
+(text "Rail power alone does not qualify the references or release CHG_SAFE_IN." (at 25.4 176.53 0) (effects (font (size 1.4 1.4)) (justify left)) (uuid "228e5188-005a-442d-924e-0ebbce5ed4df"))
+(sheet_instances (path "/" (page "1")))
+(text "BENCH SERIES-ISOLATION INTERLOCK" (at 204.47 38.1 0) (effects (font (size 1.5 1.5)) (justify left)) (uuid "b3dbd4c3-411e-4c28-97a7-0f0bc0ac06a6"))
+(symbol (lib_id "UPS_Aux:SN74LVC1G17DBVR") (at 233.68 73.66 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "802da158-5e3f-4af0-8159-81fe652f6740")
+(property "Reference" "U703" (at 242.57 66.04 0) (effects (font (size 1 1)) (justify left)))
+(property "Value" "SN74LVC1G17DBVR" (at 242.57 68.58 0) (effects (font (size 1 1)) (justify left)))
+(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5" (at 233.68 73.66 0) (effects (font (size 1 1)) (hide yes)))
+(pin "1" (uuid "1fd2030b-9c0c-4dab-b679-e20629ff39f4")) (pin "2" (uuid "1f214f02-deaa-4a6c-b796-8a992a9f03b5")) (pin "3" (uuid "2209dc37-870c-4136-bf44-4f94461a743b")) (pin "4" (uuid "4e331d03-46c5-48cb-870f-91532f5f550a")) (pin "5" (uuid "c233444a-3167-4ab7-ae0c-fc5cc445247c"))
+(instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/b8eae3b7-bce1-5ec7-923d-91463b699d8b" (reference "U703") (unit 1)))))
+(symbol (lib_id "Device:C") (at 250.19 57.15 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "5605fe74-e572-438d-92b8-af33e3c4fd75")
+(property "Reference" "C705" (at 256.54 55.88 0) (effects (font (size 1 1)) (justify left)))
+(property "Value" "100 nF" (at 256.54 58.42 0) (effects (font (size 1 1)) (justify left)))
+(property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 250.19 57.15 0) (effects (font (size 1 1)) (hide yes)))
+(pin "1" (uuid "48a92284-0af4-458b-9b92-13690a8efc35")) (pin "2" (uuid "2da501a9-68c9-410c-a4c6-6a82cf0592d5"))
+(instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/b8eae3b7-bce1-5ec7-923d-91463b699d8b" (reference "C705") (unit 1)))))
+(wire (pts (xy 233.68 67.31) (xy 233.68 48.26)) (stroke (width 0) (type default)) (uuid "9b143c53-bbf5-4d91-bb60-4ff2abe081e2"))
+(wire (pts (xy 233.68 48.26) (xy 250.19 48.26)) (stroke (width 0) (type default)) (uuid "8fffbb78-41c1-4edd-8fd6-c2566271a4ba"))
+(wire (pts (xy 250.19 48.26) (xy 250.19 53.34)) (stroke (width 0) (type default)) (uuid "7b1bcbd2-2483-427f-b5fd-284601fc8789"))
+(global_label "3V3_CHG" (shape input) (at 233.68 48.26 0) (effects (font (size 0.95 0.95)) (justify right)) (uuid "9c6669ac-28ac-40f1-b548-2b109cc687aa"))
+(global_label "GND" (shape bidirectional) (at 250.19 60.96 180) (effects (font (size 0.95 0.95)) (justify left)) (uuid "f303cb0f-9359-44a8-994a-807e6039a4b8"))
+(symbol (lib_id "Device:R") (at 207.01 85.09 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "1289be85-52e3-4ad7-a3d3-a9db7adbde5a")
+(property "Reference" "R705" (at 213.36 83.82 0) (effects (font (size 1 1)) (justify left)))
+(property "Value" "100 k" (at 213.36 86.36 0) (effects (font (size 1 1)) (justify left)))
+(property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 207.01 85.09 0) (effects (font (size 1 1)) (hide yes)))
+(pin "1" (uuid "5d07b2a0-1071-41cc-ab89-eaa06cdd48dd")) (pin "2" (uuid "7bc0c530-1074-43ca-a8eb-3be121efac8b"))
+(instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/b8eae3b7-bce1-5ec7-923d-91463b699d8b" (reference "R705") (unit 1)))))
+(wire (pts (xy 200.66 73.66) (xy 207.01 73.66)) (stroke (width 0) (type default)) (uuid "80103c71-ab4e-4438-aa5d-e633130b618f"))
+(wire (pts (xy 207.01 73.66) (xy 224.79 73.66)) (stroke (width 0) (type default)) (uuid "bdd9960b-6677-405b-bb30-93bca9ff3d85"))
+(global_label "CHG_OVP_OD" (shape input) (at 200.66 73.66 0) (effects (font (size 0.95 0.95)) (justify right)) (uuid "cd885eb6-6f8f-428b-84ec-1a006f01c243"))
+(wire (pts (xy 207.01 73.66) (xy 207.01 81.28)) (stroke (width 0) (type default)) (uuid "eefd6a80-fedc-4efe-887a-78f2dc03c460"))
+(junction (at 207.01 73.66) (diameter 0) (color 0 0 0 0) (uuid "be184fdf-f3bf-480d-a54e-4d7a447ce7a3"))
+(global_label "GND" (shape bidirectional) (at 207.01 88.9 0) (effects (font (size 0.95 0.95)) (justify right)) (uuid "4be7f308-a594-4de0-9e0c-2c14b2aed03c"))
+(no_connect (at 224.79 76.2) (uuid "d7383be9-74f6-4fb2-89dd-37a1c646e4c2"))
+(global_label "GND" (shape bidirectional) (at 233.68 80.01 180) (effects (font (size 0.95 0.95)) (justify left)) (uuid "92284576-bf6b-4ef1-9c71-78a6e40179b6"))
+(wire (pts (xy 242.57 73.66) (xy 264.16 73.66)) (stroke (width 0) (type default)) (uuid "2b9872ac-83b8-4720-9dc3-8f59f22e1805"))
+(label "CUT_OK_BUFFERED" (at 264.16 73.66 0) (effects (font (size 0.95 0.95)) (justify left bottom)) (uuid "36999792-3478-47bf-98d5-f5d7ad48310d"))
+(symbol (lib_id "Transistor_FET:Q_NMOS_GSD") (at 234.95 124.46 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "526f9e7e-e76b-44e3-bf79-34256e7eea18")
+(property "Reference" "Q703" (at 241.3 123.19 0) (effects (font (size 1 1)) (justify left)))
+(property "Value" "AO3400A" (at 241.3 125.73 0) (effects (font (size 1 1)) (justify left)))
+(property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 234.95 124.46 0) (effects (font (size 1 1)) (hide yes)))
+(pin "1" (uuid "5a3ec304-90bd-46fa-9d7c-863d3136e5e6")) (pin "2" (uuid "a5e91f23-2ae7-41be-846d-65b395aac4b3")) (pin "3" (uuid "8ae6df0a-aaa1-4260-8507-36727c1c5a8f"))
+(instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/b8eae3b7-bce1-5ec7-923d-91463b699d8b" (reference "Q703") (unit 1)))))
+(symbol (lib_id "Device:R") (at 208.28 138.43 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "04e5dae1-a38b-4291-9fc6-a20f276ac8ac")
+(property "Reference" "R706" (at 214.63 137.16 0) (effects (font (size 1 1)) (justify left)))
+(property "Value" "39 k" (at 214.63 139.7 0) (effects (font (size 1 1)) (justify left)))
+(property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 208.28 138.43 0) (effects (font (size 1 1)) (hide yes)))
+(pin "1" (uuid "a146bebb-10dd-4c4e-8b5c-4d4c8a63bf70")) (pin "2" (uuid "8a2864f0-27fb-4035-9b85-c9f5592cd164"))
+(instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/b8eae3b7-bce1-5ec7-923d-91463b699d8b" (reference "R706") (unit 1)))))
+(wire (pts (xy 199.39 124.46) (xy 208.28 124.46)) (stroke (width 0) (type default)) (uuid "ec5f98e3-505c-4906-add4-731f20d65d07"))
+(wire (pts (xy 208.28 124.46) (xy 229.87 124.46)) (stroke (width 0) (type default)) (uuid "0b1ccc60-510f-44d8-b82a-ef4502a7d0b7"))
+(label "CUT_OK_BUFFERED" (at 199.39 124.46 0) (effects (font (size 0.95 0.95)) (justify left bottom)) (uuid "6a6f8551-3245-4318-809e-75eb0ef4d834"))
+(wire (pts (xy 208.28 124.46) (xy 208.28 134.62)) (stroke (width 0) (type default)) (uuid "dd685454-a5ff-4381-a396-e6e45234118a"))
+(junction (at 208.28 124.46) (diameter 0) (color 0 0 0 0) (uuid "924d0c8d-1e07-4cf8-9960-8402165a2dee"))
+(global_label "GND" (shape bidirectional) (at 208.28 142.24 0) (effects (font (size 0.95 0.95)) (justify right)) (uuid "a8df3fef-2884-4ddd-8160-293e9b9cf23e"))
+(wire (pts (xy 237.49 119.38) (xy 237.49 110.49)) (stroke (width 0) (type default)) (uuid "a553c7ef-de07-421f-9014-716b174c830c"))
+(wire (pts (xy 237.49 110.49) (xy 251.46 110.49)) (stroke (width 0) (type default)) (uuid "ab50dce7-bea0-429e-aae1-93a6a5b2eb42"))
+(global_label "CUT_SAFE_RETURN" (shape input) (at 251.46 110.49 180) (effects (font (size 0.95 0.95)) (justify left)) (uuid "b47fc9bb-2271-4dfa-9351-d71798e8688e"))
+(wire (pts (xy 237.49 129.54) (xy 237.49 142.24)) (stroke (width 0) (type default)) (uuid "8c8b66b6-a37e-4590-9b1d-5dc12e6344fb"))
+(global_label "GND" (shape bidirectional) (at 237.49 142.24 180) (effects (font (size 0.95 0.95)) (justify left)) (uuid "fbe2e18e-b05d-48c6-a70a-2c96c77a9b8b"))
+(text "External ARM must remain low until qualified." (at 194.31 153.67 0) (effects (font (size 1.5 1.5)) (justify left)) (uuid "3cdfaa61-9a90-4bfe-9d72-462f097005cc"))
+)

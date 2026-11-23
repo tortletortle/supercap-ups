@@ -1,0 +1,8 @@
+Nominal rise 7.406574 V; fall 6.992080 V; hysteresis 0.414494 V
+Nominal high just before cutoff 2.695312 V
+Evaluated 3072 simultaneous corners
+rise: 7.285189 to 7.498985 V
+fall: 6.839892 to 7.110123 V
+hysteresis: 0.280326 to 0.536714 V
+high before cutoff: 2.610062 to 2.757491 V
+high at 9.4 V: 3.589888 to 3.643386 V

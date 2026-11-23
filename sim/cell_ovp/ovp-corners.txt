@@ -1,0 +1,6 @@
+Cell threshold with valid reference    2.4488 ... 2.5513 V
+Main falling clamp assertion          7.871 ... 8.674 V
+Main rising clamp release             8.054 ... 8.760 V
+Reference rising clamp assertion      2.5094 ... 2.5788 V
+Reference falling clamp release       2.4523 ... 2.5533 V
+Assert-on-rise bound with ref-high drift  2.6252 V

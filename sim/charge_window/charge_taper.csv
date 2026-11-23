@@ -1,0 +1,13 @@
+capacity_ratio,fast_handoff_OCV_V,fast_peak_cell_V,fast_OVP,tail_final_OCV_V,tail_peak_cell_V,tail_OVP
+1.0,8.8,2.252891,False,9.092,2.27819,False
+1.0,8.9,2.27789,False,9.092,2.27819,False
+1.0,9.0,2.302889,False,9.092,2.27819,False
+1.0,9.1,2.327888,False,9.1,2.28019,False
+1.08,8.8,2.382163,False,9.092,2.411663,False
+1.08,8.9,2.408629,False,9.092,2.411691,False
+1.08,9.0,2.435095,False,9.092,2.41172,False
+1.08,9.1,2.449,True,,,
+1.12,8.8,2.444912,False,8.99084,2.449,True
+1.12,8.9,2.449,True,,,
+1.12,9.0,2.449,True,,,
+1.12,9.1,2.449,True,,,

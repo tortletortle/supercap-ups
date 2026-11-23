@@ -1,0 +1,807 @@
+(kicad_sch (version 20250114) (generator "eeschema")
+(uuid "1fa5f3ca-3c34-4d0a-8204-d726b752978b")
+(paper "A4")
+(title_block (title "Supercap UPS | Pack discharge switch") (rev "Review"))
+(lib_symbols (symbol "Device:R"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "R"
+			(at 2.032 0 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "R"
+			(at 0 0 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -1.778 0 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_keywords" "R res resistor"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_fp_filters" "R_*"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(symbol "R_0_1"
+			(rectangle
+				(start -1.016 -2.54)
+				(end 1.016 2.54)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "R_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 1.27)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 1.27)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	) (symbol "Transistor_FET:Q_NMOS_GSD"
+		(pin_names
+			(offset 0)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "Q"
+			(at 5.08 1.905 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Q_NMOS_GSD"
+			(at 5.08 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 5.08 2.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "N-MOSFET transistor, gate/source/drain"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_keywords" "transistor NMOS N-MOS N-MOSFET"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(symbol "Q_NMOS_GSD_0_1"
+			(polyline
+				(pts
+					(xy 0.254 1.905) (xy 0.254 -1.905)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0.254 0) (xy -2.54 0)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0.762 2.286) (xy 0.762 1.27)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0.762 0.508) (xy 0.762 -0.508)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0.762 -1.27) (xy 0.762 -2.286)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0.762 -1.778) (xy 3.302 -1.778) (xy 3.302 1.778) (xy 0.762 1.778)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 1.016 0) (xy 2.032 0.381) (xy 2.032 -0.381) (xy 1.016 0)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+			(circle
+				(center 1.651 0)
+				(radius 2.794)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 2.54 2.54) (xy 2.54 1.778)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(circle
+				(center 2.54 1.778)
+				(radius 0.254)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+			(circle
+				(center 2.54 -1.778)
+				(radius 0.254)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+			(polyline
+				(pts
+					(xy 2.54 -2.54) (xy 2.54 0) (xy 0.762 0)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 2.921 0.381) (xy 3.683 0.381)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 3.302 0.381) (xy 2.921 -0.254) (xy 3.683 -0.254) (xy 3.302 0.381)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "Q_NMOS_GSD_1_1"
+			(pin input line
+				(at -5.08 0 0)
+				(length 2.54)
+				(name "G"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 2.54 5.08 270)
+				(length 2.54)
+				(name "D"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 2.54 -5.08 90)
+				(length 2.54)
+				(name "S"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	) (symbol "UPS_Disconnect:Si7149DP"
+		(pin_names
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "Q"
+			(at 5.08 1.905 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Si7149DP"
+			(at 5.08 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_SO:PowerPAK_SO-8_Single"
+			(at 5.08 -1.905 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.vishay.com/docs/68934/si7149dp.pdf"
+			(at 5.08 -3.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "P-channel 30 V MOSFET, PowerPAK SO-8"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_keywords" "P-Channel MOSFET"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_fp_filters" "PowerPAK*SO*Single*"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(symbol "Si7149DP_0_1"
+			(polyline
+				(pts
+					(xy 0.254 1.905) (xy 0.254 -1.905)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0.254 0) (xy -2.54 0)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0.762 2.286) (xy 0.762 1.27)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0.762 1.778) (xy 3.302 1.778) (xy 3.302 -1.778) (xy 0.762 -1.778)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0.762 0.508) (xy 0.762 -0.508)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0.762 -1.27) (xy 0.762 -2.286)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(circle
+				(center 1.651 0)
+				(radius 2.794)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 2.286 0) (xy 1.27 0.381) (xy 1.27 -0.381) (xy 2.286 0)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+			(polyline
+				(pts
+					(xy 2.54 2.54) (xy 2.54 1.778)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(circle
+				(center 2.54 1.778)
+				(radius 0.254)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+			(circle
+				(center 2.54 -1.778)
+				(radius 0.254)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+			(polyline
+				(pts
+					(xy 2.54 -2.54) (xy 2.54 0) (xy 0.762 0)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 2.794 -0.508) (xy 2.921 -0.381) (xy 3.683 -0.381) (xy 3.81 -0.254)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 3.302 -0.381) (xy 2.921 0.254) (xy 3.683 0.254) (xy 3.302 -0.381)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "Si7149DP_1_1"
+			(pin input line
+				(at -5.08 0 0)
+				(length 2.54)
+				(name "G"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 2.54 5.08 270)
+				(length 2.54)
+				(name "D"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 2.54 -5.08 90)
+				(length 2.54)
+				(name "S"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 2.54 -5.08 90)
+				(length 2.54)
+				(hide yes)
+				(name "S"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 2.54 -5.08 90)
+				(length 2.54)
+				(hide yes)
+				(name "S"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	))
+(text "PACK-TO-BOOST DISCONNECT" (at 20.3200 31.7500 0) (effects (font (size 2.45 2.45) (bold yes)) (justify left)) (uuid "33896795-e917-4712-930f-afdd8c945856"))
+(text "Common-source P-MOSFET pair | Default off | High-side switch" (at 20.3200 38.1000 0) (effects (font (size 1.55 1.55) ) (justify left)) (uuid "e07008a2-2f22-40c5-b7aa-5023249e04f8"))
+(symbol (lib_id "UPS_Disconnect:Si7149DP") (at 69.8500 66.0400 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "bce6c5f9-95e8-43ba-af1d-54c370256549") (property "Reference" "Q501" (at 64.7700 53.3400 90) (effects (font (size 1.27 1.27)) (justify left) )) (property "Value" "Si7149DP" (at 64.7700 55.8800 90) (effects (font (size 1.27 1.27)) (justify left) )) (property "Footprint" "Package_SO:PowerPAK_SO-8_Single" (at 69.8500 66.0400 90) (effects (font (size 1.27 1.27)) (justify left) (hide yes))) (pin "1" (uuid "085e1088-1626-4f89-8ba9-43a6429333f9")) (pin "2" (uuid "61ad3b07-02e2-4b9e-b67a-d245af7247c3")) (pin "3" (uuid "aa4bed9d-ad0a-4acb-ae55-2f85810a655a")) (pin "4" (uuid "f1a1f7dd-eedd-4f63-b40f-a78212ed1aec")) (pin "5" (uuid "bfac39e4-f137-454e-9252-0e1f429bd3aa")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/c1679a01-c748-59c8-abe5-3388fa57bcf4" (reference "Q501") (unit 1)))))
+(symbol (lib_id "UPS_Disconnect:Si7149DP") (at 143.5100 60.9600 270) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "e3864445-f0b4-48f9-83d2-02a7f97450f8") (property "Reference" "Q502" (at 138.4300 73.6600 90) (effects (font (size 1.27 1.27)) (justify left) )) (property "Value" "Si7149DP" (at 138.4300 76.2000 90) (effects (font (size 1.27 1.27)) (justify left) )) (property "Footprint" "Package_SO:PowerPAK_SO-8_Single" (at 143.5100 60.9600 90) (effects (font (size 1.27 1.27)) (justify left) (hide yes))) (pin "1" (uuid "46fb638f-e6f5-41f3-9b22-ad1a39afc6f1")) (pin "2" (uuid "f5bb0676-adca-4118-a584-178377c2ae2c")) (pin "3" (uuid "b2971606-7710-465d-ae0b-ba0733a62847")) (pin "4" (uuid "3bc10ffc-501c-4aa1-82cc-6b57673836eb")) (pin "5" (uuid "b8ec46b4-bc14-486c-93b0-612266421b60")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/c1679a01-c748-59c8-abe5-3388fa57bcf4" (reference "Q502") (unit 1)))))
+(wire (pts (xy 43.1800 63.5000) (xy 64.7700 63.5000)) (stroke (width 0) (type default)) (uuid "e34e64f1-f998-4aa3-a1e5-b433b0306f3c"))
+(global_label "PACK_4S" (shape input) (at 43.1800 63.5000 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "56dbb126-4897-4e5f-ba95-936178f7cc95") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 43.1800 63.5000 0) (effects (font (size 1.27 1.27)) (hide yes))))
+(wire (pts (xy 74.9300 63.5000) (xy 100.3300 63.5000)) (stroke (width 0) (type default)) (uuid "433185cc-28c4-414a-bf2e-f1624eeac5f9"))
+(wire (pts (xy 100.3300 63.5000) (xy 118.1100 63.5000)) (stroke (width 0) (type default)) (uuid "967f5dde-6590-4e65-84a4-b28355e6b323"))
+(wire (pts (xy 118.1100 63.5000) (xy 138.4300 63.5000)) (stroke (width 0) (type default)) (uuid "0cc637cf-1998-4464-913e-da9bf84ef1d5"))
+(wire (pts (xy 148.5900 63.5000) (xy 176.5300 63.5000)) (stroke (width 0) (type default)) (uuid "6748d274-6595-48c6-ae5f-1054035f94d0"))
+(global_label "VIN_BOOST" (shape output) (at 176.5300 63.5000 180) (effects (font (size 1.27 1.27)) (justify left)) (uuid "14643420-a487-4ec1-affb-713a7c099974") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 176.5300 63.5000 0) (effects (font (size 1.27 1.27)) (hide yes))))
+(label "SW_COMMON_SOURCE"  (at 100.3300 63.5000 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "02547ee7-25b8-4b24-8711-3d49706751c5") )
+(wire (pts (xy 69.8500 71.1200) (xy 69.8500 81.2800)) (stroke (width 0) (type default)) (uuid "d433150b-1efe-4a89-adf8-fc79926373fd"))
+(wire (pts (xy 69.8500 81.2800) (xy 95.2500 81.2800)) (stroke (width 0) (type default)) (uuid "b8e5e496-3ee5-4fbd-97d3-66cebccc4ac6"))
+(wire (pts (xy 95.2500 81.2800) (xy 118.1100 81.2800)) (stroke (width 0) (type default)) (uuid "39d42cb7-acaf-48c6-9be5-faa7342cfc85"))
+(label "SW_PGATE"  (at 69.8500 81.2800 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "8bf03b21-ab7c-450a-938d-341f7435f8ab") )
+(wire (pts (xy 143.5100 55.8800) (xy 143.5100 48.2600)) (stroke (width 0) (type default)) (uuid "fef57595-1680-4fe0-a353-e4e1383a7255"))
+(wire (pts (xy 143.5100 48.2600) (xy 149.8600 48.2600)) (stroke (width 0) (type default)) (uuid "cdfb434c-5d02-4ad9-b22d-6f8c56756d5f"))
+(label "SW_PGATE"  (at 149.8600 48.2600 180) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "9dd1dbf3-67a2-4f11-bf83-a49b87f9f220") )
+(symbol (lib_id "Device:R") (at 118.1100 72.3900 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "97cc105a-a927-4493-9158-33c6dc70992a") (property "Reference" "R501" (at 123.1900 71.1200 0) (effects (font (size 1.27 1.27)) (justify left) )) (property "Value" "10.0 k" (at 123.1900 73.6600 0) (effects (font (size 1.27 1.27)) (justify left) )) (pin "1" (uuid "3aae6352-48e1-4c7f-b6b8-580b10017358")) (pin "2" (uuid "e4eb92e1-dbd3-4f6a-8dcf-6458514b82ef")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/c1679a01-c748-59c8-abe5-3388fa57bcf4" (reference "R501") (unit 1)))))
+(wire (pts (xy 118.1100 63.5000) (xy 118.1100 68.5800)) (stroke (width 0) (type default)) (uuid "b127e826-0b4d-475f-a7cd-6fcc550a4844"))
+(wire (pts (xy 118.1100 76.2000) (xy 118.1100 81.2800)) (stroke (width 0) (type default)) (uuid "d44fc044-18e8-4efd-838e-8bd12dbbeab7"))
+(junction (at 118.1100 63.5000) (diameter 0) (color 0 0 0 0) (uuid "e2b62227-e927-4c4b-8c43-1b5fce629201"))
+(wire (pts (xy 95.2500 81.2800) (xy 95.2500 87.6300)) (stroke (width 0) (type default)) (uuid "e8812bc4-1d77-4ed3-98ff-c890d52fa06b"))
+(junction (at 95.2500 81.2800) (diameter 0) (color 0 0 0 0) (uuid "29c3dde0-87d8-459d-8ca6-d8a6a5ecf4cd"))
+(symbol (lib_id "Device:R") (at 95.2500 91.4400 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "8e3524da-fa9f-4271-a362-ad8e6f8862e9") (property "Reference" "R502" (at 100.3300 90.1700 0) (effects (font (size 1.27 1.27)) (justify left) )) (property "Value" "1.00 k" (at 100.3300 92.7100 0) (effects (font (size 1.27 1.27)) (justify left) )) (pin "1" (uuid "07734699-948d-4a68-8a7f-38404d65410e")) (pin "2" (uuid "bb5b3f9c-7f96-4ae1-9376-5acd26a73071")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/c1679a01-c748-59c8-abe5-3388fa57bcf4" (reference "R502") (unit 1)))))
+(wire (pts (xy 95.2500 95.2500) (xy 95.2500 106.6800)) (stroke (width 0) (type default)) (uuid "3879940d-cc1c-4f31-a573-0b57f423ca6f"))
+(wire (pts (xy 95.2500 106.6800) (xy 128.2700 106.6800)) (stroke (width 0) (type default)) (uuid "aa45e1fd-1df1-490e-a5f0-897a192cb2b9"))
+(wire (pts (xy 128.2700 106.6800) (xy 128.2700 111.7600)) (stroke (width 0) (type default)) (uuid "94d190d8-3772-45ad-96e5-fb59dc777046"))
+(symbol (lib_id "Transistor_FET:Q_NMOS_GSD") (at 125.7300 116.8400 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "48acfcd1-8775-4ded-902d-97c0a3cf2210") (property "Reference" "Q503" (at 133.3500 115.5700 0) (effects (font (size 1.27 1.27)) (justify left) )) (property "Value" "AO3400A" (at 133.3500 118.1100 0) (effects (font (size 1.27 1.27)) (justify left) )) (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 125.7300 116.8400 0) (effects (font (size 1.27 1.27)) (justify left) (hide yes))) (pin "1" (uuid "671c912f-9766-4d0e-95fd-b478c951dc96")) (pin "2" (uuid "8953d957-1a04-497e-bb40-ce9027c16f7b")) (pin "3" (uuid "7b45eff3-1b07-4604-b4ff-3c2472e7ac31")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/c1679a01-c748-59c8-abe5-3388fa57bcf4" (reference "Q503") (unit 1)))))
+(symbol (lib_id "Transistor_FET:Q_NMOS_GSD") (at 125.7300 142.2400 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "a0a872c9-8f57-4637-8ebe-344e823dde3b") (property "Reference" "Q504" (at 133.3500 140.9700 0) (effects (font (size 1.27 1.27)) (justify left) )) (property "Value" "AO3400A" (at 133.3500 143.5100 0) (effects (font (size 1.27 1.27)) (justify left) )) (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 125.7300 142.2400 0) (effects (font (size 1.27 1.27)) (justify left) (hide yes))) (pin "1" (uuid "e69074eb-e79a-4900-b8cf-d17202ad4ad7")) (pin "2" (uuid "ab99fc7f-4d18-4782-8c1e-c572c1595621")) (pin "3" (uuid "83f5613b-ff82-469e-8aff-bd0eaa8c30b0")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/c1679a01-c748-59c8-abe5-3388fa57bcf4" (reference "Q504") (unit 1)))))
+(wire (pts (xy 128.2700 121.9200) (xy 128.2700 137.1600)) (stroke (width 0) (type default)) (uuid "c050a119-e3f0-4141-a501-345aa3bda526"))
+(wire (pts (xy 128.2700 147.3200) (xy 128.2700 158.7500)) (stroke (width 0) (type default)) (uuid "e8cdf11e-06d7-4afb-868f-71b53ddf670d"))
+(wire (pts (xy 128.2700 158.7500) (xy 95.2500 158.7500)) (stroke (width 0) (type default)) (uuid "c098d279-4951-4fe7-8bf1-52a769630abf"))
+(wire (pts (xy 95.2500 158.7500) (xy 67.3100 158.7500)) (stroke (width 0) (type default)) (uuid "83ceb7e7-801e-4b66-9bdc-1df3df7ba46e"))
+(wire (pts (xy 67.3100 158.7500) (xy 43.1800 158.7500)) (stroke (width 0) (type default)) (uuid "c0f7cb16-8af1-456b-b23a-16b3e72c054e"))
+(global_label "GND" (shape bidirectional) (at 43.1800 158.7500 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c7200640-9c29-48ee-a4a1-042cd627d5c1") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 43.1800 158.7500 0) (effects (font (size 1.27 1.27)) (hide yes))))
+(wire (pts (xy 43.1800 116.8400) (xy 67.3100 116.8400)) (stroke (width 0) (type default)) (uuid "b4b59c32-4a92-41f5-89c1-abfbc0867f21"))
+(wire (pts (xy 67.3100 116.8400) (xy 120.6500 116.8400)) (stroke (width 0) (type default)) (uuid "f7f3a8a6-a1cd-4611-b7fc-fc240b8aa33e"))
+(global_label "PACK_UV_OK" (shape input) (at 43.1800 116.8400 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "ca621535-c942-4525-b78d-0a0b6585ad41") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 43.1800 116.8400 0) (effects (font (size 1.27 1.27)) (hide yes))))
+(wire (pts (xy 43.1800 142.2400) (xy 95.2500 142.2400)) (stroke (width 0) (type default)) (uuid "600fa29b-82fc-4f61-a7a1-fdfed43cf6bb"))
+(wire (pts (xy 95.2500 142.2400) (xy 120.6500 142.2400)) (stroke (width 0) (type default)) (uuid "dd17c8c1-63dc-4582-b42b-f2f544f97087"))
+(global_label "DISCHARGE_ARM" (shape input) (at 43.1800 142.2400 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "f1a40a12-5cc6-40bc-be4a-3867dc68a8a5") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 43.1800 142.2400 0) (effects (font (size 1.27 1.27)) (hide yes))))
+(symbol (lib_id "Device:R") (at 67.3100 129.5400 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "4dab0501-7ad2-493d-933a-c4fa9e84b76c") (property "Reference" "R503" (at 72.3900 128.2700 0) (effects (font (size 1.27 1.27)) (justify left) )) (property "Value" "1.50 M" (at 72.3900 130.8100 0) (effects (font (size 1.27 1.27)) (justify left) )) (pin "1" (uuid "1dd3e348-2a69-422f-84ab-75ab3c758254")) (pin "2" (uuid "ac96dce1-ece4-4a48-a9ce-a996a08143fb")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/c1679a01-c748-59c8-abe5-3388fa57bcf4" (reference "R503") (unit 1)))))
+(wire (pts (xy 67.3100 116.8400) (xy 67.3100 125.7300)) (stroke (width 0) (type default)) (uuid "de2803d4-e46c-4152-a9f9-643e63a684b4"))
+(wire (pts (xy 67.3100 133.3500) (xy 67.3100 158.7500)) (stroke (width 0) (type default)) (uuid "33a08aa8-a64c-413f-9ffe-b2b364ab29d7"))
+(symbol (lib_id "Device:R") (at 95.2500 151.1300 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "7c89f10c-7cfb-40d2-bb83-6b9b6231ee5b") (property "Reference" "R504" (at 100.3300 149.8600 0) (effects (font (size 1.27 1.27)) (justify left) )) (property "Value" "100 k" (at 100.3300 152.4000 0) (effects (font (size 1.27 1.27)) (justify left) )) (pin "1" (uuid "af695822-f4a8-4ba3-b70d-244ea8dacd58")) (pin "2" (uuid "434f4520-2110-48a4-8aa4-47b2fb11c86d")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/c1679a01-c748-59c8-abe5-3388fa57bcf4" (reference "R504") (unit 1)))))
+(wire (pts (xy 95.2500 142.2400) (xy 95.2500 147.3200)) (stroke (width 0) (type default)) (uuid "a51cd88f-c5d1-4f00-acdd-b3c4e73b0525"))
+(wire (pts (xy 95.2500 154.9400) (xy 95.2500 158.7500)) (stroke (width 0) (type default)) (uuid "0efa882e-6d75-494b-b165-f238fa5d974c"))
+(junction (at 67.3100 116.8400) (diameter 0) (color 0 0 0 0) (uuid "27a3c1d0-b11f-4ad6-9ed4-368822401cfe"))
+(junction (at 95.2500 142.2400) (diameter 0) (color 0 0 0 0) (uuid "a33c872f-a373-4aaf-96cc-5f7037dadc71"))
+(junction (at 67.3100 158.7500) (diameter 0) (color 0 0 0 0) (uuid "ab5af64d-d0cb-46ae-ac5a-b9b046fda585"))
+(junction (at 95.2500 158.7500) (diameter 0) (color 0 0 0 0) (uuid "b3dd903d-0b03-44b1-bd87-ab22224e9eeb"))
+(text "DISCHARGE_ARM permits pre-start only after pack supervisor and interlocks are valid." (at 20.3200 168.9100 0) (effects (font (size 1.35 1.35) ) (justify left)) (uuid "6fb5fb01-aec1-46af-8702-2b48f2730e54"))
+(text "BOOST_EN is wired separately by the system; check VIN_BOOST precharge and release timing." (at 20.3200 173.9900 0) (effects (font (size 1.35 1.35) ) (justify left)) (uuid "8e86f080-1a20-4c64-81e0-9c864f9439f3"))
+(text "Off: both directions blocked by opposing body diodes; on: both directions conduct." (at 20.3200 179.0700 0) (effects (font (size 1.35 1.35) ) (justify left)) (uuid "b9b8a11a-5086-45bd-b0e4-ac07f9b1cce4"))
+(text "No inrush current regulator on this sheet; check restart and pulse SOA under the actual load." (at 20.3200 184.1500 0) (effects (font (size 1.35 1.35) ) (justify left)) (uuid "d7c8c14c-4dae-47d4-9cf6-d8a8d96607a7"))
+)

@@ -1,0 +1,1673 @@
+(kicad_sch (version 20250114) (generator "eeschema") (uuid "2cb8be79-bc5b-4170-8b74-3eeb2c9cd103") (paper "User" 400 270) (title_block (title "Supercap UPS | 4S cell overvoltage interlock") (rev "Review")) (lib_symbols (symbol "Device:R"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "R"
+			(at 2.032 0 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "R"
+			(at 0 0 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -1.778 0 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_keywords" "R res resistor"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_fp_filters" "R_*"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(symbol "R_0_1"
+			(rectangle
+				(start -1.016 -2.54)
+				(end 1.016 2.54)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "R_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 1.27)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 1.27)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+(symbol "Device:C"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0.254)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "C"
+			(at 0.635 2.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "C"
+			(at 0.635 -2.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 0.9652 -3.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_keywords" "cap capacitor"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_fp_filters" "C_*"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(symbol "C_0_1"
+			(polyline
+				(pts
+					(xy -2.032 0.762) (xy 2.032 0.762)
+				)
+				(stroke
+					(width 0.508)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy -2.032 -0.762) (xy 2.032 -0.762)
+				)
+				(stroke
+					(width 0.508)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "C_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 2.794)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 2.794)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+(symbol "power:PWR_FLAG"
+		(power)
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "#FLG"
+			(at 0 1.905 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 0 3.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Special symbol for telling ERC where power comes from"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_keywords" "flag power"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(symbol "PWR_FLAG_0_0"
+			(pin power_out line
+				(at 0 0 90)
+				(length 0)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(symbol "PWR_FLAG_0_1"
+			(polyline
+				(pts
+					(xy 0 0) (xy 0 1.27) (xy -1.016 1.905) (xy 0 2.54) (xy 1.016 1.905) (xy 0 1.27)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+(symbol "Amplifier_Operational:OPA4197xPW"
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "U"
+			(at 0 3.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "OPA4197xPW"
+			(at 0 -3.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_SO:TSSOP-14_4.4x5mm_P0.65mm"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/opa4197.pdf"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Quad 36V, Precision, Rail-to-Rail Input/Output, Low Offset Voltage, Operational Amplifier, TSSOP-14"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_locked" ""
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "quad opamp rtor"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_fp_filters" "TSSOP*4.4x5mm*P0.65mm*"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(symbol "OPA4197xPW_1_1"
+			(polyline
+				(pts
+					(xy -5.08 5.08) (xy 5.08 0) (xy -5.08 -5.08) (xy -5.08 5.08)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(pin input line
+				(at -7.62 2.54 0)
+				(length 2.54)
+				(name "+"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -7.62 -2.54 0)
+				(length 2.54)
+				(name "-"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin output line
+				(at 7.62 0 180)
+				(length 2.54)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(symbol "OPA4197xPW_2_1"
+			(polyline
+				(pts
+					(xy -5.08 5.08) (xy 5.08 0) (xy -5.08 -5.08) (xy -5.08 5.08)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(pin input line
+				(at -7.62 2.54 0)
+				(length 2.54)
+				(name "+"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -7.62 -2.54 0)
+				(length 2.54)
+				(name "-"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "6"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin output line
+				(at 7.62 0 180)
+				(length 2.54)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "7"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(symbol "OPA4197xPW_3_1"
+			(polyline
+				(pts
+					(xy -5.08 5.08) (xy 5.08 0) (xy -5.08 -5.08) (xy -5.08 5.08)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(pin input line
+				(at -7.62 2.54 0)
+				(length 2.54)
+				(name "+"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "10"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -7.62 -2.54 0)
+				(length 2.54)
+				(name "-"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "9"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin output line
+				(at 7.62 0 180)
+				(length 2.54)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "8"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(symbol "OPA4197xPW_4_1"
+			(polyline
+				(pts
+					(xy -5.08 5.08) (xy 5.08 0) (xy -5.08 -5.08) (xy -5.08 5.08)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(pin input line
+				(at -7.62 2.54 0)
+				(length 2.54)
+				(name "+"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "12"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -7.62 -2.54 0)
+				(length 2.54)
+				(name "-"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "13"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin output line
+				(at 7.62 0 180)
+				(length 2.54)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "14"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(symbol "OPA4197xPW_5_1"
+			(pin power_in line
+				(at -2.54 7.62 270)
+				(length 3.81)
+				(name "V+"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at -2.54 -7.62 90)
+				(length 3.81)
+				(name "V-"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "11"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+(symbol "Cell_OVP:REF5025IDR"
+		(pin_names
+			(offset 0.254)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "U"
+			(at -1.27 8.255 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "REF5025IDR"
+			(at -1.27 6.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
+			(at -1.905 -6.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.ti.com/product/REF5025"
+			(at -1.27 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "2.5 V precision shunt-independent series reference, SOIC-8"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_keywords" "Low Noise Precision Voltage Reference 2.048V"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_fp_filters" "SOIC*3.9x4.9mm*P1.27mm*"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(symbol "REF5025IDR_0_1"
+			(rectangle
+				(start -7.62 5.08)
+				(end 7.62 -5.08)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+		)
+		(symbol "REF5025IDR_1_1"
+			(pin passive line
+				(at -10.16 0 0)
+				(length 2.54)
+				(name "Temp"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin no_connect line
+				(at -7.62 2.54 0)
+				(length 2.54)
+				(hide yes)
+				(name "DNC"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin no_connect line
+				(at -5.08 -5.08 90)
+				(length 2.54)
+				(hide yes)
+				(name "NC"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "7"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at -2.54 7.62 270)
+				(length 2.54)
+				(name "Vin"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at -2.54 -7.62 90)
+				(length 2.54)
+				(name "GND"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin no_connect line
+				(at 7.62 0 180)
+				(length 2.54)
+				(hide yes)
+				(name "DNC"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "8"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_out line
+				(at 10.16 2.54 180)
+				(length 2.54)
+				(name "Vout"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "6"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 10.16 -2.54 180)
+				(length 2.54)
+				(name "Trim/NR"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+(symbol "Cell_OVP:LM339BPW"
+		(pin_names
+			(offset 0.127)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "U"
+			(at 0 5.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "LM339BPW"
+			(at 0 -5.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_SO:TSSOP-14_4.4x5mm_P0.65mm"
+			(at -1.27 2.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.ti.com/lit/ds/symlink/lm339b.pdf"
+			(at 1.27 5.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Quad differential comparator with open-collector outputs"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_locked" ""
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "cmp open collector"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_fp_filters" "TSSOP*4.4x5mm*P0.65mm*"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(symbol "LM339BPW_1_1"
+			(polyline
+				(pts
+					(xy -5.08 5.08) (xy 5.08 0) (xy -5.08 -5.08) (xy -5.08 5.08)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(polyline
+				(pts
+					(xy 3.302 -0.508) (xy 2.794 -0.508) (xy 3.302 0) (xy 2.794 0.508) (xy 2.286 0) (xy 2.794 -0.508)
+					(xy 2.286 -0.508)
+				)
+				(stroke
+					(width 0.127)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(pin input line
+				(at -7.62 2.54 0)
+				(length 2.54)
+				(name "+"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -7.62 -2.54 0)
+				(length 2.54)
+				(name "-"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin open_collector line
+				(at 7.62 0 180)
+				(length 2.54)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(symbol "LM339BPW_2_1"
+			(polyline
+				(pts
+					(xy -5.08 5.08) (xy 5.08 0) (xy -5.08 -5.08) (xy -5.08 5.08)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(polyline
+				(pts
+					(xy 3.302 -0.508) (xy 2.794 -0.508) (xy 3.302 0) (xy 2.794 0.508) (xy 2.286 0) (xy 2.794 -0.508)
+					(xy 2.286 -0.508)
+				)
+				(stroke
+					(width 0.127)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(pin input line
+				(at -7.62 2.54 0)
+				(length 2.54)
+				(name "+"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "7"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -7.62 -2.54 0)
+				(length 2.54)
+				(name "-"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "6"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin open_collector line
+				(at 7.62 0 180)
+				(length 2.54)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(symbol "LM339BPW_3_1"
+			(polyline
+				(pts
+					(xy -5.08 5.08) (xy 5.08 0) (xy -5.08 -5.08) (xy -5.08 5.08)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(polyline
+				(pts
+					(xy 3.302 -0.508) (xy 2.794 -0.508) (xy 3.302 0) (xy 2.794 0.508) (xy 2.286 0) (xy 2.794 -0.508)
+					(xy 2.286 -0.508)
+				)
+				(stroke
+					(width 0.127)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(pin input line
+				(at -7.62 2.54 0)
+				(length 2.54)
+				(name "+"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "11"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -7.62 -2.54 0)
+				(length 2.54)
+				(name "-"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "10"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin open_collector line
+				(at 7.62 0 180)
+				(length 2.54)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "13"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(symbol "LM339BPW_4_1"
+			(polyline
+				(pts
+					(xy -5.08 5.08) (xy 5.08 0) (xy -5.08 -5.08) (xy -5.08 5.08)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(polyline
+				(pts
+					(xy 3.302 -0.508) (xy 2.794 -0.508) (xy 3.302 0) (xy 2.794 0.508) (xy 2.286 0) (xy 2.794 -0.508)
+					(xy 2.286 -0.508)
+				)
+				(stroke
+					(width 0.127)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(pin input line
+				(at -7.62 2.54 0)
+				(length 2.54)
+				(name "+"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "9"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -7.62 -2.54 0)
+				(length 2.54)
+				(name "-"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "8"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin open_collector line
+				(at 7.62 0 180)
+				(length 2.54)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "14"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(symbol "LM339BPW_5_1"
+			(pin power_in line
+				(at -2.54 7.62 270)
+				(length 3.81)
+				(name "V+"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at -2.54 -7.62 90)
+				(length 3.81)
+				(name "V-"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "12"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+(symbol "Cell_OVP:TPS3700DDC"
+  (pin_names (offset 1.27))
+  (in_bom yes) (on_board yes)
+  (property "Reference" "U" (at 0 12.7 0) (effects (font (size 1.27 1.27))))
+  (property "Value" "TPS3700DDC" (at 0 10.16 0) (effects (font (size 1.27 1.27))))
+  (property "Footprint" "Package_TO_SOT_SMD:SOT-23-6" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+  (symbol "TPS3700DDC_0_1"
+    (rectangle (start -15.24 8.89) (end 15.24 -8.89)
+      (stroke (width 0.254) (type default)) (fill (type background))))
+  (symbol "TPS3700DDC_1_1"
+    (pin open_collector line (at 20.32 0 180) (length 5.08) (name "OUTA" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.016 1.016)))))
+    (pin power_in line (at 0 -13.97 90) (length 5.08) (name "GND" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.016 1.016)))))
+    (pin input line (at -20.32 0 0) (length 5.08) (name "INA+" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.016 1.016)))))
+    (pin input line (at -20.32 -5.08 0) (length 5.08) (name "INB-" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.016 1.016)))))
+    (pin power_in line (at 0 13.97 270) (length 5.08) (name "VDD" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.016 1.016)))))
+    (pin open_collector line (at 20.32 -5.08 180) (length 5.08) (name "OUTB" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.016 1.016))))))))
+(text "4S CELL OVERVOLTAGE INTERLOCK" (at 16.510 15.240 0) (effects (font (size 2.8 2.8) (bold yes)) (justify left)) (uuid "47505f99-94f1-4a9a-83de-5e5fdedd4362"))
+(text "Four unity-gain difference amplifiers and a wired-low charger EN clamp  |  engineering candidate" (at 16.510 22.860 0) (effects (font (size 1.55 1.55) ) (justify left)) (uuid "70838d79-eab3-4cb5-9df2-09b382d28524"))
+(text "CELL 1  |  CELL_1 - GND" (at 17.780 31.750 0) (effects (font (size 1.7 1.7) (bold yes)) (justify left)) (uuid "3aec330b-749c-4bf6-940c-7f9770553ac5"))
+(symbol (lib_id "Device:R") (at 45.720 41.910 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "a1692c1c-e721-481a-82fd-413aabec0d50") (property "Reference" "R401" (at 41.910 36.830 90) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "1 M / 0.1%" (at 36.830 39.370 90) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 45.720 41.910 90) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "53a2e65b-5e75-49f8-bb83-1bc921b3a77c")) (pin "2" (uuid "32513a31-eaaf-4080-b5d4-2ba1554bf624")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "R401") (unit 1)))))
+(symbol (lib_id "Device:R") (at 69.850 60.960 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "cb1338a1-a5be-4e76-804b-dd73c06d407d") (property "Reference" "R402" (at 73.660 59.690 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "1 M / 0.1%" (at 73.660 62.230 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 69.850 60.960 0) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "54e7735d-f1d8-40e0-9f93-64dfffa802e6")) (pin "2" (uuid "3c7e57cd-ddb4-4055-9806-8123505d0afe")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "R402") (unit 1)))))
+(symbol (lib_id "Device:R") (at 45.720 46.990 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "6f62b0e2-34b1-4ae1-9a2f-714f54959ba5") (property "Reference" "R403" (at 41.910 49.530 90) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "1 M / 0.1%" (at 36.830 52.070 90) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 45.720 46.990 90) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "2e475647-2746-46df-8991-cd884bc326e7")) (pin "2" (uuid "c93f5585-d038-4835-8404-cea684672006")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "R403") (unit 1)))))
+(symbol (lib_id "Device:R") (at 87.630 57.150 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "d1dcc86b-2719-4142-a98c-6510495f4f9d") (property "Reference" "R404" (at 83.820 59.690 90) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "1 M / 0.1%" (at 78.740 62.230 90) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 87.630 57.150 90) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "c659f7ef-5d99-4ebf-8ed6-c7f8c50add60")) (pin "2" (uuid "0338a5b3-d851-4054-9217-592bd9d8320e")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "R404") (unit 1)))))
+(wire (pts (xy 20.320 41.910) (xy 41.910 41.910)) (stroke (width 0) (type default)) (uuid "6c6aca3c-cb21-49e2-9ff5-b23ac927dbe6"))
+(global_label "CELL_1" (shape input) (at 20.320 41.910 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "1190422d-d9ed-46e6-8df9-5fc3a91185b4") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 20.320 41.910 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(wire (pts (xy 20.320 46.990) (xy 41.910 46.990)) (stroke (width 0) (type default)) (uuid "eb19321b-c8f5-4e27-ada4-02c20ec1aa28"))
+(global_label "GND" (shape input) (at 20.320 46.990 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "ea648fd3-320c-4eb5-974b-c9e0be045cc8") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 20.320 46.990 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(wire (pts (xy 49.530 41.910) (xy 69.850 41.910)) (stroke (width 0) (type default)) (uuid "b1fe9327-6d91-4f1b-85a8-c55a7f49f399"))
+(wire (pts (xy 69.850 41.910) (xy 88.900 41.910)) (stroke (width 0) (type default)) (uuid "98319992-b93b-4ac0-8ec6-1e51c9cb7ecb"))
+(wire (pts (xy 69.850 41.910) (xy 69.850 57.150)) (stroke (width 0) (type default)) (uuid "09511dd0-6cc2-4d75-8ef9-8585ea9a9390"))
+(junction (at 69.850 41.910) (diameter 0) (color 0 0 0 0) (uuid "1aa26062-b424-498d-ace1-d1a37f9c1ff7"))
+(wire (pts (xy 69.850 64.770) (xy 69.850 68.580)) (stroke (width 0) (type default)) (uuid "2b215cb4-75c1-4215-91cc-3a2ce0eed27e"))
+(global_label "GND" (shape input) (at 69.850 68.580 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "5c69b971-95bf-4897-b99f-25aae6ff950c") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 69.850 68.580 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(wire (pts (xy 49.530 46.990) (xy 62.230 46.990)) (stroke (width 0) (type default)) (uuid "7d73be64-255a-4344-aa8e-ebe437ce40ab"))
+(wire (pts (xy 62.230 46.990) (xy 88.900 46.990)) (stroke (width 0) (type default)) (uuid "5d1ba317-c70a-4ec1-9e28-8a9f972a0fc3"))
+(wire (pts (xy 62.230 46.990) (xy 62.230 57.150)) (stroke (width 0) (type default)) (uuid "750a6617-7db5-458d-be13-cfdffde982bf"))
+(wire (pts (xy 62.230 57.150) (xy 83.820 57.150)) (stroke (width 0) (type default)) (uuid "53335616-e74b-458d-934f-11dc71fd65e9"))
+(junction (at 62.230 46.990) (diameter 0) (color 0 0 0 0) (uuid "5623d0a6-d852-4a60-b77a-194f636adb08"))
+(wire (pts (xy 91.440 57.150) (xy 113.030 57.150)) (stroke (width 0) (type default)) (uuid "42f9e49c-b98d-4a9c-81ae-8a255726135d"))
+(wire (pts (xy 113.030 57.150) (xy 113.030 44.450)) (stroke (width 0) (type default)) (uuid "d8e74191-8025-4952-b68f-012d1aa4d6ef"))
+(wire (pts (xy 113.030 44.450) (xy 104.140 44.450)) (stroke (width 0) (type default)) (uuid "8c9cae56-0373-458d-bd1f-b0843c9011a1"))
+(wire (pts (xy 113.030 44.450) (xy 119.380 44.450)) (stroke (width 0) (type default)) (uuid "214bd277-1434-444c-8b78-b8ea100ffee8"))
+(wire (pts (xy 119.380 44.450) (xy 130.810 44.450)) (stroke (width 0) (type default)) (uuid "945a33cf-9211-4676-9a87-af92a9ad64e2"))
+(wire (pts (xy 130.810 44.450) (xy 130.810 46.990)) (stroke (width 0) (type default)) (uuid "0305c5f9-1835-4807-8fbc-cf157c54bea4"))
+(wire (pts (xy 130.810 46.990) (xy 148.590 46.990)) (stroke (width 0) (type default)) (uuid "db4da193-ef59-4b44-8b24-26dbfe7a64c9"))
+(junction (at 113.030 44.450) (diameter 0) (color 0 0 0 0) (uuid "95708f10-5cab-4111-925c-f0f7f467c641"))
+(label "VCELL_1" (at 119.380 44.450 0) (effects (font (size 1.1 1.1)) (justify left bottom)) (uuid "0a8ba758-ed52-472e-adba-05b8f28e138c"))
+(symbol (lib_id "Amplifier_Operational:OPA4197xPW") (at 96.520 44.450 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "e245f08a-7fdd-4d3c-81e8-6034a0fb5c65") (property "Reference" "U401" (at 92.710 35.560 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "OPA4197IPW" (at 90.170 38.100 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Package_SO:TSSOP-14_4.4x5mm_P0.65mm" (at 96.520 44.450 0) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "3" (uuid "95685e10-bc16-4679-bb39-08a3d764ab7a")) (pin "2" (uuid "0e9991f3-3f9a-4993-afa9-5a0768302b48")) (pin "1" (uuid "c3f14b18-8b2b-4511-8835-060ed1fe816f")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "U401") (unit 1)))))
+(wire (pts (xy 128.270 41.910) (xy 148.590 41.910)) (stroke (width 0) (type default)) (uuid "669be4af-bb2e-465e-a729-b8bda75fcfd3"))
+(label "OV_REF" (at 128.270 41.910 0) (effects (font (size 1.1 1.1)) (justify left bottom)) (uuid "5be1202a-57b9-4f9b-af76-c2c0efdf9088"))
+(symbol (lib_id "Cell_OVP:LM339BPW") (at 156.210 44.450 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "cca10783-c739-4951-8e47-2e5db03a8bcd") (property "Reference" "U402" (at 152.400 35.560 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "LM339BPW" (at 149.860 38.100 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Package_SO:TSSOP-14_4.4x5mm_P0.65mm" (at 156.210 44.450 0) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "5" (uuid "e4d087e4-73c6-4b3f-bc60-dddc21d3eb64")) (pin "4" (uuid "8a6d85d2-606f-4c07-8e9f-e4e723cf71aa")) (pin "2" (uuid "62681e1b-0b2e-4aff-9911-2df211181b49")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "U402") (unit 1)))))
+(wire (pts (xy 163.830 44.450) (xy 172.720 44.450)) (stroke (width 0) (type default)) (uuid "0d7d9252-90f5-4481-a2e1-afbbdf4c1f28"))
+(global_label "CHG_OVP_OD" (shape output) (at 172.720 44.450 180) (effects (font (size 1.0 1.0)) (justify left)) (uuid "46438434-0407-4ce1-b684-3084feb01c6c") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 172.720 44.450 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(text "CELL 2  |  CELL_2 - CELL_1" (at 17.780 71.120 0) (effects (font (size 1.7 1.7) (bold yes)) (justify left)) (uuid "0a809698-ca82-4653-858e-a18e65a8b342"))
+(symbol (lib_id "Device:R") (at 45.720 81.280 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "945ec999-6536-407d-ba25-11e791fdf1cb") (property "Reference" "R405" (at 41.910 76.200 90) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "1 M / 0.1%" (at 36.830 78.740 90) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 45.720 81.280 90) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "e36860b3-796f-4ead-b7d0-61278b4a36c9")) (pin "2" (uuid "c7a472de-e309-4473-81a5-2a501c2d49a0")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "R405") (unit 1)))))
+(symbol (lib_id "Device:R") (at 69.850 100.330 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "f5cbd680-00dc-49dd-a267-402c4ff517ca") (property "Reference" "R406" (at 73.660 99.060 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "1 M / 0.1%" (at 73.660 101.600 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 69.850 100.330 0) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "67bce9e4-2ba0-4328-9aa4-0f56665b8bca")) (pin "2" (uuid "8b537439-a002-4134-989b-b10579ae646f")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "R406") (unit 1)))))
+(symbol (lib_id "Device:R") (at 45.720 86.360 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "3a2b8759-cca7-4098-9761-acc4d29a8796") (property "Reference" "R407" (at 41.910 88.900 90) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "1 M / 0.1%" (at 36.830 91.440 90) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 45.720 86.360 90) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "0e444e1b-150f-4f83-9f68-0601bab8d40d")) (pin "2" (uuid "f5179a4f-6af6-4f14-a01f-d36856ed062d")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "R407") (unit 1)))))
+(symbol (lib_id "Device:R") (at 87.630 96.520 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "4a0ea4e9-5a0f-4e8a-aa9d-103b966c36c6") (property "Reference" "R408" (at 83.820 99.060 90) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "1 M / 0.1%" (at 78.740 101.600 90) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 87.630 96.520 90) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "11770aa4-1eb1-47eb-b22c-382770fd5990")) (pin "2" (uuid "37efb395-30b0-423f-979e-22c5dedcd660")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "R408") (unit 1)))))
+(wire (pts (xy 20.320 81.280) (xy 41.910 81.280)) (stroke (width 0) (type default)) (uuid "28f81c10-f1bc-4194-8e66-c0f9d5522871"))
+(global_label "CELL_2" (shape input) (at 20.320 81.280 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "40415bb6-2955-476a-a909-5aef8138630a") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 20.320 81.280 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(wire (pts (xy 20.320 86.360) (xy 41.910 86.360)) (stroke (width 0) (type default)) (uuid "8a0a9183-4d7b-401c-b281-fe0689a62935"))
+(global_label "CELL_1" (shape input) (at 20.320 86.360 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "cdbd93e0-80f0-43b6-bf5e-127b84612b2e") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 20.320 86.360 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(wire (pts (xy 49.530 81.280) (xy 69.850 81.280)) (stroke (width 0) (type default)) (uuid "894fb310-a7f0-489f-9a0d-a16dfc0ac994"))
+(wire (pts (xy 69.850 81.280) (xy 88.900 81.280)) (stroke (width 0) (type default)) (uuid "587e8665-6e9e-49bc-aec7-3f069f5a98c8"))
+(wire (pts (xy 69.850 81.280) (xy 69.850 96.520)) (stroke (width 0) (type default)) (uuid "dacd1fd4-2881-424e-84ad-24b58ffe9a22"))
+(junction (at 69.850 81.280) (diameter 0) (color 0 0 0 0) (uuid "424d6b79-70e9-4ccd-a5f5-087732a33d1c"))
+(wire (pts (xy 69.850 104.140) (xy 69.850 107.950)) (stroke (width 0) (type default)) (uuid "28bfa934-6ec8-44d2-9565-8b570bac2e69"))
+(global_label "GND" (shape input) (at 69.850 107.950 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "6eae92de-2241-4ec5-9d80-1045466bb805") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 69.850 107.950 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(wire (pts (xy 49.530 86.360) (xy 62.230 86.360)) (stroke (width 0) (type default)) (uuid "4331a96f-af09-4728-a47c-966a1918975c"))
+(wire (pts (xy 62.230 86.360) (xy 88.900 86.360)) (stroke (width 0) (type default)) (uuid "e89a0a60-9f53-4be6-9bf2-32de6f25ab99"))
+(wire (pts (xy 62.230 86.360) (xy 62.230 96.520)) (stroke (width 0) (type default)) (uuid "97f24959-abc6-4130-a01b-5275d7815c9f"))
+(wire (pts (xy 62.230 96.520) (xy 83.820 96.520)) (stroke (width 0) (type default)) (uuid "85a289be-d709-4615-b5ac-abe19e4f70cd"))
+(junction (at 62.230 86.360) (diameter 0) (color 0 0 0 0) (uuid "a8adf22d-5cb8-4fa9-9557-a6d3071d0122"))
+(wire (pts (xy 91.440 96.520) (xy 113.030 96.520)) (stroke (width 0) (type default)) (uuid "c7fb4ce5-513f-46ee-a6df-446acdc4f4d1"))
+(wire (pts (xy 113.030 96.520) (xy 113.030 83.820)) (stroke (width 0) (type default)) (uuid "433d85b4-5162-4c70-843b-0e28632354bd"))
+(wire (pts (xy 113.030 83.820) (xy 104.140 83.820)) (stroke (width 0) (type default)) (uuid "f6202efa-823c-44a8-8d97-de44db373a42"))
+(wire (pts (xy 113.030 83.820) (xy 119.380 83.820)) (stroke (width 0) (type default)) (uuid "7625d71a-4ecf-4390-a5c8-a51b6f98ffb2"))
+(wire (pts (xy 119.380 83.820) (xy 130.810 83.820)) (stroke (width 0) (type default)) (uuid "3109c25a-4bfb-41b4-9144-0a3b9903a537"))
+(wire (pts (xy 130.810 83.820) (xy 130.810 86.360)) (stroke (width 0) (type default)) (uuid "4e8592b3-1256-4223-8f23-db5627480c18"))
+(wire (pts (xy 130.810 86.360) (xy 148.590 86.360)) (stroke (width 0) (type default)) (uuid "c22ab5d4-45ab-4d07-a4bc-c4000caf19c8"))
+(junction (at 113.030 83.820) (diameter 0) (color 0 0 0 0) (uuid "981c8776-96f7-4afa-80e1-7500c6ef054a"))
+(label "VCELL_2" (at 119.380 83.820 0) (effects (font (size 1.1 1.1)) (justify left bottom)) (uuid "acd1c194-ee11-4dd4-a6ee-353ceab3f2df"))
+(symbol (lib_id "Amplifier_Operational:OPA4197xPW") (at 96.520 83.820 0) (unit 2) (in_bom yes) (on_board yes) (dnp no) (uuid "c649b33f-ad2c-4e03-8119-6695ce78c232") (property "Reference" "U401" (at 92.710 74.930 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "OPA4197IPW" (at 90.170 77.470 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Package_SO:TSSOP-14_4.4x5mm_P0.65mm" (at 96.520 83.820 0) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "5" (uuid "e8dcffd9-149a-40aa-95f4-61f14cc09a6a")) (pin "6" (uuid "bbf0a58e-8ab9-4f74-a3b2-5ee9d5db86ca")) (pin "7" (uuid "3cd7c13a-39ce-4a7c-8d4f-1238c1ec85c1")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "U401") (unit 2)))))
+(wire (pts (xy 128.270 81.280) (xy 148.590 81.280)) (stroke (width 0) (type default)) (uuid "c99c7398-110a-4a6f-a091-1d3a16af412a"))
+(label "OV_REF" (at 128.270 81.280 0) (effects (font (size 1.1 1.1)) (justify left bottom)) (uuid "602b1db2-37ae-4fc8-b07e-5c1db9ee059c"))
+(symbol (lib_id "Cell_OVP:LM339BPW") (at 156.210 83.820 0) (unit 2) (in_bom yes) (on_board yes) (dnp no) (uuid "15f50fff-1dda-4ff5-ba0c-86bfa143fb4d") (property "Reference" "U402" (at 152.400 74.930 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "LM339BPW" (at 149.860 77.470 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Package_SO:TSSOP-14_4.4x5mm_P0.65mm" (at 156.210 83.820 0) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "7" (uuid "2629dfc2-4271-46c0-932c-ec26c0a57cb2")) (pin "6" (uuid "a6f0a247-bfc5-47df-a19a-182faf7506b4")) (pin "1" (uuid "fc05c37b-2e29-4827-a21e-80b3b4492013")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "U402") (unit 2)))))
+(wire (pts (xy 163.830 83.820) (xy 172.720 83.820)) (stroke (width 0) (type default)) (uuid "330aad10-e05a-4c77-87b9-bc628360acfa"))
+(global_label "CHG_OVP_OD" (shape output) (at 172.720 83.820 180) (effects (font (size 1.0 1.0)) (justify left)) (uuid "5d0e68b7-81a5-4f04-a9c0-2b7216ecbef5") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 172.720 83.820 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(text "CELL 3  |  CELL_3 - CELL_2" (at 17.780 110.490 0) (effects (font (size 1.7 1.7) (bold yes)) (justify left)) (uuid "c547dc82-fc96-4778-b479-8b9909ee675e"))
+(symbol (lib_id "Device:R") (at 45.720 120.650 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "f0fde97c-bb04-4146-aa4b-2fdb92527c9d") (property "Reference" "R409" (at 41.910 115.570 90) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "1 M / 0.1%" (at 36.830 118.110 90) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 45.720 120.650 90) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "1a466533-935b-4183-ad34-2f5d33342f91")) (pin "2" (uuid "9e973fac-b9fd-4dc7-9d80-7499c2c914d4")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "R409") (unit 1)))))
+(symbol (lib_id "Device:R") (at 69.850 139.700 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "b95bcda3-e85c-4038-a482-ba43d69f7d87") (property "Reference" "R410" (at 73.660 138.430 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "1 M / 0.1%" (at 73.660 140.970 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 69.850 139.700 0) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "bb24200d-a9c9-4589-9f76-a20d9e071865")) (pin "2" (uuid "5b4923c5-0d01-44e7-9d5e-4ad001318c16")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "R410") (unit 1)))))
+(symbol (lib_id "Device:R") (at 45.720 125.730 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "d522fdaa-8a79-4618-8da9-a83c726d9b24") (property "Reference" "R411" (at 41.910 128.270 90) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "1 M / 0.1%" (at 36.830 130.810 90) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 45.720 125.730 90) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "4ad935d4-9b07-4768-9f8a-d885a87ef9da")) (pin "2" (uuid "04509a51-4395-4a34-ae8c-d43101d656c5")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "R411") (unit 1)))))
+(symbol (lib_id "Device:R") (at 87.630 135.890 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "ded86899-ace1-456f-a563-c69f362550dc") (property "Reference" "R412" (at 83.820 138.430 90) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "1 M / 0.1%" (at 78.740 140.970 90) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 87.630 135.890 90) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "c2fa59b3-4e2b-49ee-a3a4-3bb68b65b68f")) (pin "2" (uuid "f21fa6db-fd11-4afa-8708-22f9448ae55e")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "R412") (unit 1)))))
+(wire (pts (xy 20.320 120.650) (xy 41.910 120.650)) (stroke (width 0) (type default)) (uuid "ecefcfd6-8946-4e50-91e5-026a81a17aeb"))
+(global_label "CELL_3" (shape input) (at 20.320 120.650 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "c8d659fb-8d38-4abf-9fce-e62fc7802ca5") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 20.320 120.650 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(wire (pts (xy 20.320 125.730) (xy 41.910 125.730)) (stroke (width 0) (type default)) (uuid "7c5f4290-4a45-4294-be6d-4576ff379e91"))
+(global_label "CELL_2" (shape input) (at 20.320 125.730 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "5cfa6f3e-8689-4a69-b0bb-31671142663b") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 20.320 125.730 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(wire (pts (xy 49.530 120.650) (xy 69.850 120.650)) (stroke (width 0) (type default)) (uuid "4fcb7d2f-2593-43c3-82b8-9e6967a8f7a5"))
+(wire (pts (xy 69.850 120.650) (xy 88.900 120.650)) (stroke (width 0) (type default)) (uuid "60386f8e-9a10-4df1-b60e-d6c3c534fc33"))
+(wire (pts (xy 69.850 120.650) (xy 69.850 135.890)) (stroke (width 0) (type default)) (uuid "3d0a9bb2-bfc5-4b01-b448-bbfc14a71d17"))
+(junction (at 69.850 120.650) (diameter 0) (color 0 0 0 0) (uuid "3b6032d4-43a7-4b98-b1d4-7d28e0a59fe1"))
+(wire (pts (xy 69.850 143.510) (xy 69.850 147.320)) (stroke (width 0) (type default)) (uuid "269db545-3b23-420a-9076-40fc763a6443"))
+(global_label "GND" (shape input) (at 69.850 147.320 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "3457c273-abc4-4ed6-b959-cc8d6d5c702d") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 69.850 147.320 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(wire (pts (xy 49.530 125.730) (xy 62.230 125.730)) (stroke (width 0) (type default)) (uuid "d10b68f4-cd63-4625-9ec4-dbadd35e2191"))
+(wire (pts (xy 62.230 125.730) (xy 88.900 125.730)) (stroke (width 0) (type default)) (uuid "78a621b8-ab10-48eb-80d6-0b287c31c492"))
+(wire (pts (xy 62.230 125.730) (xy 62.230 135.890)) (stroke (width 0) (type default)) (uuid "34ee0dcb-0b87-4e4b-aa96-9cab51fbb166"))
+(wire (pts (xy 62.230 135.890) (xy 83.820 135.890)) (stroke (width 0) (type default)) (uuid "90968f96-7121-469e-b571-d8e9779ae3d2"))
+(junction (at 62.230 125.730) (diameter 0) (color 0 0 0 0) (uuid "b5449f60-a7db-49af-ae39-5d873f31a3b5"))
+(wire (pts (xy 91.440 135.890) (xy 113.030 135.890)) (stroke (width 0) (type default)) (uuid "a77f6e57-70b0-4d30-8fc0-02bf510ee87d"))
+(wire (pts (xy 113.030 135.890) (xy 113.030 123.190)) (stroke (width 0) (type default)) (uuid "39181998-fdae-40ed-aaf6-93b7dd1b52ac"))
+(wire (pts (xy 113.030 123.190) (xy 104.140 123.190)) (stroke (width 0) (type default)) (uuid "d7247929-e492-4684-a8b1-fb8b56a0c84e"))
+(wire (pts (xy 113.030 123.190) (xy 119.380 123.190)) (stroke (width 0) (type default)) (uuid "b444d282-2f52-4671-8f33-5b8e738b948d"))
+(wire (pts (xy 119.380 123.190) (xy 130.810 123.190)) (stroke (width 0) (type default)) (uuid "3d8aa3e2-ef60-4ca1-981c-557176241b9d"))
+(wire (pts (xy 130.810 123.190) (xy 130.810 125.730)) (stroke (width 0) (type default)) (uuid "a16c7d56-cdfb-49d8-8a14-d15ed4564dc1"))
+(wire (pts (xy 130.810 125.730) (xy 148.590 125.730)) (stroke (width 0) (type default)) (uuid "1f0b8f1f-e742-4e82-aa42-50cd1bbff2b8"))
+(junction (at 113.030 123.190) (diameter 0) (color 0 0 0 0) (uuid "1def54a6-1989-4b3b-ad6c-5959800a85c4"))
+(label "VCELL_3" (at 119.380 123.190 0) (effects (font (size 1.1 1.1)) (justify left bottom)) (uuid "7b3cfb5d-f939-4e11-9520-3588abd4dd73"))
+(symbol (lib_id "Amplifier_Operational:OPA4197xPW") (at 96.520 123.190 0) (unit 3) (in_bom yes) (on_board yes) (dnp no) (uuid "0eea7183-53c9-4837-acfd-18ba1dc9ee13") (property "Reference" "U401" (at 92.710 114.300 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "OPA4197IPW" (at 90.170 116.840 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Package_SO:TSSOP-14_4.4x5mm_P0.65mm" (at 96.520 123.190 0) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "10" (uuid "71904483-2b12-4f2c-af86-caff3c7bab8f")) (pin "9" (uuid "a5bb518f-5133-4031-b251-80af3f2a4829")) (pin "8" (uuid "bc239c5f-00af-4acb-ad31-e941c5c298ca")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "U401") (unit 3)))))
+(wire (pts (xy 128.270 120.650) (xy 148.590 120.650)) (stroke (width 0) (type default)) (uuid "6814cb88-e3ca-46a3-99d2-2236ab8375b9"))
+(label "OV_REF" (at 128.270 120.650 0) (effects (font (size 1.1 1.1)) (justify left bottom)) (uuid "0dde3195-036c-4eac-b4e2-60f3b12b3f20"))
+(symbol (lib_id "Cell_OVP:LM339BPW") (at 156.210 123.190 0) (unit 3) (in_bom yes) (on_board yes) (dnp no) (uuid "d415ae2d-3a85-47a1-97db-70b1ed8e4a9d") (property "Reference" "U402" (at 152.400 114.300 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "LM339BPW" (at 149.860 116.840 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Package_SO:TSSOP-14_4.4x5mm_P0.65mm" (at 156.210 123.190 0) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "11" (uuid "2aa4b2f4-7142-4445-837b-a88d1a3ac78d")) (pin "10" (uuid "325cea74-71c9-43ee-8142-98e189ec146d")) (pin "13" (uuid "2be96b68-c953-4eca-a1cc-fe140fa6d4d0")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "U402") (unit 3)))))
+(wire (pts (xy 163.830 123.190) (xy 172.720 123.190)) (stroke (width 0) (type default)) (uuid "930f8170-b305-488f-994a-344633876bff"))
+(global_label "CHG_OVP_OD" (shape output) (at 172.720 123.190 180) (effects (font (size 1.0 1.0)) (justify left)) (uuid "e2346772-2ba7-4749-a445-4adf93892c5d") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 172.720 123.190 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(text "CELL 4  |  PACK_4S - CELL_3" (at 17.780 149.860 0) (effects (font (size 1.7 1.7) (bold yes)) (justify left)) (uuid "51191cb4-ee6c-4bdf-badb-251846387a97"))
+(symbol (lib_id "Device:R") (at 45.720 160.020 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "a205eed5-df92-4e1c-87dc-e5c3610db853") (property "Reference" "R413" (at 41.910 154.940 90) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "1 M / 0.1%" (at 36.830 157.480 90) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 45.720 160.020 90) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "6751b314-04a8-4dcc-9dfa-e259654eeda4")) (pin "2" (uuid "bdf1172e-5f24-4cc1-b8b1-2c966f320d6c")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "R413") (unit 1)))))
+(symbol (lib_id "Device:R") (at 69.850 179.070 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "4ca9fa65-3b94-47a3-8a8e-2b5ff8b3a427") (property "Reference" "R414" (at 73.660 177.800 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "1 M / 0.1%" (at 73.660 180.340 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 69.850 179.070 0) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "ae39eb9d-eb9b-4e56-94e7-5feea6a27006")) (pin "2" (uuid "8a2da421-feda-4ab2-b1e0-cede148e1d06")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "R414") (unit 1)))))
+(symbol (lib_id "Device:R") (at 45.720 165.100 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "b5d72bbd-8dc3-4f21-be40-9e9c88b84d28") (property "Reference" "R415" (at 41.910 167.640 90) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "1 M / 0.1%" (at 36.830 170.180 90) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 45.720 165.100 90) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "7dbba8f5-f8e5-4c48-9dbe-793a56cab2ab")) (pin "2" (uuid "0621cdbc-36c8-4517-a0b4-1e6fa4e1f137")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "R415") (unit 1)))))
+(symbol (lib_id "Device:R") (at 87.630 175.260 90) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "e0e73acb-2de7-491e-90a8-2177fcb1ef31") (property "Reference" "R416" (at 83.820 177.800 90) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "1 M / 0.1%" (at 78.740 180.340 90) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 87.630 175.260 90) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "244c6f4c-311b-436e-b9a3-63c997e3757f")) (pin "2" (uuid "880d286f-134c-447c-8577-1424d996689e")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "R416") (unit 1)))))
+(wire (pts (xy 20.320 160.020) (xy 41.910 160.020)) (stroke (width 0) (type default)) (uuid "415203e4-9b0b-4aff-a65d-b1a7a07babd9"))
+(global_label "PACK_4S" (shape input) (at 20.320 160.020 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "72319f31-86b0-42a4-b3de-1fa7b9dbc42f") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 20.320 160.020 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(wire (pts (xy 20.320 165.100) (xy 41.910 165.100)) (stroke (width 0) (type default)) (uuid "6f2dc366-2abf-4d53-b6a4-7f5c3505b04e"))
+(global_label "CELL_3" (shape input) (at 20.320 165.100 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "0755ab5c-22ab-45f6-b7c7-f067501f5e9b") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 20.320 165.100 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(wire (pts (xy 49.530 160.020) (xy 69.850 160.020)) (stroke (width 0) (type default)) (uuid "b1d55325-d9bf-4e8c-b9b3-79ea6491ee96"))
+(wire (pts (xy 69.850 160.020) (xy 88.900 160.020)) (stroke (width 0) (type default)) (uuid "cb398b79-6372-4f0c-94f4-917150944213"))
+(wire (pts (xy 69.850 160.020) (xy 69.850 175.260)) (stroke (width 0) (type default)) (uuid "22f764d4-9c2f-41cb-803b-1735b31d6995"))
+(junction (at 69.850 160.020) (diameter 0) (color 0 0 0 0) (uuid "ea418b0f-1663-416d-8a75-e13029e52f0c"))
+(wire (pts (xy 69.850 182.880) (xy 69.850 186.690)) (stroke (width 0) (type default)) (uuid "631bd749-79c5-42ae-b67e-b4f6d68f7ba9"))
+(global_label "GND" (shape input) (at 69.850 186.690 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "087c120f-e5d8-4707-ad89-297c4037027f") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 69.850 186.690 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(wire (pts (xy 49.530 165.100) (xy 62.230 165.100)) (stroke (width 0) (type default)) (uuid "aec6d152-bd54-47c4-a60c-8e0ec7604b9f"))
+(wire (pts (xy 62.230 165.100) (xy 88.900 165.100)) (stroke (width 0) (type default)) (uuid "739a3d53-7b12-4649-9aaf-4a4fb042cba0"))
+(wire (pts (xy 62.230 165.100) (xy 62.230 175.260)) (stroke (width 0) (type default)) (uuid "a1b71845-e50a-4a89-94b9-9e61788f27bd"))
+(wire (pts (xy 62.230 175.260) (xy 83.820 175.260)) (stroke (width 0) (type default)) (uuid "d84c5eec-d97b-421c-8632-0c2682afba46"))
+(junction (at 62.230 165.100) (diameter 0) (color 0 0 0 0) (uuid "87b1d286-ba56-4b5d-bd48-927783077c0b"))
+(wire (pts (xy 91.440 175.260) (xy 113.030 175.260)) (stroke (width 0) (type default)) (uuid "0fa5d0e8-f8a3-46aa-aa45-3cd9ee4b73ae"))
+(wire (pts (xy 113.030 175.260) (xy 113.030 162.560)) (stroke (width 0) (type default)) (uuid "d9c4c27d-10f3-40b7-9604-cdc9dbf1c8e3"))
+(wire (pts (xy 113.030 162.560) (xy 104.140 162.560)) (stroke (width 0) (type default)) (uuid "1ac8e1b4-cd7d-4858-9888-195def54d6fa"))
+(wire (pts (xy 113.030 162.560) (xy 119.380 162.560)) (stroke (width 0) (type default)) (uuid "289a3b4d-ff3d-433d-a8bc-ed393a25e888"))
+(wire (pts (xy 119.380 162.560) (xy 130.810 162.560)) (stroke (width 0) (type default)) (uuid "7b50562c-e5f7-4d72-9bef-a5bc82613db2"))
+(wire (pts (xy 130.810 162.560) (xy 130.810 165.100)) (stroke (width 0) (type default)) (uuid "a5fd1ce6-8400-400c-9091-7a426cff5439"))
+(wire (pts (xy 130.810 165.100) (xy 148.590 165.100)) (stroke (width 0) (type default)) (uuid "1bc30d73-c218-4363-bb36-3cc0b97b71f7"))
+(junction (at 113.030 162.560) (diameter 0) (color 0 0 0 0) (uuid "4e613f03-9b64-4ce3-b24c-abf2d91a7e0a"))
+(label "VCELL_4" (at 119.380 162.560 0) (effects (font (size 1.1 1.1)) (justify left bottom)) (uuid "2afc5ca9-1422-4010-9031-84025f5d7944"))
+(symbol (lib_id "Amplifier_Operational:OPA4197xPW") (at 96.520 162.560 0) (unit 4) (in_bom yes) (on_board yes) (dnp no) (uuid "51f4f7ea-2857-44cb-931d-c90d13586807") (property "Reference" "U401" (at 92.710 153.670 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "OPA4197IPW" (at 90.170 156.210 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Package_SO:TSSOP-14_4.4x5mm_P0.65mm" (at 96.520 162.560 0) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "12" (uuid "04f3ffa0-eb88-4202-82e5-bf0add3959da")) (pin "13" (uuid "3109ffd5-33dd-461f-ad86-33c7cdc893f5")) (pin "14" (uuid "1a6efc0c-f992-4829-b70f-34f977ab765d")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "U401") (unit 4)))))
+(wire (pts (xy 128.270 160.020) (xy 148.590 160.020)) (stroke (width 0) (type default)) (uuid "b8c69018-86e0-4c68-b551-2829879c3985"))
+(label "OV_REF" (at 128.270 160.020 0) (effects (font (size 1.1 1.1)) (justify left bottom)) (uuid "c17ca170-6bf0-4e71-b2b9-67908adeb777"))
+(symbol (lib_id "Cell_OVP:LM339BPW") (at 156.210 162.560 0) (unit 4) (in_bom yes) (on_board yes) (dnp no) (uuid "352766c5-33ff-4a17-8029-e9d7b2ee27b7") (property "Reference" "U402" (at 152.400 153.670 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "LM339BPW" (at 149.860 156.210 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Package_SO:TSSOP-14_4.4x5mm_P0.65mm" (at 156.210 162.560 0) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "9" (uuid "c2e86b33-87cc-4417-addd-d8e180720771")) (pin "8" (uuid "c16182a2-938b-4d2c-a57f-5177e497e360")) (pin "14" (uuid "fca58c51-fc08-456f-9449-36ed5789d86c")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "U402") (unit 4)))))
+(wire (pts (xy 163.830 162.560) (xy 172.720 162.560)) (stroke (width 0) (type default)) (uuid "0b3b6185-0a8d-45d8-9169-5a96dc2ac80c"))
+(global_label "CHG_OVP_OD" (shape output) (at 172.720 162.560 180) (effects (font (size 1.0 1.0)) (justify left)) (uuid "5c1fd9f2-bd3d-47dd-8e51-900dcfcf9a25") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 172.720 162.560 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(text "POWER AND REFERENCE" (at 210.820 33.020 0) (effects (font (size 1.9 1.9) (bold yes)) (justify left)) (uuid "6dfd42e7-e403-4229-871f-9d9a994224ae"))
+(symbol (lib_id "Amplifier_Operational:OPA4197xPW") (at 223.520 58.420 0) (unit 5) (in_bom yes) (on_board yes) (dnp no) (uuid "ee77560f-1efb-44cc-be7c-e11dae3945c7") (property "Reference" "U401" (at 226.060 55.880 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "OPA4197IPW" (at 226.060 58.420 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Package_SO:TSSOP-14_4.4x5mm_P0.65mm" (at 223.520 58.420 0) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "4" (uuid "bac8a81a-9204-41ac-b563-b65c68a87934")) (pin "11" (uuid "464bf048-4683-4b36-84bc-e39b4a64edf6")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "U401") (unit 5)))))
+(wire (pts (xy 220.980 43.180) (xy 220.980 50.800)) (stroke (width 0) (type default)) (uuid "36e8d0dc-c9b0-43d8-a84b-d93971f09560"))
+(global_label "VIN_MAIN" (shape input) (at 220.980 43.180 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "3fcf6d3e-f59b-41fa-b436-9407265388b7") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 220.980 43.180 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(wire (pts (xy 220.980 66.040) (xy 220.980 73.660)) (stroke (width 0) (type default)) (uuid "b1066ef0-dc63-4ac5-b90e-e55672874523"))
+(global_label "GND" (shape input) (at 220.980 73.660 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "1b903ec0-26b2-450b-a887-2053a6f074d0") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 220.980 73.660 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(symbol (lib_id "Cell_OVP:LM339BPW") (at 261.620 58.420 0) (unit 5) (in_bom yes) (on_board yes) (dnp no) (uuid "1d10f9a6-495e-4ef1-8764-b3edd94d3313") (property "Reference" "U402" (at 264.160 55.880 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "LM339BPW" (at 264.160 58.420 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Package_SO:TSSOP-14_4.4x5mm_P0.65mm" (at 261.620 58.420 0) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "3" (uuid "ad2b0f47-3c10-4fc8-800e-160aed63341d")) (pin "12" (uuid "bd3ff29a-b65a-41a1-9901-c22c569e36bc")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "U402") (unit 5)))))
+(wire (pts (xy 259.080 43.180) (xy 259.080 50.800)) (stroke (width 0) (type default)) (uuid "daa83783-211c-4b88-9a4a-e34d14782715"))
+(global_label "VIN_MAIN" (shape input) (at 259.080 43.180 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "46576364-c1a2-4ac5-86df-6f34cdcb2609") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 259.080 43.180 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(wire (pts (xy 259.080 66.040) (xy 259.080 73.660)) (stroke (width 0) (type default)) (uuid "88aa2e77-2393-43fa-b466-98f4da7032d1"))
+(global_label "GND" (shape input) (at 259.080 73.660 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "b725b8af-2fec-4524-aa82-af126b48e698") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 259.080 73.660 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(symbol (lib_id "Device:C") (at 236.220 86.360 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "e5f64b5e-bd57-4da7-949c-e5fb4d28c1e2") (property "Reference" "C401" (at 240.030 85.090 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "100 nF" (at 240.030 87.630 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 236.220 86.360 0) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "0303b505-2b93-4c04-b624-3dec949e9bdf")) (pin "2" (uuid "101aaf67-7aef-49bc-bfce-2d00151e13e4")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "C401") (unit 1)))))
+(wire (pts (xy 236.220 76.200) (xy 236.220 82.550)) (stroke (width 0) (type default)) (uuid "16424754-d896-4cb1-a157-12400505160c"))
+(global_label "VIN_MAIN" (shape input) (at 236.220 76.200 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "7cff50f5-3147-44a5-86a3-3a8ce678ca43") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 236.220 76.200 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(wire (pts (xy 236.220 90.170) (xy 236.220 96.520)) (stroke (width 0) (type default)) (uuid "ae22d9ce-34e5-49ed-9a4f-8ea56be490cd"))
+(global_label "GND" (shape input) (at 236.220 96.520 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "be7e534d-b904-4149-9357-e87aac68889f") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 236.220 96.520 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(symbol (lib_id "Device:C") (at 273.050 86.360 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "af9c741b-ef1f-46f8-94ac-b302393042e3") (property "Reference" "C402" (at 276.860 85.090 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "100 nF" (at 276.860 87.630 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 273.050 86.360 0) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "70d0a685-edc6-43f8-bc79-a8c1e15a20bc")) (pin "2" (uuid "29c17053-6695-4728-a2f6-a31042c3e5fc")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "C402") (unit 1)))))
+(wire (pts (xy 273.050 76.200) (xy 273.050 82.550)) (stroke (width 0) (type default)) (uuid "62a6990e-69c3-4628-8ff1-a2f66a54c41f"))
+(global_label "VIN_MAIN" (shape input) (at 273.050 76.200 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "1665534a-408f-4eb0-bb11-0b9b761fff9a") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 273.050 76.200 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(wire (pts (xy 273.050 90.170) (xy 273.050 96.520)) (stroke (width 0) (type default)) (uuid "75b3be9b-333b-40df-9d35-18e89556b784"))
+(global_label "GND" (shape input) (at 273.050 96.520 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "ccce3726-5558-48db-98f6-254a94c40e72") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 273.050 96.520 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(symbol (lib_id "Cell_OVP:REF5025IDR") (at 238.760 116.840 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "4af2f7c6-2583-47ba-afa6-bdd01a43960c") (property "Reference" "U403" (at 228.600 102.870 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "REF5025IDR" (at 228.600 105.410 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" (at 238.760 116.840 0) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "ef50d2e9-715d-4a72-b421-270b07a3dbbd")) (pin "2" (uuid "c08d3ffd-9349-4a4c-bccf-1370461dd9f5")) (pin "3" (uuid "bbbf49bf-53f7-4be8-b88f-b64a30aed851")) (pin "4" (uuid "1efbce7b-8bc7-4eaa-a00e-49fc36ee99c9")) (pin "5" (uuid "3b322f3d-cdc7-4fda-8a89-707c2ce5b680")) (pin "6" (uuid "54f98cad-8068-4815-9fc9-c848de9cb5fd")) (pin "7" (uuid "86bb829e-5315-4827-9b6d-172f903f96d8")) (pin "8" (uuid "db124cab-f4cc-4dbf-990c-17a9e0b31316")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "U403") (unit 1)))))
+(wire (pts (xy 236.220 100.330) (xy 236.220 109.220)) (stroke (width 0) (type default)) (uuid "0b1fb6b2-85ec-49f2-a7bb-1be0e8259ee1"))
+(global_label "VIN_MAIN" (shape input) (at 236.220 100.330 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "d0684eff-fd1b-4d8d-8738-12664be8e02d") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 236.220 100.330 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(wire (pts (xy 236.220 124.460) (xy 236.220 130.810)) (stroke (width 0) (type default)) (uuid "dcf73ae0-5feb-48c0-9667-5fc3238cc2bb"))
+(global_label "GND" (shape input) (at 236.220 130.810 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "ce2bb766-c741-4694-af37-603dffb5e8e3") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 236.220 130.810 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(wire (pts (xy 248.920 114.300) (xy 260.350 114.300)) (stroke (width 0) (type default)) (uuid "815b769e-bb8f-45a3-8f4b-20bbb6a08af4"))
+(label "OV_REF" (at 260.350 114.300 0) (effects (font (size 1.1 1.1)) (justify left bottom)) (uuid "1a4b3edf-34b4-4436-b006-525b46b733b7"))
+(no_connect (at 231.140 114.300) (uuid "c81335d2-3b84-42a7-8e09-c6d6daa0abed"))
+(no_connect (at 228.600 116.840) (uuid "ffac5531-35b9-48f7-829e-6c0416e14117"))
+(no_connect (at 233.680 121.920) (uuid "e7f21d46-063b-42cd-8f8d-0d2347f2ffe7"))
+(no_connect (at 246.380 116.840) (uuid "0467e7ec-c43c-4d9d-8bc3-5b74a8b8d865"))
+(no_connect (at 248.920 119.380) (uuid "09c06852-f39b-4319-81c9-06fcb36d2665"))
+(symbol (lib_id "Device:C") (at 217.170 124.460 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "4350db07-83f2-4c37-baa1-9e4f6df88111") (property "Reference" "C403" (at 220.980 123.190 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "100 nF" (at 220.980 125.730 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 217.170 124.460 0) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "1bc03231-5a91-4e99-bc51-770e9d098459")) (pin "2" (uuid "8775dc6b-bb20-487c-a5e8-3a70a684f8be")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "C403") (unit 1)))))
+(wire (pts (xy 217.170 114.300) (xy 217.170 120.650)) (stroke (width 0) (type default)) (uuid "e874692d-de87-4146-a5e7-1ff96bb98dec"))
+(global_label "VIN_MAIN" (shape input) (at 217.170 114.300 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "1676338e-f146-4ba9-b97e-0c8cdad6fed0") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 217.170 114.300 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(wire (pts (xy 217.170 128.270) (xy 217.170 134.620)) (stroke (width 0) (type default)) (uuid "1aebf90f-9804-4c4f-af4f-ab547079a18f"))
+(global_label "GND" (shape input) (at 217.170 134.620 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "6bffe835-22d4-4152-a5d1-57340f10675f") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 217.170 134.620 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(symbol (lib_id "Device:C") (at 274.320 124.460 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "3237ec6b-95ec-4fc6-aea2-e26171260400") (property "Reference" "C404" (at 278.130 123.190 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "10 uF X7R" (at 278.130 125.730 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 274.320 124.460 0) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "16d26472-b9da-44e3-8218-67ad99853958")) (pin "2" (uuid "a35c47c1-6ed5-4842-8d61-ef5f76d50ec2")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "C404") (unit 1)))))
+(wire (pts (xy 274.320 114.300) (xy 274.320 120.650)) (stroke (width 0) (type default)) (uuid "cae37074-d725-41d3-a3ba-093e0b8dac3c"))
+(label "OV_REF" (at 274.320 114.300 0) (effects (font (size 1.1 1.1)) (justify left bottom)) (uuid "14a0f1e9-f236-417e-ab8c-464a1a8742d0"))
+(wire (pts (xy 274.320 128.270) (xy 274.320 134.620)) (stroke (width 0) (type default)) (uuid "bac1a11c-4b60-4ef5-b1e3-17ad601a6b04"))
+(global_label "GND" (shape input) (at 274.320 134.620 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "0484f4ca-6e81-4bb3-bd1a-612c4a51f759") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 274.320 134.620 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(text "Input and reference supervision" (at 210.820 149.860 0) (effects (font (size 1.55 1.55) (bold yes)) (justify left)) (uuid "dc4afb74-b8de-45b7-aea0-a1f949b69122"))
+(symbol (lib_id "Device:R") (at 224.790 163.830 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "6254dd99-7984-4da2-b999-b40df9673650") (property "Reference" "R417" (at 228.600 162.560 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "200 k / 1%" (at 228.600 165.100 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 224.790 163.830 0) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "dae90377-d404-4efe-84b4-7ca9d7d0add5")) (pin "2" (uuid "e58d0032-9b4a-44d3-a9df-ae49698a9147")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "R417") (unit 1)))))
+(symbol (lib_id "Device:R") (at 224.790 186.690 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "806d08ff-967a-451d-bd19-ed4c91a88a69") (property "Reference" "R418" (at 228.600 185.420 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "10.0 k / 1%" (at 228.600 187.960 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 224.790 186.690 0) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "2182941c-0e6e-4d87-86e0-2c51a204947e")) (pin "2" (uuid "30fec9e5-aa63-4693-aa13-d105829374dc")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "R418") (unit 1)))))
+(wire (pts (xy 224.790 156.210) (xy 224.790 160.020)) (stroke (width 0) (type default)) (uuid "6fcac4b5-beea-438c-8389-d43ba62f5f74"))
+(global_label "VIN_MAIN" (shape input) (at 224.790 156.210 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "9c2c63c5-af04-4568-a4df-caa02a12266b") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 224.790 156.210 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(wire (pts (xy 224.790 167.640) (xy 224.790 182.880)) (stroke (width 0) (type default)) (uuid "bfd8167d-6f99-4b59-8e9e-b148d7caeab0"))
+(label "SUP_MAIN_SENSE" (at 224.790 175.260 0) (effects (font (size 1.1 1.1)) (justify left bottom)) (uuid "3a751627-bc69-474f-8a40-f27cc0c271e3"))
+(wire (pts (xy 224.790 190.500) (xy 224.790 196.850)) (stroke (width 0) (type default)) (uuid "1a0775e2-1caf-45ec-b0bd-38fd21a5badf"))
+(global_label "GND" (shape input) (at 224.790 196.850 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "963ae7c4-b18d-4396-a610-330f1fb67ba3") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 224.790 196.850 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(symbol (lib_id "Device:R") (at 257.810 163.830 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "8b2e6d98-cc6b-41b9-9a51-03d5c7dd9d87") (property "Reference" "R419" (at 261.620 162.560 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "53.6 k / 0.1%" (at 261.620 165.100 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 257.810 163.830 0) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "8ee25bd9-2764-46ec-9573-a126c24619b6")) (pin "2" (uuid "71cf4e9b-1d92-44d2-8740-78e62ed2c47a")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "R419") (unit 1)))))
+(symbol (lib_id "Device:R") (at 257.810 186.690 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "9ee6559a-6bd8-4ffe-aa4d-a233efdda54d") (property "Reference" "R420" (at 261.620 185.420 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "10.0 k / 0.1%" (at 261.620 187.960 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 257.810 186.690 0) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "40403bac-8776-4ebe-8aa4-d8f8256e022b")) (pin "2" (uuid "a3d8965f-5ebc-4a3c-86cd-6ea06eb98c53")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "R420") (unit 1)))))
+(wire (pts (xy 257.810 156.210) (xy 257.810 160.020)) (stroke (width 0) (type default)) (uuid "b39551b1-4daa-4aa1-8703-fab1b64d633e"))
+(label "OV_REF" (at 257.810 156.210 0) (effects (font (size 1.1 1.1)) (justify left bottom)) (uuid "a1906aab-039c-4af3-ac84-c395daea5a32"))
+(wire (pts (xy 257.810 167.640) (xy 257.810 182.880)) (stroke (width 0) (type default)) (uuid "1a060fe4-c386-47fb-a889-d3560188cf93"))
+(label "SUP_REF_SENSE" (at 257.810 175.260 0) (effects (font (size 1.1 1.1)) (justify left bottom)) (uuid "767b516b-80a5-4c44-9d79-74990c8c636a"))
+(wire (pts (xy 257.810 190.500) (xy 257.810 196.850)) (stroke (width 0) (type default)) (uuid "68b451cf-3c37-45ad-a080-2a2a2406f2e3"))
+(global_label "GND" (shape input) (at 257.810 196.850 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "4871997f-ccf7-4baa-b2ee-11be37e70dfe") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 257.810 196.850 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(symbol (lib_id "Cell_OVP:TPS3700DDC") (at 322.580 175.260 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "67f10d3d-058c-4ed3-8a58-2b6043af1d39") (property "Reference" "U404" (at 312.420 161.290 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "TPS3700DDC" (at 312.420 163.830 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Package_TO_SOT_SMD:SOT-23-6" (at 322.580 175.260 0) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "240e152e-bb17-46d4-a622-fd8562100f4c")) (pin "2" (uuid "fd656ea9-56c0-4b0d-98f7-f58356fc5ea1")) (pin "3" (uuid "b4ad60fc-bc40-4d28-b5a2-891123e73292")) (pin "4" (uuid "c93d11b1-f940-41d4-9cac-d4672aa51883")) (pin "5" (uuid "29669ef4-46e7-47da-874d-5d6d6fa2f457")) (pin "6" (uuid "c94e8391-3388-4035-adc3-225a3f264d60")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "U404") (unit 1)))))
+(wire (pts (xy 322.580 153.670) (xy 322.580 161.290)) (stroke (width 0) (type default)) (uuid "e67ac8d0-0d8b-4219-9d7d-947c68183604"))
+(global_label "VIN_MAIN" (shape input) (at 322.580 153.670 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "c36f7ac9-ff67-4aac-a4ac-434d5de8d60d") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 322.580 153.670 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(wire (pts (xy 322.580 189.230) (xy 322.580 195.580)) (stroke (width 0) (type default)) (uuid "76fe476b-5e3b-4826-9935-3665b1bfb1ed"))
+(global_label "GND" (shape input) (at 322.580 195.580 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "af9a06b8-e27b-4dff-9ed3-02d76653f54a") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 322.580 195.580 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(wire (pts (xy 276.860 175.260) (xy 302.260 175.260)) (stroke (width 0) (type default)) (uuid "32ff1997-5348-405e-a497-fd5cfd5d443a"))
+(label "SUP_MAIN_SENSE" (at 276.860 175.260 0) (effects (font (size 1.1 1.1)) (justify left bottom)) (uuid "328ff36a-af7b-4113-8fd9-ca2b6e67b20b"))
+(wire (pts (xy 276.860 180.340) (xy 302.260 180.340)) (stroke (width 0) (type default)) (uuid "9d2e548c-c3ff-48b8-b348-33abaeeec491"))
+(label "SUP_REF_SENSE" (at 276.860 180.340 0) (effects (font (size 1.1 1.1)) (justify left bottom)) (uuid "01c5715f-7c2d-48a4-b52d-f88d7192ab7f"))
+(wire (pts (xy 342.900 175.260) (xy 347.980 175.260)) (stroke (width 0) (type default)) (uuid "8e024d5b-f128-4dbb-be9a-1877bddf08c5"))
+(global_label "CHG_OVP_OD" (shape output) (at 347.980 175.260 180) (effects (font (size 1.0 1.0)) (justify left)) (uuid "1e047a14-30e4-40d8-94f5-b5c9060be0f0") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 347.980 175.260 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(wire (pts (xy 342.900 180.340) (xy 347.980 180.340)) (stroke (width 0) (type default)) (uuid "fa34edf5-7ed3-4ceb-a704-7702f62196fc"))
+(global_label "CHG_OVP_OD" (shape output) (at 347.980 180.340 180) (effects (font (size 1.0 1.0)) (justify left)) (uuid "c90f6419-59e0-44c7-a17b-800af0f6abd7") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 347.980 180.340 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(symbol (lib_id "Device:C") (at 353.060 154.940 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "3f3a3c98-af32-4c62-b3fb-91e26f044a4e") (property "Reference" "C405" (at 356.870 153.670 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Value" "100 nF" (at 356.870 156.210 0) (effects (font (size 1.1 1.1)) (justify left) )) (property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 353.060 154.940 0) (effects (font (size 1.1 1.1)) (justify left) (hide yes))) (pin "1" (uuid "79ec2fa6-ca34-4977-bda9-38ae54dffd07")) (pin "2" (uuid "e8eba09c-b287-4867-aa6d-26f684ac4d30")) (instances (project "supercap-ups-4s" (path "/4f184fe9-3a22-483f-9ea4-3479fb50ee2d/a114de55-bafe-597e-88e7-07878af0964b" (reference "C405") (unit 1)))))
+(wire (pts (xy 353.060 144.780) (xy 353.060 151.130)) (stroke (width 0) (type default)) (uuid "2af57842-be82-4b70-9e57-52ab05c91b57"))
+(global_label "VIN_MAIN" (shape input) (at 353.060 144.780 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "47a5901b-ff49-49ad-b7f4-99bcb9749cba") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 353.060 144.780 0) (effects (font (size 1.0 1.0)) (hide yes))))
+(wire (pts (xy 353.060 158.750) (xy 353.060 165.100)) (stroke (width 0) (type default)) (uuid "f2bc095f-d131-4cdb-a7f2-05a53ecc9209"))
+(global_label "GND" (shape input) (at 353.060 165.100 0) (effects (font (size 1.0 1.0)) (justify right)) (uuid "d2f1d3d6-a51c-433e-aa05-b7852963ef48") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 353.060 165.100 0) (effects (font (size 1.0 1.0)) (hide yes))))
+
+
+(text "CHG_OVP_OD: connect directly to charger EN clamp node." (at 212.090 204.470 0) (effects (font (size 1.5 1.5) (bold yes)) (justify left)) (uuid "3d79250b-1744-4831-9e71-485aca555c7e"))
+(text "CHG_ALLOW must stay low / high-Z until analog power and VREF settle." (at 212.090 210.820 0) (effects (font (size 1.35 1.35) ) (justify left)) (uuid "85a80068-846c-4666-bc5d-04ccec99fb19"))
+(text "No local pull-up. Analog circuit releases when all measured faults clear." (at 212.090 217.170 0) (effects (font (size 1.35 1.35) ) (justify left)) (uuid "8914e9bd-1c68-4602-8bb3-0cf861606163"))
+(text "Verify automatic retry, tap opens, power-down backfeed and stop latency on bench." (at 212.090 223.520 0) (effects (font (size 1.35 1.35) ) (justify left)) (uuid "a9b1822c-19d2-4438-8dc6-5007125856eb"))
+)
