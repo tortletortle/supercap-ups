@@ -4,15 +4,19 @@ on:
   push:
     branches:
       - power-stage-integration
+      - p0-ov2-fault-closure
     paths:
       - "sim/design_convergence/**"
+      - "sim/backup_transfer/**"
       - "hardware/kicad/**"
       - ".github/workflows/power-stage-design-check.yml"
   pull_request:
     branches:
       - main
+      - power-stage-integration
     paths:
       - "sim/design_convergence/**"
+      - "sim/backup_transfer/**"
       - "hardware/kicad/**"
       - ".github/workflows/power-stage-design-check.yml"
   workflow_dispatch:
@@ -34,6 +38,14 @@ jobs:
         run: python3 -B sim/design_convergence/power_stage_budget.py
       - name: Validate BOM, protection map, acceptance matrix, and schematic structure
         run: python3 -B sim/design_convergence/check_artifacts.py
+      - name: Run OV2 residual-bias corners
+        run: python3 -B sim/backup_transfer/check_ov2_bias.py
+      - name: Run residual-IN2 route scenarios
+        run: python3 -B sim/backup_transfer/check_residual_input.py
+      - name: Run design-validator regression tests
+        run: python3 -m unittest discover -s sim/design_convergence -p 'test_*.py' -v
+      - name: Run eFuse and backup-ready tests
+        run: python3 -m unittest discover -s sim/backup_transfer -p 'test_*.py' -v
       - name: Create KiCad artifact directory
         run: mkdir -p artifacts
       - name: Run KiCad 9 hierarchical ERC report

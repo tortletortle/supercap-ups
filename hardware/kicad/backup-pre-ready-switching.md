@@ -53,3 +53,20 @@ TPS2121 的 IN2 下降欠压门槛最低为 2.4 V。若仅用分压给 OV2，保
 运行 `python3 -B sim/backup_transfer/check_ov2_bias.py` 检查分压电阻公差、漏电及导通角落。临时输入包络上限取 13.2 V，钳位包络取 2.40–2.60 V，低压区总漏电预算取 ±10 µA，NMOS 导通等效电阻上限取 100 Ω。三项是模型预算，须用最终器件和控制轨保证值核对。重点验证 ATL431LI 在临界电压附近的分流电流和动态稳定性、栅极下降到关断的传播延迟、以及从保护故障到选路生效的时间差。静态计算未包含两路同时变化导致的瞬态竞态。
 
 - [TI ATL431LI 数据手册](https://www.ti.com/lit/ds/symlink/atl431li.pdf)
+
+
+## eFuse 变体评审（TI TPS25947 Rev C，2026-05）
+
+当前 BOM 的 U902 是 TPS259470ARPW。该型号属于 470A：提供 AUXOFF 与 FLT，采用主动电流限制并在相应故障后自动重试；它没有 PG/PGTH。AUXOFF 仅表示输入电压有效且 inrush 完成，数据手册明确列出过流、短路、反向电流和过温时 AUXOFF 仍为高。因此 AUXOFF 不能作为负载侧输出 Power-Good。470L 可改为锁存故障响应，但仍没有 PG/PGTH。
+
+下一轮优先评估 TPS259474LRPW：它提供 PG/PGTH、Circuit Breaker 和 Latch-Off。1.65 kΩ R_ILM 对应的电气特性范围为 1.800–2.200 A，典型 2.028 A；高于 1 A 稳态负载，但必须把 eFuse 输出电容充电电流、Boost 启动、负载阶跃和 TPS2121 输入浪涌一起计入。不能只按 1 A 稳态电流放行。
+
+**PGTH 必须从 eFuse OUT 分压，而不是从 IN 分压**，这样 PG 才代表真正送到 TPS2121 IN2 的输出电压。分压关系为 V_PGTH = V_OUT × R_BOTTOM / (R_TOP + R_BOTTOM)。输出欠压门槛要由负载允许的最小电压和 eFuse 压降反推；当前负载 V_MIN/V_MAX 仍未提供，所以分压值暂不冻结。
+
+TI Rev C 给出的 PGTH 上升阈值为 1.183–1.223 V，下降阈值为 1.076–1.116 V。PG 的 assertion/deassertion deglitch 均为 12 µs typical，未给出可用于系统最坏时序证明的最大值。输出硬短路时，PG 由 PGTH 决定：如果 C_OUT 残压仍使 PGTH 高于门槛，PG 可以暂时保持高；电压跌破下降阈值后才会撤销。因此必须保留独立的快速输出窗口检测/OV2 否决路径，并由系统锁存记住 PG/输出窗口失效，不能等电压恢复后自动重新 READY。
+
+器件故障语义也必须区分：TPS259474L 对持续 Circuit-Breaker 过流和过温可锁存关断；数据手册 Table 7-3 对输出短路列出的响应是 fast-trip followed by current-limit，内部 fault-latched 为 N。短路故障仍需外部锁存。内部锁存清除需把 VIN 拉到 0 V 后重新上电，或把 EN/UVLO 拉到 V_SD 以下；仅仅拉低到普通 UVLO falling threshold 附近不足以清除。
+
+PG 为开漏输出。器件未供电时没有主动下拉保证 PG 到 0 V；如果逻辑上拉电源仍存在，接收端必须通过默认低的输入网络/缓冲器与掉电隔离设计，禁止把浮空或残压误判为有效 READY。
+
+**工程决定：** 将 TPS259474LRPW 提升为下一轮主候选，保留 TPS259470ARPW 作为对照/备选；在负载电压窗口、PGTH 分压、短路外部锁存、EN 复位路径、浪涌和热验证完成前，不修改为正式冻结 BOM，也不落未经验证的器件连线。依据：[TI TPS25947 Rev C 数据手册](https://www.ti.com/lit/ds/slvsfc9c/slvsfc9c.pdf)。
