@@ -128,7 +128,7 @@ def main() -> None:
     allowed_status = {"MODEL_ONLY", "NOT_TESTED", "BLOCKED_SPEC"}
     require(all(row["status"] in allowed_status for row in tests),
             "acceptance matrix contains an unknown or release-like status")
-    require({"SYS-001", "CHG-002", "CELL-UV-001", "MUX-002", "SAFE-001", "ILK-001", "ILK-009"}.issubset(set(test_ids)),
+    require({"SYS-001", "CHG-002", "CELL-UV-001", "MUX-002", "SAFE-001", "ILK-001", "ILK-009", "MUX-005", "MUX-006", "MUX-007", "MUX-008", "MUX-009"}.issubset(set(test_ids)),
             "acceptance matrix is missing a critical subsystem test")
 
     design = design_path.read_text(encoding="utf-8")
