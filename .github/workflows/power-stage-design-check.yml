@@ -1,0 +1,40 @@
+name: power-stage-design-check
+
+on:
+  push:
+    branches:
+      - power-stage-integration
+    paths:
+      - "sim/design_convergence/**"
+      - "hardware/kicad/BOM_PRELIMINARY.csv"
+      - "hardware/kicad/POWER_STAGE_DESIGN_CONVERGENCE.md"
+      - "hardware/kicad/cell-uv-monitor-design.md"
+      - "hardware/kicad/README.md"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "sim/design_convergence/**"
+      - "hardware/kicad/BOM_PRELIMINARY.csv"
+      - "hardware/kicad/POWER_STAGE_DESIGN_CONVERGENCE.md"
+      - "hardware/kicad/cell-uv-monitor-design.md"
+      - "hardware/kicad/README.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-design-budget:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run EOL power-stage budget
+        run: python3 -B sim/design_convergence/power_stage_budget.py
+      - name: Validate BOM, protection map, and acceptance matrix
+        run: python3 -B sim/design_convergence/check_artifacts.py
