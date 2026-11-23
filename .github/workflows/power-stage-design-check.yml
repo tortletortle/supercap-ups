@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - power-stage-integration
+      - audit/backup-ready-residual-fault
     paths:
       - "sim/design_convergence/**"
       - "sim/backup_transfer/**"
@@ -14,6 +15,7 @@ on:
       - main
     paths:
       - "sim/design_convergence/**"
+      - "sim/backup_transfer/**"
       - "hardware/kicad/**"
       - ".github/workflows/power-stage-design-check.yml"
   workflow_dispatch:
