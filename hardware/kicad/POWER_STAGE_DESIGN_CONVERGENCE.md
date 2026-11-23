@@ -120,7 +120,7 @@ TPS54302 的外部 CV（OPA333）与 CC（TLV9001/INA180）均通过注入 FB �
 | 4 | `hardware/kicad/power-mux.kicad_sch`（新增） | TPS2121、TPS25947、IN2 残压否决、BACKUP_READY、LOAD_12V 和反灌测点。 |
 | 5 | `hardware/kicad/pack-discharge-switch.kicad_sch` | DISCHARGE_ARM 改接锁存输出；CELL_UV_FAULT 与 PACK_UV_OK 硬件撤销许可；复核 P-MOS VGS、热态 RDS(on) 和单管短路故障。 |
 | 6 | `hardware/kicad/supercap-ups-charger.kicad_sch` / `precision-cv-ovp.kicad_sch` | 只在完成环路和故障逻辑验证后更新补偿、CV/OVP 和 Q601 门控；保留单体 OVP 独立路径。 |
-| 7 | `hardware/kicad/BOM.csv`（新增） | 增加 RefDes、功能、制造商、MPN、封装、额定值、容差/TCR、温度范围、生命周期、替代料、供应商 SKU、证据 URL、样品测量、仿真状态和放行状态。 |
+| 7 | `hardware/kicad/BOM_PRELIMINARY.csv`（本轮新增） | 记录当前 MPN/封装候选、额定值、替代料、验证状态和未关闭事项；完成样品/封装/热校核后再冻结正式 BOM。 |
 | 8 | `sim/design_convergence/`（新增） | 保持时间解析预算、联合角点、系统验收矩阵和复跑说明；后续增加 BQ76905 CUV、MUX 残压和充电环路仿真。 |
 
 ### 推荐测试点
