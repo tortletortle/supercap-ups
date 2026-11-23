@@ -99,40 +99,99 @@ def hold_time_s(
     It does not include cell mismatch, temperature, leakage, balancing loss,
     switching transients, converter current limit, or switchover dynamics.
     """
+    return hold_time_from_pack_equivalents_s(
+        initial_pack_ocv_v,
+        pack.pack_equivalent_cap_f,
+        pack.pack_dc_esr_ohm,
+        boost_efficiency,
+        pack_cutoff_v=pack.pack_cutoff_v,
+        output_power_w=output_power_w,
+        path_efficiency=path_efficiency,
+    )
+
+
+def hold_time_from_pack_equivalents_s(
+    initial_pack_ocv_v: float,
+    equivalent_capacitance_f: float,
+    pack_dc_esr_ohm: float,
+    boost_efficiency: float,
+    *,
+    pack_cutoff_v: float = PACK_CUTOFF_V,
+    output_power_w: float = P_OUT_W,
+    path_efficiency: float = PATH_EFFICIENCY,
+) -> float:
+    """Hold time for arbitrary series-pack Ceq/ESR, including mismatched cells."""
+    if equivalent_capacitance_f <= 0.0:
+        raise ValueError("equivalent_capacitance_f must be positive")
     if not 0.0 < boost_efficiency <= 1.0:
         raise ValueError("boost_efficiency must be in (0, 1]")
-    if output_power_w <= 0.0:
-        raise ValueError("output_power_w must be positive")
     if not 0.0 < path_efficiency <= 1.0:
         raise ValueError("path_efficiency must be in (0, 1]")
+    if output_power_w <= 0.0:
+        raise ValueError("output_power_w must be positive")
 
     capacitor_input_power_w = output_power_w / (
         boost_efficiency * path_efficiency
     )
     state = solve_loaded_state(
-        initial_pack_ocv_v, pack.pack_dc_esr_ohm, capacitor_input_power_w
+        initial_pack_ocv_v, pack_dc_esr_ohm, capacitor_input_power_w
     )
     if state is None:
         return 0.0
 
     _, initial_terminal_v = state
-    cutoff_v = pack.pack_cutoff_v
-    if initial_terminal_v <= cutoff_v:
+    if initial_terminal_v <= pack_cutoff_v:
         return 0.0
 
-    # Invert Voc = Vterminal + R*P/Vterminal, then integrate
-    # dVoc/dt = -I/C with I=P/Vterminal.
-    resistance_power = pack.pack_dc_esr_ohm * capacitor_input_power_w
+    resistance_power = pack_dc_esr_ohm * capacitor_input_power_w
     integral_v2 = 0.5 * (
-        initial_terminal_v**2 - cutoff_v**2
-    ) - resistance_power * math.log(initial_terminal_v / cutoff_v)
+        initial_terminal_v**2 - pack_cutoff_v**2
+    ) - resistance_power * math.log(initial_terminal_v / pack_cutoff_v)
+    return equivalent_capacitance_f * integral_v2 / capacitor_input_power_w
 
-    return (
-        pack.pack_equivalent_cap_f
-        * integral_v2
-        / capacitor_input_power_w
-    )
 
+def first_cell_ovp_charge_state(
+    cell_capacitances_f: tuple[float, ...] | list[float],
+    cell_ovp_v: float,
+) -> dict[str, float | list[float]]:
+    """Ideal series-charge state when the lowest-capacitance cell first trips.
+
+    The same charge passes through each series capacitor. This is a worst-case
+    capacity-mismatch calculation, not a dynamic balancing simulation.
+    """
+    if len(cell_capacitances_f) < 2:
+        raise ValueError("at least two series cells are required")
+    if any(cap <= 0.0 for cap in cell_capacitances_f):
+        raise ValueError("cell capacitances must be positive")
+    if cell_ovp_v <= 0.0:
+        raise ValueError("cell_ovp_v must be positive")
+
+    weakest_cap_f = min(cell_capacitances_f)
+    charge_c = weakest_cap_f * cell_ovp_v
+    cell_voltages = [charge_c / cap for cap in cell_capacitances_f]
+    reciprocal_capacitance = sum(1.0 / cap for cap in cell_capacitances_f)
+    equivalent_capacitance_f = 1.0 / reciprocal_capacitance
+    return {
+        "charge_c": charge_c,
+        "pack_ocv_v": sum(cell_voltages),
+        "equivalent_capacitance_f": equivalent_capacitance_f,
+        "first_trip_cell_v": max(cell_voltages),
+        "minimum_cell_v": min(cell_voltages),
+        "maximum_cell_v": max(cell_voltages),
+        "cell_voltages_v": cell_voltages,
+    }
+
+
+def passive_balancer_current_a(
+    cell_voltage_v: float,
+    resistance_ohm: float,
+) -> float:
+    """DC current through a resistor bleeder across one capacitor cell."""
+    if cell_voltage_v < 0.0:
+        raise ValueError("cell_voltage_v must be non-negative")
+    if resistance_ohm <= 0.0:
+        raise ValueError("resistance_ohm must be positive")
+    return cell_voltage_v / resistance_ohm
 
 def minimum_initial_ocv_v(
     boost_efficiency: float,
