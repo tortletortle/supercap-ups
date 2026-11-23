@@ -144,7 +144,7 @@ def main() -> None:
         require(token in cell_uv, f"4S cell-monitor design missing interface/filter rule: {token}")
     require("cell-uv-monitor.kicad_sch" in design and "cell-uv-monitor.kicad_sch" in readme,
             "BQ76905 schematic page must be linked from design review and README")
-    for token in ("ARM_PERMIT", "SN74LVC1G74", "TPS3839G33", "D910", "STARTUP_TIMEOUT", "not implemented"):
+    for token in ("ARM_PERMIT", "SN74LVC1G74", "TPS3839G33", "D910", "STARTUP_TIMEOUT", "尚未实现"):
         require(token.lower() in interlock_design.lower(), f"interlock design missing rule: {token}")
     require("system-interlock.kicad_sch" in readme, "system interlock schematic must be linked from README")
     require('(lib (name "Power_Interlock")' in sym_table, "symbol table is missing Power_Interlock library")
