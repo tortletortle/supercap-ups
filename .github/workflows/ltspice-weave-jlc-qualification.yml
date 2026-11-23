@@ -77,7 +77,7 @@ jobs:
           root = Path("artifacts/tps61088-weave-jlc-preflight")
           asc = root / "eol_1p2s.asc"
           text = asc.read_text(encoding="latin-1")
-          symbols = sorted(set(re.findall(r"^\\s*SYMBOL\\s+(\\S+)", text, re.M)), key=str.lower)
+          symbols = sorted(set(re.findall(r"^\s*SYMBOL\s+(\S+)", text, re.M)), key=str.lower)
           asy_files = {p.stem.lower(): p.name for p in root.glob("*.asy")}
           report = [
             "# Weave conversion preflight",
@@ -101,8 +101,8 @@ jobs:
             "This is the eol_1p2s.cir simulation testbench. The generated __blockN symbol is a synthetic macro-model pin carrier, not the real TPS61088 package pinout and not a PCB footprint.",
             "The existing eol_1p2s.log references work/lt_probe/TPS61088_LT.LIB; this CI run preserves the repository model file and does not claim that the old log proves this exact model copy was re-simulated.",
           ]
-          (root / "conversion-report.md").write_text("\\n".join(report) + "\\n", encoding="utf-8")
-          (root / "required-asy-symbols.txt").write_text("\\n".join(symbols) + "\\n", encoding="utf-8")
+          (root / "conversion-report.md").write_text("\n".join(report) + "\n", encoding="utf-8")
+          (root / "required-asy-symbols.txt").write_text("\n".join(symbols) + "\n", encoding="utf-8")
           def sha(p):
             h = hashlib.sha256()
             with p.open("rb") as f:
@@ -123,7 +123,7 @@ jobs:
             "jlc_gui_import": "NOT_RUN",
             "production_ready": False,
           }
-          (root / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+          (root / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           (cd artifacts/tps61088-weave-jlc-preflight && sha256sum * > SHA256SUMS.txt)
 
