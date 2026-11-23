@@ -21,8 +21,6 @@ def read_table(path: Path, expected_columns: int) -> tuple[list[str], list[dict[
     for index, row in enumerate(rows, start=2):
         if None in row or any(value is None for value in row.values()):
             raise SystemExit(f"{path}:{index}: malformed CSV row")
-        if any(not value.strip() for value in row.values()):
-            raise SystemExit(f"{path}:{index}: blank required field")
     return list(reader.fieldnames), rows
 
 
@@ -47,8 +45,14 @@ def main() -> None:
     require(required_bom_columns.issubset(set(bom_header)), "BOM schema is missing required fields")
     refs = [row["RefDes"] for row in bom_rows]
     require(len(refs) == len(set(refs)), "BOM RefDes groups must be unique")
-    require(all(row["MPN"].strip() and row["Status"].strip() for row in bom_rows),
-            "every BOM row must identify an MPN or explicit TBD and a status")
+    required_bom_values = (
+        "RefDes", "Subsystem", "Manufacturer", "MPN", "Value_or_Rating",
+        "Footprint_or_Package", "Key_Rating_or_Constraint", "Status", "Open_Checks",
+    )
+    require(all(all(row[key].strip() for key in required_bom_values) for row in bom_rows),
+            "every BOM row must identify its part, rating, package, status, and open checks")
+    require(all(all(value.strip() for value in row.values()) for row in tests),
+            "every acceptance test field must be populated")
     require(not any(row["Status"].lower() in {"released", "approved", "production"} for row in bom_rows),
             "preliminary BOM must not silently mark unqualified parts as released")
 
