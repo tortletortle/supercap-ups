@@ -1,0 +1,141 @@
+{
+  "baseline_summary": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\v14-internal-native\\freq_vin7_rfsw324k_internal_probe_50ns\\freq_vin7_rfsw324k_internal_probe_50ns.raw",
+  "current_summary": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\v14-internal-native\\freq_vin7_rfsw324k_internal_probe_25ns\\freq_vin7_rfsw324k_internal_probe_25ns.raw",
+  "baseline_run_parameters": {
+    "rfsw_ohm": 324000.0,
+    "cfsw_f": 2.3e-11,
+    "roff_ohm": 1000000.0,
+    "sw_edge_v": 10.0,
+    "sw_rearm_v": 2.0,
+    "solver_label": "Gear",
+    "max_step_ns": 50.0
+  },
+  "current_run_parameters": {
+    "rfsw_ohm": 324000.0,
+    "cfsw_f": 2.3e-11,
+    "roff_ohm": 1000000.0,
+    "sw_edge_v": 10.0,
+    "sw_rearm_v": 2.0,
+    "solver_label": "Gear",
+    "max_step_ns": 25.0
+  },
+  "same_electrical_parameters": true,
+  "baseline_valid_cycles": 347,
+  "current_valid_cycles": 748,
+  "frequency_delta_khz": -0.5786731148295416,
+  "distribution_deltas": {
+    "period_s": {
+      "unit": "ns",
+      "current_median": 2264.478872842507,
+      "baseline_median": 2271.0401686130976,
+      "median_delta": -6.561295770590725,
+      "current_p95": 2287.366555142785,
+      "baseline_p95": 2311.0739919528223
+    },
+    "sw_high_s": {
+      "unit": "ns",
+      "current_median": 1308.6225955083464,
+      "baseline_median": 1307.7832198699068,
+      "median_delta": 0.839375638439499,
+      "current_p95": 1312.5835985767706,
+      "baseline_p95": 1326.3725903985696
+    },
+    "sw_rise_to_pvin_cross_s": {
+      "unit": "ns",
+      "current_median": 1194.5516241070043,
+      "baseline_median": 1194.5016377065688,
+      "median_delta": 0.04998640043551994,
+      "current_p95": 1194.8221007163431,
+      "baseline_p95": 1194.9781535465497
+    },
+    "cross_to_comparator_output_rise_s": {
+      "unit": "ns",
+      "current_median": 5.693478086557513,
+      "baseline_median": 3.152797821426301,
+      "median_delta": 2.540680265131212,
+      "current_p95": 9.615204429186395,
+      "baseline_p95": 21.707654052419144
+    },
+    "comparator_output_rise_to_u5_toff_0p5V_s": {
+      "unit": "ns",
+      "current_median": 90.76232906045367,
+      "baseline_median": 92.53221483485063,
+      "median_delta": -1.769885774396962,
+      "current_p95": 90.76232967281106,
+      "baseline_p95": 92.53221537747214
+    },
+    "cross_to_u5_toff_0p5V_s": {
+      "unit": "ns",
+      "current_median": 96.44224419416703,
+      "baseline_median": 95.66606969449442,
+      "median_delta": 0.7761744996725994,
+      "current_p95": 100.37753350906897,
+      "baseline_p95": 114.15467653375089
+    },
+    "cross_to_gate_l_rise_s": {
+      "unit": "ns",
+      "current_median": 99.58052930164607,
+      "baseline_median": 98.58015989280821,
+      "median_delta": 1.0003694088378534,
+      "current_p95": 103.5442237068071,
+      "baseline_p95": 117.06913557660292
+    },
+    "u5_toff_0p5V_to_gate_l_rise_s": {
+      "unit": "ns",
+      "current_median": 3.166507498916782,
+      "baseline_median": 2.914114470564666,
+      "median_delta": 0.25239302835211586,
+      "current_p95": 3.1667272830035453,
+      "baseline_p95": 2.917634487481502
+    },
+    "gate_l_rise_to_cap_reset_0p5V_s": {
+      "unit": "ns",
+      "current_median": 0.20532404595985376,
+      "baseline_median": 0.2573112591053306,
+      "median_delta": -0.05198721314547683,
+      "current_p95": 0.20598814754607675,
+      "baseline_p95": 0.2594709617304014
+    },
+    "cross_to_sw_fall_s": {
+      "unit": "ns",
+      "current_median": 113.99751106803969,
+      "baseline_median": 113.32318090515048,
+      "median_delta": 0.6743301628892029,
+      "current_p95": 117.96443584472654,
+      "baseline_p95": 131.82239794670704
+    },
+    "cap_reset_to_sw_fall_s": {
+      "unit": "ns",
+      "current_median": 14.235956731153966,
+      "baseline_median": 14.470996657911517,
+      "median_delta": -0.23503992675755203,
+      "current_p95": 14.294831439908005,
+      "baseline_p95": 14.60742050964081
+    },
+    "rc_ode_prediction_residual_s": {
+      "unit": "ns",
+      "current_median": -0.014726060648673212,
+      "baseline_median": 0.004553232790804884,
+      "median_delta": -0.019279293439478096,
+      "current_p95": -0.014716523139002291,
+      "baseline_p95": 0.0061794985795060545
+    },
+    "C_est_from_internal_ifsw_F": {
+      "unit": "pF",
+      "current_median": 23.000008190728874,
+      "baseline_median": 22.999744501051303,
+      "median_delta": 0.00026368967756825915,
+      "current_p95": 23.00001357787494,
+      "baseline_p95": 22.9997832607822
+    },
+    "C_est_from_external_rfsw_F": {
+      "unit": "pF",
+      "current_median": 23.000008190728877,
+      "baseline_median": 22.999744501051353,
+      "median_delta": 0.0002636896775262539,
+      "current_p95": 23.00001357787495,
+      "baseline_p95": 22.999783260782227
+    }
+  },
+  "interpretation": "Distribution-level comparison only. Different adaptive RAW time grids must not be compared sample by sample."
+}

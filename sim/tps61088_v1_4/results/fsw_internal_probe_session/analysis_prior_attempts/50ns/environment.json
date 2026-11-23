@@ -1,0 +1,102 @@
+{
+  "source_commit": "ef1ba6702bce0dfb668501c733e8acaf4ae73abb",
+  "branch": "v1.4-audit-frequency-ilim",
+  "source_worktree_status": "M sim/tps61088_v1_4/scripts/analyze_fsw_internal.py\n M sim/tps61088_v1_4/tests/test_fsw_internal.py\n?? sim/tps61088_v1_4/results/fsw_internal_probe_50ns/\n?? sim/tps61088_v1_4/results/fsw_internal_probe_session/",
+  "os": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "simulator_path": "C:\\Users\\tortl\\AppData\\Local\\Programs\\ADI\\LTspice\\LTspice.exe",
+  "simulator_version": "26.1.1.0",
+  "simulator_sha256": "3c144a2b3ec6a30baac6761c502d99b95aaa40b947ff5eca25b8fbd80d68af72",
+  "model_path": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\supercap-ups-repo\\sim\\tps61088_v1_3\\model\\TPS61088_LT.LIB",
+  "model_sha256": "418466fbd205f9e9ec487bee1d9c1ada48858ff49eef67767e84706966fa1795",
+  "model_version": "TI ordinary TPS61088 Final 1.00 / 11MAY2015, compatibility expression edits retained",
+  "deck": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\supercap-ups-repo\\sim\\tps61088_v1_4\\diagnostics\\freq_vin7_rfsw324k_internal_probe_50ns.cir",
+  "deck_sha256": "3d39d705a254658b7e39fd325e0cc33e6d1529b055ccd06c83758eb04ea12a11",
+  "max_step_ns": 50,
+  "native_directory": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\v14-internal-native\\freq_vin7_rfsw324k_internal_probe_50ns",
+  "started_utc": "2026-11-21T13:42:41.620694+00:00",
+  "command": [
+    "C:\\Users\\tortl\\AppData\\Local\\Programs\\ADI\\LTspice\\LTspice.exe",
+    "-b",
+    "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\supercap-ups-repo\\sim\\tps61088_v1_4\\diagnostics\\freq_vin7_rfsw324k_internal_probe_50ns.cir"
+  ],
+  "cwd": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\supercap-ups-repo\\sim\\tps61088_v1_4\\diagnostics",
+  "solver_expected": "Normal / Gear",
+  "analysis_script_sha256": "0146dfccb4045260c17c32f8283ebbd393b4468036d28222f5d815e86a3d3ac5",
+  "raw_reader_sha256": "03459f444661b52cbb38a5f53f83bf38c077243824925e48b252b1611632c20e",
+  "pid": 51704,
+  "finished_utc": "2026-11-21T13:47:41.760049+00:00",
+  "elapsed_wall_s": 300.141,
+  "exit_code": 0,
+  "deck_sha256_after_run": "3d39d705a254658b7e39fd325e0cc33e6d1529b055ccd06c83758eb04ea12a11",
+  "native_files": [
+    {
+      "name": "freq_vin7_rfsw324k_internal_probe_50ns.db",
+      "bytes": 32768,
+      "sha256": "9084abc9cfadc0ddbf3c6e99c4ed9acf2e70a31b104bb8ed0ad306be3d553484"
+    },
+    {
+      "name": "freq_vin7_rfsw324k_internal_probe_50ns.log",
+      "bytes": 2017,
+      "sha256": "278c3186773da135983b884bcf81a2ab78b4d4c2c16c57c1c6be44e529eea87c"
+    },
+    {
+      "name": "freq_vin7_rfsw324k_internal_probe_50ns.op.raw",
+      "bytes": 2290,
+      "sha256": "86212f28d0d94d0e2517d839f40fe858619e2b78de2543fedc1a98de25e465f3"
+    },
+    {
+      "name": "freq_vin7_rfsw324k_internal_probe_50ns.raw",
+      "bytes": 555189092,
+      "sha256": "b817d10d13cfc83027764796eafcf4e3bb8b0b05fbb420c68879417f051bc719"
+    }
+  ],
+  "postprocess_recovery_note": "Initial runner mistakenly parsed .save in a comment; LTspice had already exited 0. Corrected line-anchored .save check and analyzed the existing unchanged RAW; no rerun.",
+  "raw_validation": {
+    "points": 2570310,
+    "variables": [
+      "time",
+      "V(comp)",
+      "V(en)",
+      "V(fsw)",
+      "V(ss)",
+      "V(sw)",
+      "V(vin)",
+      "V(vout)",
+      "V(x1:gate_l)",
+      "V(x1:mode_ok)",
+      "V(x1:ssend)",
+      "V(x1:u5_ifsw)",
+      "V(x1:u5_n01584)",
+      "V(x1:u5_n16903113)",
+      "V(x1:u5_pvin)",
+      "V(x1:u5_sel_toff)",
+      "V(x1:u5_tdelay_sw)",
+      "V(x1:u5_tend)",
+      "V(x1:u5_toff)",
+      "V(x1:u5_toff_sel)",
+      "V(x1:u5_toff_sel_1)",
+      "V(x1:u5_tsw)",
+      "I(L1)",
+      "I(RFSW)",
+      "I(V1)",
+      "I(VLOAD)",
+      "L1:flux"
+    ],
+    "start_s": 0.0,
+    "end_s": 0.026000000000000002,
+    "complete_interleaved_double": true
+  },
+  "analysis_command": [
+    "py",
+    "-3",
+    "sim/tps61088_v1_4/scripts/analyze_fsw_internal.py",
+    "--raw",
+    "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\v14-internal-native\\freq_vin7_rfsw324k_internal_probe_50ns\\freq_vin7_rfsw324k_internal_probe_50ns.raw",
+    "--out",
+    "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\supercap-ups-repo\\sim\\tps61088_v1_4\\results\\fsw_internal_probe_50ns",
+    "--max-step-ns",
+    "50"
+  ],
+  "analysis_exit_code": 4294967295
+}

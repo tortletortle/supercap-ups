@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "C:\Users\tortl\Documents\Codex\2026-11-20\c-users-tortl-downloads-dc-v1\work\supercap-ups-repo\sim\tps61088_v1_4\scripts\analyze_fsw_internal.py", line 704, in <module>
+    main()
+  File "C:\Users\tortl\Documents\Codex\2026-11-20\c-users-tortl-downloads-dc-v1\work\supercap-ups-repo\sim\tps61088_v1_4\scripts\analyze_fsw_internal.py", line 693, in main
+    baseline = json.loads(args.compare_with.read_text(encoding="utf-8"))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tortl\AppData\Local\Programs\Python\Python312\Lib\pathlib.py", line 1027, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tortl\AppData\Local\Programs\Python\Python312\Lib\pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'sim\\tps61088_v1_4\\results\\fsw_internal_probe_50ns\\fsw_internal_summary.json'

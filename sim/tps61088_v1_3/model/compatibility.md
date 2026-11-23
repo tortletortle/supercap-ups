@@ -1,36 +1,28 @@
-# TPS61088 模型兼容性
+# TPS61088 模型兼容性与文件身份
 
-## 来源与身份
+更新：2026-11-21，V1.4 第二轮官方包二进制复核。
 
-- 器件：Texas Instruments TPS61088。
-- 模型类型：TI 官方 PSpice transient macro-model，子电路名 TPS61088_TRANS。
-- 模型头部标注：TPS61088EVM-677、SLVUAF2、SLVSCM8、Model Version Final 1.00。
-- 仓库文件：TPS61088_LT.LIB。
-- 适配文件 SHA-256：39F724ACCC32B8930E06C9F7A979FEF5E3163CCD1E2AC027E10F546E7D624CE1。
+本项目器件为普通 TPS61088，使用 TI 官方 PSpice 瞬态宏模型，主子电路 TPS61088_TRANS；文件头标注 TPS61088EVM-677、SLVSCM8、Final 1.00、11MAY2015、PSPICE 16.2.0.p001。不是理想开关替代模型。
 
-## 适配内容
+当前文件 TPS61088_LT.LIB 为 16,352 字节，SHA-256：
 
-LTspice 能够解析主电路，但 TI PSpice 文件中的两个带括号表达式需要改成等价数值表达式：
+    418466fbd205f9e9ec487bee1d9c1ada48858ff49eef67767e84706966fa1795
 
-1. (2.35-6m) 改为 2.344。
-2. (1.48+6m) 改为 1.486。
+本轮实际重新下载普通 TPS61088 资源 SLVMDA9 与 SLVMAU6A Rev. A，完整哈希表、获取记录与版本见[模型来源审计](../../tps61088_v1_4/model_source_audit.md)及[版本对照报告](../../tps61088_v1_4/results/frequency_round2/model_binary/model_version_comparison_zh.md)。产品页本轮刷新 HTTP 404，两个 TI 官方 ZIP 端点均 HTTP 200；未用 Q1 模型替代。
 
-未替换功率级、控制环路、限流、软启动或反馈行为。网表实例仍使用 XU1 ... TPS61088_TRANS，因此运行的是 TI 宏模型，不是理想开关。
+旧版误标的 39f724accc32b8930e06c9f7a979fef5e3163ccd1e2ac027e10f546e7d624ce1 是 ZIP 哈希；新下载字节确认它对应 SLVMAU6A，不能当作 LIB 哈希。先前“包名称未确认、二进制对照 pending”的状态由本轮证据补齐，历史原始记录保持不变。
 
-## LTspice 兼容性观察
+两包 LIB 只有换行差异：SLVMDA9 为 CRLF，SLVMAU6A 为 LF；统一后全文（含注释）和全部 27 个子电路逐字节一致。包 Rev. A 与内部模型 Final 1.00 是不同层次的版本标记。
 
-- LTspice 26.1.1 可完成启动、稳态、负载阶跃和预偏置联合窗口仿真。
-- 模型反复输出 N=0.0001 二极管发射系数警告。该警告在本轮窗口内未阻止收敛，但说明模型并非针对 LTspice 原生优化。
-- 结果是宏模型在短窗口内的输入到负载能量比，不能直接当作实物整机效率或热设计结论。
-- 网表从 sim/tps61088_v1_3/netlists 或 sim/tps61088_v1_3/joint 目录运行时，统一使用相对引用：
+SLVMAU6A 原始 LIB 的 SHA-256 为 27a088f856aaaf4219a494582fba73a801650d7bae09b5b7fd77023c791ebdf0。本次新下载 LIB 仅做两处替换，各一次，即与仓库模型逐字节相同：
 
-    .include ../model/TPS61088_LT.LIB
+1. (2.35-6m) → 2.344。
+2. (1.48+6m) → 1.486。
 
-## 复跑方式
+完整 [diff](../../tps61088_v1_4/results/frequency_round2/model_binary/official_to_repository.diff) 已保存。没有发现额外端口、参数、FSW 或 ILIM 改动。文件关系已验证，跨求解器功能等价性仍需回归。未覆盖当前模型基线。
 
-在安装 LTspice 并确保命令行可用的环境中，从对应目录执行，例如：
+LTspice 26.1.1 / Normal / Gear 已完成 V1.4 首轮及本轮指定案例。日志均保留 5 条二极管 N=0.0001 警告。退出码、完整 RAW、终止时间与测量有效性需联合判断；低频案例固定边沿计数不足属于测量失败，不等同于求解不收敛。
 
-    cd sim/tps61088_v1_3/netlists
-    ltspice.exe -Run vin_7.cir
+[第二轮报告](../../tps61088_v1_4/results/frequency_round2/实验报告.md)记录频率差异和 FSW 定时路径诊断。两包源码相同，不能用版本差异解释本次频偏；也不能仅凭源码审计判定模型或 LTspice 存在缺陷。
 
-联合窗口网表位于 sim/tps61088_v1_3/joint，同样从该目录运行。仓库只提交网表、日志、CSV 和 PNG，不提交 .raw、.op.raw、.db 等大文件。
+未完成原生 PSpice 交叉仿真。宏模型功率比不等于实物效率；电感仅有 L 与 DCR，不能验证磁芯饱和安全。

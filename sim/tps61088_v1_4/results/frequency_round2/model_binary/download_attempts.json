@@ -1,0 +1,74 @@
+[
+  {
+    "name": "product_page",
+    "requested_url": "https://www.ti.com/product/TPS61088",
+    "requested_utc": "2026-11-21T08:41:29.504687+00:00",
+    "error": "<HTTPError 404: 'Not Found'>"
+  },
+  {
+    "name": "slvmda9",
+    "requested_url": "https://www.ti.com/lit/zip/slvmda9",
+    "requested_utc": "2026-11-21T08:41:30.353829+00:00",
+    "status": 200,
+    "final_url": "https://www.ti.com/lit/mo/slvmda9/slvmda9.zip?ts=1795237189920",
+    "headers": {
+      "Last-Modified": "Thu, 19 Mar 2020 15:33:28 GMT",
+      "ETag": "\"12da-5a136e3faf22f\"",
+      "Content-Length": "4826",
+      "Content-Type": "application/zip",
+      "Date": "Sat, 21 Nov 2026 08:41:30 GMT"
+    },
+    "bytes": 4826,
+    "sha256": "6636d108c3abca3086c14c006b01e373ab8f3d57bf3be299aa9df30e5b857432",
+    "file": "slvmda9.zip",
+    "valid_zip_magic": true
+  },
+  {
+    "name": "slvmau6a",
+    "requested_url": "https://www.ti.com/lit/zip/slvmau6a",
+    "requested_utc": "2026-11-21T08:41:31.356558+00:00",
+    "status": 200,
+    "final_url": "https://www.ti.com/lit/mo/slvmau6a/slvmau6a.zip?ts=1795192407163",
+    "headers": {
+      "Last-Modified": "Tue, 12 May 2020 15:31:04 GMT",
+      "ETag": "\"15f20-5a57526d59725\"",
+      "Content-Length": "89888",
+      "Content-Type": "application/zip",
+      "Date": "Sat, 21 Nov 2026 08:41:31 GMT"
+    },
+    "bytes": 89888,
+    "sha256": "39f724accc32b8930e06c9f7a979fef5e3163ccd1e2ac027e10f546e7d624ce1",
+    "file": "slvmau6a.zip",
+    "valid_zip_magic": true
+  },
+  {
+    "name": "product_page_followup",
+    "requested_url": "https://www.ti.com/product/TPS61088?keyMatch=TPS61088",
+    "requested_utc": "2026-11-21T08:41:54.984951+00:00",
+    "error": "<HTTPError 404: 'Not Found'>"
+  },
+  {
+    "name": "product_page_followup",
+    "requested_url": "https://www.ti.com/product/TPS61088?HQS=dis-dk-null-digikeymode-dsf-pf-null-wwe&ts=1795248000000",
+    "requested_utc": "2026-11-21T08:41:54.985736+00:00",
+    "error": "<HTTPError 404: 'Not Found'>"
+  },
+  {
+    "name": "product_page_followup",
+    "requested_url": "https://www.ti.com/product/TPS61088/part-details/TPS61088RHLR",
+    "requested_utc": "2026-11-21T08:41:54.985736+00:00",
+    "error": "<HTTPError 404: 'Not Found'>"
+  },
+  {
+    "name": "product_page_followup",
+    "requested_url": "https://www.ti.com.cn/product/cn/TPS61088",
+    "requested_utc": "2026-11-21T08:41:54.985736+00:00",
+    "error": "<HTTPError 404: 'Not Found'>"
+  },
+  {
+    "name": "product_page_followup",
+    "requested_url": "https://www.ti.com/product/ja-jp/TPS61088",
+    "requested_utc": "2026-11-21T08:41:55.563947+00:00",
+    "error": "<HTTPError 404: 'Not Found'>"
+  }
+]

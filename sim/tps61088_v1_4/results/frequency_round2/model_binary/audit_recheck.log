@@ -1,0 +1,5 @@
+COMMAND: py -3 audit_models.py --repo work/supercap-ups-repo
+EXIT_CODE: 0
+STDOUT:
+{"official_models_equal_after_crlf_to_lf": true, "subcircuits": 27, "repository_reproduced_with_only_two_adaptations": true, "artifacts": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\v14-round2-model-audit"}
+STDERR:

@@ -1,0 +1,383 @@
+{
+  "audit_scope": "ordinary TPS61088; no TPS61088-Q1 download used",
+  "repository_head": "f24cf8e72681097c2e148064ddd3cb6ca5f1704c",
+  "archives": {
+    "slvmda9": {
+      "name": "slvmda9",
+      "requested_url": "https://www.ti.com/lit/zip/slvmda9",
+      "requested_utc": "2026-11-21T08:41:30.353829+00:00",
+      "status": 200,
+      "final_url": "https://www.ti.com/lit/mo/slvmda9/slvmda9.zip?ts=1795237189920",
+      "headers": {
+        "Last-Modified": "Thu, 19 Mar 2020 15:33:28 GMT",
+        "ETag": "\"12da-5a136e3faf22f\"",
+        "Content-Length": "4826",
+        "Content-Type": "application/zip",
+        "Date": "Sat, 21 Nov 2026 08:41:30 GMT"
+      },
+      "bytes": 4826,
+      "sha256": "6636d108c3abca3086c14c006b01e373ab8f3d57bf3be299aa9df30e5b857432",
+      "file": "slvmda9.zip",
+      "valid_zip_magic": true,
+      "zip_integrity": "PASS",
+      "lib_path": "TPS61088_lib/TPS61088.lib",
+      "lib_bytes": 16799,
+      "lib_sha256": "8361a8a007780942f484a180f791b0712504b99d186ab12546bf5d44bc5ebba5",
+      "lib_sha256_lf": "27a088f856aaaf4219a494582fba73a801650d7bae09b5b7fd77023c791ebdf0",
+      "header": {
+        "Part": "TPS61088",
+        "Date": "11MAY2015",
+        "Model Type": "TRANSIENT",
+        "Simulator": "PSPICE",
+        "Simulator Version": "16.2.0.p001",
+        "EVM Order Number": "TPS61088EVM-677",
+        "Datasheet": "SLVSCM8 –MARCH 2015",
+        "Model Version": "Final 1.00"
+      },
+      "line_endings": {
+        "crlf": 439,
+        "bare_lf": 0,
+        "bare_cr": 0
+      },
+      "subcircuits": {
+        "TPS61088_TRANS": {
+          "declaration": ".SUBCKT TPS61088_TRANS AGND BOOT COMP EN FB FSW ILIM MODE NC_0 NC_1 PGND SS SW_0 SW_1 SW_2 SW_3 VCC VIN VOUT_0 VOUT_1 VOUT_2",
+          "logical_lines": 149,
+          "sha256_logical": "b11a9d7fdf100e4900782640c81c15f247c6b069662cb8fd3373fc94e0070641"
+        },
+        "DRIVER_U1_H1": {
+          "declaration": ".SUBCKT DRIVER_U1_H1 1 2 3 4",
+          "logical_lines": 4,
+          "sha256_logical": "7dd044949bb47793b23029cbbff70ee89b0d3f76eb71e6e15665a7f6d2824941"
+        },
+        "DRIVER_U1_H2": {
+          "declaration": ".SUBCKT DRIVER_U1_H2 1 2 3 4",
+          "logical_lines": 4,
+          "sha256_logical": "a563212d3432f74272a638374699bc544823929afc2090f31c6af002ef69c344"
+        },
+        "DRIVER_U1_S2": {
+          "declaration": ".SUBCKT DRIVER_U1_S2 1 2 3 4",
+          "logical_lines": 5,
+          "sha256_logical": "fbb9af4702f5dc4ad28c7d24037886c1780de6ef9b4dc661ce04da2b22d74274"
+        },
+        "DRIVER_U1_S1": {
+          "declaration": ".SUBCKT DRIVER_U1_S1 1 2 3 4",
+          "logical_lines": 5,
+          "sha256_logical": "9bafc31d180b617962621e90c4287edef3d4e3525d794ca797427a0d1452bca1"
+        },
+        "TPS61088_TRANS_H1": {
+          "declaration": ".SUBCKT TPS61088_TRANS_H1 1 2 3 4",
+          "logical_lines": 4,
+          "sha256_logical": "559eff03861e0fc7fb5ee7fb36318005d8828f8d15a1c2cc701a7445858fbdc1"
+        },
+        "SOFTSTART_U3_S1": {
+          "declaration": ".SUBCKT SOFTSTART_U3_S1 1 2 3 4",
+          "logical_lines": 5,
+          "sha256_logical": "d9d8b5d1459320e9cdacca487777412ba0d617bf7acb995d6c52b987aabea211"
+        },
+        "OFF_TIMER_U5_S4": {
+          "declaration": ".SUBCKT OFF_TIMER_U5_S4 1 2 3 4",
+          "logical_lines": 5,
+          "sha256_logical": "e115af190275328e285495abda1dd6b5d053d07b4bf1fc70d9e1350486630280"
+        },
+        "OFF_TIMER_U5_S3": {
+          "declaration": ".SUBCKT OFF_TIMER_U5_S3 1 2 3 4",
+          "logical_lines": 5,
+          "sha256_logical": "267292b4ea6e040ac697ff33d75788aa030b61c855128bf1a220e787e963fd0b"
+        },
+        "OFF_TIMER_U5_S2": {
+          "declaration": ".SUBCKT OFF_TIMER_U5_S2 1 2 3 4",
+          "logical_lines": 5,
+          "sha256_logical": "017620d76f105fada7c43747f8598727e77656245ba745e812b1343f11eb5f57"
+        },
+        "OFF_TIMER_U5_S1": {
+          "declaration": ".SUBCKT OFF_TIMER_U5_S1 1 2 3 4",
+          "logical_lines": 5,
+          "sha256_logical": "56f595a3285b2ddd3ab92f5758402c8591a0c562b75626b3ed1903cc1c76b4b6"
+        },
+        "OFF_TIMER_U5_H1": {
+          "declaration": ".SUBCKT OFF_TIMER_U5_H1 1 2 3 4",
+          "logical_lines": 4,
+          "sha256_logical": "4c870d36d918b060424c7e672f089c31af9658f8a9fab8cf843ff7251dfa66ef"
+        },
+        "D_D": {
+          "declaration": ".SUBCKT D_D 1 2",
+          "logical_lines": 4,
+          "sha256_logical": "eb9a0cb57eef6b5e739aa6da7bb96b5b43cfe325bc8010cdff7b606783083507"
+        },
+        "D_D1": {
+          "declaration": ".SUBCKT D_D1 1 2",
+          "logical_lines": 4,
+          "sha256_logical": "6fefa8be6d955efadd5e6ee7db8a6c4765d83b553eb3d6e9e1dde578d83875a3"
+        },
+        "ONE_SHOT": {
+          "declaration": ".SUBCKT ONE_SHOT IN OUT PARAMS: T=100",
+          "logical_lines": 11,
+          "sha256_logical": "744854b409fa7e0290c0e33a992ac3ba87ab098fccc13657533229c7fdfeca8f"
+        },
+        "LDCR": {
+          "declaration": ".SUBCKT LDCR 1 2 PARAMS: L=1U DCR=20M IC = 0",
+          "logical_lines": 4,
+          "sha256_logical": "61acaa6bd71623d039d6471318c73fccb62e507dcc294814f802ec3e0e2f1af5"
+        },
+        "CESR": {
+          "declaration": ".SUBCKT CESR 1 2 PARAMS: C=10U ESR=2M IC = 0 X = 1",
+          "logical_lines": 4,
+          "sha256_logical": "6132eebe879ac7095e0cfe9de9642e5d5dfb8f12b24abdb3d7e46901fef15bd4"
+        },
+        "INV_BASIC_GEN": {
+          "declaration": ".SUBCKT INV_BASIC_GEN A Y PARAMS: VDD=1 VSS=0 VTHRESH=0.5",
+          "logical_lines": 5,
+          "sha256_logical": "d92cb33bc820fa03a984dbafead45509c77c8f02c25141c0af87e9d71c7aa1ff"
+        },
+        "COMPHYS_BASIC_GEN": {
+          "declaration": ".SUBCKT COMPHYS_BASIC_GEN INP INM HYS OUT PARAMS: VDD=1 VSS=0 VTHRESH=0.5",
+          "logical_lines": 8,
+          "sha256_logical": "4c8c11e039c20ce35d6ed339f743f2f18cf696626510e0c85656575da8b0d0d8"
+        },
+        "AND2_BASIC_GEN": {
+          "declaration": ".SUBCKT AND2_BASIC_GEN A B Y PARAMS: VDD=1 VSS=0 VTHRESH=0.5",
+          "logical_lines": 5,
+          "sha256_logical": "8c6317ce0f64c2119e8cb94317361af9e6caebe772b8bee9bfe7916fb38ad9de"
+        },
+        "AND3_BASIC_GEN": {
+          "declaration": ".SUBCKT AND3_BASIC_GEN A B C Y PARAMS: VDD=1 VSS=0 VTHRESH=0.5",
+          "logical_lines": 5,
+          "sha256_logical": "28c00a997457b26b1a95111f773f8cdb025262812fcffc320dde3445f248640e"
+        },
+        "AND4_BASIC_GEN": {
+          "declaration": ".SUBCKT AND4_BASIC_GEN A B C D Y PARAMS: VDD=1 VSS=0 VTHRESH=0.5",
+          "logical_lines": 5,
+          "sha256_logical": "f40bbbea01b5af3e44be490190edc5978102733031e64666cfb58b6be19b00fe"
+        },
+        "OR2_BASIC_GEN": {
+          "declaration": ".SUBCKT OR2_BASIC_GEN A B Y PARAMS: VDD=1 VSS=0 VTHRESH=0.5",
+          "logical_lines": 5,
+          "sha256_logical": "c15d214e253b88ee5942c62a52083c747227c0658e217fc9815ffdf61153db39"
+        },
+        "SRLATCHRHP_BASIC_GEN": {
+          "declaration": ".SUBCKT SRLATCHRHP_BASIC_GEN S R Q QB PARAMS: VDD=1 VSS=0 VTHRESH=0.5",
+          "logical_lines": 18,
+          "sha256_logical": "5e68810a22802a40aa12649a1a4e4925d6a1328bdc48d3fcf66a6fdea7b98dae"
+        },
+        "BUF_DELAY_BASIC_GEN": {
+          "declaration": ".SUBCKT BUF_DELAY_BASIC_GEN A Y PARAMS: VDD=1 VSS=0 VTHRESH=0.5 DELAY = 10N",
+          "logical_lines": 8,
+          "sha256_logical": "a3bcde7f8a0132506d452d16a3900bdc7527f1234de8ab58bac5a945e197ee53"
+        },
+        "BUF_BASIC_GEN": {
+          "declaration": ".SUBCKT BUF_BASIC_GEN A Y PARAMS: VDD=1 VSS=0 VTHRESH=0.5",
+          "logical_lines": 5,
+          "sha256_logical": "7383a03c86967304e6f5869d6d20c49a76db0d17dd51a455b9719b7eb456b6ab"
+        },
+        "COMP_BASIC_GEN": {
+          "declaration": ".SUBCKT COMP_BASIC_GEN INP INM Y PARAMS: VDD=1 VSS=0 VTHRESH=0.5",
+          "logical_lines": 5,
+          "sha256_logical": "77ec11628ffd851b61a8cd54076b7f08aa861bc4babc7d583c9b3dc78359a8b2"
+        }
+      },
+      "encryption_markers": false
+    },
+    "slvmau6a": {
+      "name": "slvmau6a",
+      "requested_url": "https://www.ti.com/lit/zip/slvmau6a",
+      "requested_utc": "2026-11-21T08:41:31.356558+00:00",
+      "status": 200,
+      "final_url": "https://www.ti.com/lit/mo/slvmau6a/slvmau6a.zip?ts=1795192407163",
+      "headers": {
+        "Last-Modified": "Tue, 12 May 2020 15:31:04 GMT",
+        "ETag": "\"15f20-5a57526d59725\"",
+        "Content-Length": "89888",
+        "Content-Type": "application/zip",
+        "Date": "Sat, 21 Nov 2026 08:41:31 GMT"
+      },
+      "bytes": 89888,
+      "sha256": "39f724accc32b8930e06c9f7a979fef5e3163ccd1e2ac027e10f546e7d624ce1",
+      "file": "slvmau6a.zip",
+      "valid_zip_magic": true,
+      "zip_integrity": "PASS",
+      "lib_path": "SLVMAU6/TPS61088_PSPICE_TRANS/TPS61088_TRANS.LIB",
+      "lib_bytes": 16360,
+      "lib_sha256": "27a088f856aaaf4219a494582fba73a801650d7bae09b5b7fd77023c791ebdf0",
+      "lib_sha256_lf": "27a088f856aaaf4219a494582fba73a801650d7bae09b5b7fd77023c791ebdf0",
+      "header": {
+        "Part": "TPS61088",
+        "Date": "11MAY2015",
+        "Model Type": "TRANSIENT",
+        "Simulator": "PSPICE",
+        "Simulator Version": "16.2.0.p001",
+        "EVM Order Number": "TPS61088EVM-677",
+        "Datasheet": "SLVSCM8 –MARCH 2015",
+        "Model Version": "Final 1.00"
+      },
+      "line_endings": {
+        "crlf": 0,
+        "bare_lf": 439,
+        "bare_cr": 0
+      },
+      "subcircuits": {
+        "TPS61088_TRANS": {
+          "declaration": ".SUBCKT TPS61088_TRANS AGND BOOT COMP EN FB FSW ILIM MODE NC_0 NC_1 PGND SS SW_0 SW_1 SW_2 SW_3 VCC VIN VOUT_0 VOUT_1 VOUT_2",
+          "logical_lines": 149,
+          "sha256_logical": "b11a9d7fdf100e4900782640c81c15f247c6b069662cb8fd3373fc94e0070641"
+        },
+        "DRIVER_U1_H1": {
+          "declaration": ".SUBCKT DRIVER_U1_H1 1 2 3 4",
+          "logical_lines": 4,
+          "sha256_logical": "7dd044949bb47793b23029cbbff70ee89b0d3f76eb71e6e15665a7f6d2824941"
+        },
+        "DRIVER_U1_H2": {
+          "declaration": ".SUBCKT DRIVER_U1_H2 1 2 3 4",
+          "logical_lines": 4,
+          "sha256_logical": "a563212d3432f74272a638374699bc544823929afc2090f31c6af002ef69c344"
+        },
+        "DRIVER_U1_S2": {
+          "declaration": ".SUBCKT DRIVER_U1_S2 1 2 3 4",
+          "logical_lines": 5,
+          "sha256_logical": "fbb9af4702f5dc4ad28c7d24037886c1780de6ef9b4dc661ce04da2b22d74274"
+        },
+        "DRIVER_U1_S1": {
+          "declaration": ".SUBCKT DRIVER_U1_S1 1 2 3 4",
+          "logical_lines": 5,
+          "sha256_logical": "9bafc31d180b617962621e90c4287edef3d4e3525d794ca797427a0d1452bca1"
+        },
+        "TPS61088_TRANS_H1": {
+          "declaration": ".SUBCKT TPS61088_TRANS_H1 1 2 3 4",
+          "logical_lines": 4,
+          "sha256_logical": "559eff03861e0fc7fb5ee7fb36318005d8828f8d15a1c2cc701a7445858fbdc1"
+        },
+        "SOFTSTART_U3_S1": {
+          "declaration": ".SUBCKT SOFTSTART_U3_S1 1 2 3 4",
+          "logical_lines": 5,
+          "sha256_logical": "d9d8b5d1459320e9cdacca487777412ba0d617bf7acb995d6c52b987aabea211"
+        },
+        "OFF_TIMER_U5_S4": {
+          "declaration": ".SUBCKT OFF_TIMER_U5_S4 1 2 3 4",
+          "logical_lines": 5,
+          "sha256_logical": "e115af190275328e285495abda1dd6b5d053d07b4bf1fc70d9e1350486630280"
+        },
+        "OFF_TIMER_U5_S3": {
+          "declaration": ".SUBCKT OFF_TIMER_U5_S3 1 2 3 4",
+          "logical_lines": 5,
+          "sha256_logical": "267292b4ea6e040ac697ff33d75788aa030b61c855128bf1a220e787e963fd0b"
+        },
+        "OFF_TIMER_U5_S2": {
+          "declaration": ".SUBCKT OFF_TIMER_U5_S2 1 2 3 4",
+          "logical_lines": 5,
+          "sha256_logical": "017620d76f105fada7c43747f8598727e77656245ba745e812b1343f11eb5f57"
+        },
+        "OFF_TIMER_U5_S1": {
+          "declaration": ".SUBCKT OFF_TIMER_U5_S1 1 2 3 4",
+          "logical_lines": 5,
+          "sha256_logical": "56f595a3285b2ddd3ab92f5758402c8591a0c562b75626b3ed1903cc1c76b4b6"
+        },
+        "OFF_TIMER_U5_H1": {
+          "declaration": ".SUBCKT OFF_TIMER_U5_H1 1 2 3 4",
+          "logical_lines": 4,
+          "sha256_logical": "4c870d36d918b060424c7e672f089c31af9658f8a9fab8cf843ff7251dfa66ef"
+        },
+        "D_D": {
+          "declaration": ".SUBCKT D_D 1 2",
+          "logical_lines": 4,
+          "sha256_logical": "eb9a0cb57eef6b5e739aa6da7bb96b5b43cfe325bc8010cdff7b606783083507"
+        },
+        "D_D1": {
+          "declaration": ".SUBCKT D_D1 1 2",
+          "logical_lines": 4,
+          "sha256_logical": "6fefa8be6d955efadd5e6ee7db8a6c4765d83b553eb3d6e9e1dde578d83875a3"
+        },
+        "ONE_SHOT": {
+          "declaration": ".SUBCKT ONE_SHOT IN OUT PARAMS: T=100",
+          "logical_lines": 11,
+          "sha256_logical": "744854b409fa7e0290c0e33a992ac3ba87ab098fccc13657533229c7fdfeca8f"
+        },
+        "LDCR": {
+          "declaration": ".SUBCKT LDCR 1 2 PARAMS: L=1U DCR=20M IC = 0",
+          "logical_lines": 4,
+          "sha256_logical": "61acaa6bd71623d039d6471318c73fccb62e507dcc294814f802ec3e0e2f1af5"
+        },
+        "CESR": {
+          "declaration": ".SUBCKT CESR 1 2 PARAMS: C=10U ESR=2M IC = 0 X = 1",
+          "logical_lines": 4,
+          "sha256_logical": "6132eebe879ac7095e0cfe9de9642e5d5dfb8f12b24abdb3d7e46901fef15bd4"
+        },
+        "INV_BASIC_GEN": {
+          "declaration": ".SUBCKT INV_BASIC_GEN A Y PARAMS: VDD=1 VSS=0 VTHRESH=0.5",
+          "logical_lines": 5,
+          "sha256_logical": "d92cb33bc820fa03a984dbafead45509c77c8f02c25141c0af87e9d71c7aa1ff"
+        },
+        "COMPHYS_BASIC_GEN": {
+          "declaration": ".SUBCKT COMPHYS_BASIC_GEN INP INM HYS OUT PARAMS: VDD=1 VSS=0 VTHRESH=0.5",
+          "logical_lines": 8,
+          "sha256_logical": "4c8c11e039c20ce35d6ed339f743f2f18cf696626510e0c85656575da8b0d0d8"
+        },
+        "AND2_BASIC_GEN": {
+          "declaration": ".SUBCKT AND2_BASIC_GEN A B Y PARAMS: VDD=1 VSS=0 VTHRESH=0.5",
+          "logical_lines": 5,
+          "sha256_logical": "8c6317ce0f64c2119e8cb94317361af9e6caebe772b8bee9bfe7916fb38ad9de"
+        },
+        "AND3_BASIC_GEN": {
+          "declaration": ".SUBCKT AND3_BASIC_GEN A B C Y PARAMS: VDD=1 VSS=0 VTHRESH=0.5",
+          "logical_lines": 5,
+          "sha256_logical": "28c00a997457b26b1a95111f773f8cdb025262812fcffc320dde3445f248640e"
+        },
+        "AND4_BASIC_GEN": {
+          "declaration": ".SUBCKT AND4_BASIC_GEN A B C D Y PARAMS: VDD=1 VSS=0 VTHRESH=0.5",
+          "logical_lines": 5,
+          "sha256_logical": "f40bbbea01b5af3e44be490190edc5978102733031e64666cfb58b6be19b00fe"
+        },
+        "OR2_BASIC_GEN": {
+          "declaration": ".SUBCKT OR2_BASIC_GEN A B Y PARAMS: VDD=1 VSS=0 VTHRESH=0.5",
+          "logical_lines": 5,
+          "sha256_logical": "c15d214e253b88ee5942c62a52083c747227c0658e217fc9815ffdf61153db39"
+        },
+        "SRLATCHRHP_BASIC_GEN": {
+          "declaration": ".SUBCKT SRLATCHRHP_BASIC_GEN S R Q QB PARAMS: VDD=1 VSS=0 VTHRESH=0.5",
+          "logical_lines": 18,
+          "sha256_logical": "5e68810a22802a40aa12649a1a4e4925d6a1328bdc48d3fcf66a6fdea7b98dae"
+        },
+        "BUF_DELAY_BASIC_GEN": {
+          "declaration": ".SUBCKT BUF_DELAY_BASIC_GEN A Y PARAMS: VDD=1 VSS=0 VTHRESH=0.5 DELAY = 10N",
+          "logical_lines": 8,
+          "sha256_logical": "a3bcde7f8a0132506d452d16a3900bdc7527f1234de8ab58bac5a945e197ee53"
+        },
+        "BUF_BASIC_GEN": {
+          "declaration": ".SUBCKT BUF_BASIC_GEN A Y PARAMS: VDD=1 VSS=0 VTHRESH=0.5",
+          "logical_lines": 5,
+          "sha256_logical": "7383a03c86967304e6f5869d6d20c49a76db0d17dd51a455b9719b7eb456b6ab"
+        },
+        "COMP_BASIC_GEN": {
+          "declaration": ".SUBCKT COMP_BASIC_GEN INP INM Y PARAMS: VDD=1 VSS=0 VTHRESH=0.5",
+          "logical_lines": 5,
+          "sha256_logical": "77ec11628ffd851b61a8cd54076b7f08aa861bc4babc7d583c9b3dc78359a8b2"
+        }
+      },
+      "encryption_markers": false
+    }
+  },
+  "binary_equal": false,
+  "equal_after_crlf_to_lf": true,
+  "logical_spice_equal": true,
+  "subcircuits_equal": true,
+  "subcircuit_count": 27,
+  "baseline": {
+    "path": "sim/tps61088_v1_3/model/TPS61088_LT.LIB",
+    "bytes": 16352,
+    "sha256": "418466fbd205f9e9ec487bee1d9c1ada48858ff49eef67767e84706966fa1795",
+    "adaptations": [
+      {
+        "old": "(2.35-6m)",
+        "new": "2.344",
+        "count": 1
+      },
+      {
+        "old": "(1.48+6m)",
+        "new": "1.486",
+        "count": 1
+      }
+    ],
+    "patched_slvmau6a_equals_repository": true
+  },
+  "product_page_refresh": "failed; HTTP 404 recorded in download_attempts.json",
+  "interpretation": "Different ZIP packaging and line endings; identical model content after CRLF normalization. Package Rev.A does not imply an internal model version change. No simulator cross-validation performed by this audit."
+}

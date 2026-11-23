@@ -1,0 +1,81 @@
+"""Serial, unchanged LTspice runs for the four explicitly requested V1.4 decks."""
+from datetime import datetime, timezone
+import hashlib
+import json
+from pathlib import Path
+import platform
+import shutil
+import subprocess
+import sys
+import time
+
+WORK=Path(__file__).resolve().parent
+REPO=WORK/'supercap-ups-repo'
+V14=REPO/'sim/tps61088_v1_4'
+RESULT=V14/'results/frequency_round2'
+NATIVE=WORK/'v14-round2-native'
+EXE=Path('C:/Users/tortl/AppData/Local/Programs/ADI/LTspice/LTspice.exe')
+CASES=[('netlists','freq_vin7_rfsw510k'),('netlists','freq_vin9p4_rfsw324k'),
+       ('netlists','freq_vin9p4_rfsw517k'),('diagnostics','freq_vin7_rfsw324k_fsw_probe')]
+
+def sha(p):
+    h=hashlib.sha256()
+    with p.open('rb') as f:
+        for block in iter(lambda:f.read(1024*1024),b''):h.update(block)
+    return h.hexdigest()
+
+def git(*args):return subprocess.check_output(['git',*args],cwd=REPO,text=True).strip()
+def now():return datetime.now(timezone.utc).isoformat()
+def dump(path,obj):path.write_text(json.dumps(obj,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+
+def main():
+    if RESULT.exists() or NATIVE.exists():raise RuntimeError('Previous experiment exists; refuse overwrite')
+    RESULT.mkdir(parents=True);NATIVE.mkdir()
+    tests=subprocess.run(['py','-3','-m','unittest','discover','-s','sim/tps61088_v1_4/tests','-v'],
+        cwd=REPO,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,check=False)
+    (RESULT/'unit_tests_before.log').write_bytes(tests.stdout)
+    if tests.returncode:raise RuntimeError('Unit tests failed')
+    model=REPO/'sim/tps61088_v1_3/model/TPS61088_LT.LIB'
+    if sha(EXE)!='3c144a2b3ec6a30baac6761c502d99b95aaa40b947ff5eca25b8fbd80d68af72':
+        raise RuntimeError('LTspice executable differs from first round')
+    common=dict(source_commit=git('rev-parse','HEAD'),branch=git('branch','--show-current'),
+        source_worktree_status=git('status','--porcelain'),os=platform.platform(),python=sys.version,
+        simulator_path=str(EXE),simulator_version='26.1.1.0',simulator_sha256=sha(EXE),
+        model_sha256=sha(model),native_root=str(NATIVE),started_utc=now(),
+        cases_in_order=[name for _,name in CASES],note='Only these 4 runs, serial; original .cir files untouched')
+    dump(RESULT/'session_environment.json',common)
+    for folder,name in CASES:
+        deck=V14/folder/(name+'.cir');text=deck.read_text(encoding='ascii')
+        for s in ('.options method=gear reltol=.003 trtol=7 gmin=1e-10 numdgt=7 threads=1 plotwinsize=0',
+                  '.tran 0 26m 0 50n','.meas tran sw_t6001 WHEN V(sw)=10 RISE=6001',
+                  '.meas tran sw_t6101 WHEN V(sw)=10 RISE=6101','RILIM ilim 0 100k'):
+            if s not in text:raise RuntimeError('Preflight failure: '+s)
+        if any(p!=deck for p in deck.parent.glob(name+'.*')):raise RuntimeError('Native result already exists: '+name)
+        case=RESULT/name;case.mkdir();native=NATIVE/name;native.mkdir()
+        shutil.copyfile(deck,case/'input_deck.cir.txt')
+        metadata=common|dict(case=name,deck=str(deck),deck_sha256=sha(deck),started_utc=now(),
+                            command=[str(EXE),'-b',str(deck)],cwd=str(deck.parent))
+        dump(case/'environment.json',metadata)
+        began=time.monotonic()
+        with (case/'runner_stdout.txt').open('wb') as out,(case/'runner_stderr.txt').open('wb') as err:
+            proc=subprocess.Popen(metadata['command'],cwd=deck.parent,stdout=out,stderr=err,
+                creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
+            metadata['pid']=proc.pid;dump(case/'environment.json',metadata)
+            print(f'START {name} PID={proc.pid}',flush=True)
+            while proc.poll() is None:
+                time.sleep(10)
+                raw=deck.with_suffix('.raw')
+                print(f'{name} elapsed={time.monotonic()-began:.0f}s raw_bytes={raw.stat().st_size if raw.exists() else 0}',flush=True)
+        metadata.update(finished_utc=now(),elapsed_wall_s=round(time.monotonic()-began,3),
+                        exit_code=proc.returncode,deck_sha256_after_run=sha(deck))
+        if metadata['deck_sha256']!=metadata['deck_sha256_after_run']:raise RuntimeError('Input changed')
+        if deck.with_suffix('.log').exists():shutil.copyfile(deck.with_suffix('.log'),case/'ltspice_original.log')
+        for file in deck.parent.glob(name+'.*'):
+            if file!=deck:shutil.move(str(file),native/file.name)
+        metadata['native_files']=[dict(name=f.name,bytes=f.stat().st_size,sha256=sha(f)) for f in native.iterdir()]
+        dump(case/'environment.json',metadata)
+        print(f'FINISHED {name} exit={proc.returncode}',flush=True)
+    common['finished_utc']=now();dump(RESULT/'session_environment.json',common)
+    print('ALL FOUR REQUESTED RUNS FINISHED',flush=True)
+
+if __name__=='__main__':main()

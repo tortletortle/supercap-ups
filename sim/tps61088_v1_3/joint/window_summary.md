@@ -1,5 +1,8 @@
 # TPS61088 LTspice short-window evidence
 
+> **Configuration erratum (V1.4 audit):** The joint decks in this directory connect MODE to VCC, which is not the same as the single-source BOM decks that connect MODE to ground. TI specifies MODE=GND for FPWM and MODE floating for PFM; a VCC connection selects the high/PFM state in this macro-model. These joint decks also use 20 mΩ inductor DCR and 1.07 MΩ feedback upper resistor, while the final BOM uses 26 mΩ and 1.076 MΩ. The EOL prebias uses 112.5 mΩ/cell, not the 130 mΩ/cell EOL stress scenario (not a guaranteed maximum DC ESR). Preserve these measurements as historical local-window evidence only; do not treat them as final-BOM joint validation. See [V1.4 audit](../../tps61088_v1_4/README.md).
+
+
 All values below come from LTspice 26.1.1 using work/lt_probe/TPS61088_LT.LIB, a syntax-adapted copy of the TI TPS61088 PSpice macro-model. The windows are 18 ms switching runs with statistics from 15 ms to 17 ms. The 4S cases are prebiased to V1.2-estimated capacitor states; they are not continuous 1.0 s or 1.2 s switching runs.
 
 | Case | Vsrc/Vin (V) | Vout avg (V) | Vout min/max (V) | Ripple (mVpp) | IL peak (A) | Iin avg (A) | Pin (W) | Pout (W) | Eta |

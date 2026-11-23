@@ -1,0 +1,64 @@
+diff --git a/sim/tps61088_v1_4/scripts/analyze_fsw_internal.py b/sim/tps61088_v1_4/scripts/analyze_fsw_internal.py
+index 7757bf5..8fa6e08 100644
+--- a/sim/tps61088_v1_4/scripts/analyze_fsw_internal.py
++++ b/sim/tps61088_v1_4/scripts/analyze_fsw_internal.py
+@@ -253,8 +253,8 @@ def compare_summaries(current, baseline):
+             "current_p95": a["p95"] * scale,
+             "baseline_p95": b["p95"] * scale,
+         }
+-    cur_freq = current.get("prescribed_edge_measurement", {}).get("frequency_khz")
+-    base_freq = baseline.get("prescribed_edge_measurement", {}).get("frequency_khz")
++    cur_freq = current.get("prescribed_edge_measurement", {}).get("frequency_kHz")
++    base_freq = baseline.get("prescribed_edge_measurement", {}).get("frequency_kHz")
+     return {
+         "baseline_summary": baseline.get("raw_path"),
+         "current_summary": current.get("raw_path"),
+@@ -338,7 +338,9 @@ def main():
+         )
+ 
+     def vec(name):
+-        return np.asarray(raw[:, idx[name]], dtype=float)
++        # np.interp otherwise copies the entire strided RAW column on each
++        # per-cycle lookup. One exact copy preserves samples and avoids this.
++        return np.array(raw[:, idx[name]], dtype=float, copy=True)
+ 
+     t = vec("time")
+     sw = vec("v(sw)")
+diff --git a/sim/tps61088_v1_4/tests/test_fsw_internal.py b/sim/tps61088_v1_4/tests/test_fsw_internal.py
+index 1c99b98..89d283b 100644
+--- a/sim/tps61088_v1_4/tests/test_fsw_internal.py
++++ b/sim/tps61088_v1_4/tests/test_fsw_internal.py
+@@ -113,9 +113,13 @@ class RawReaderTests(unittest.TestCase):
+             )
+             path.write_bytes(header.encode("utf-16le") + values.tobytes())
+             decoded, names, raw = load_raw(path)
+-            self.assertIn("Plotname: Transient Analysis", decoded)
+-            self.assertEqual(names, ["time", "V(sw)"])
+-            np.testing.assert_allclose(np.asarray(raw), values)
++            try:
++                self.assertIn("Plotname: Transient Analysis", decoded)
++                self.assertEqual(names, ["time", "V(sw)"])
++                np.testing.assert_allclose(np.asarray(raw), values)
++            finally:
++                # Windows cannot remove the temporary RAW while it is mapped.
++                raw._mmap.close()
+ 
+     def test_rejects_fastaccess_raw(self):
+         with tempfile.TemporaryDirectory() as temp:
+@@ -169,14 +173,14 @@ class DeckAndComparisonTests(unittest.TestCase):
+             "raw_path": "baseline.raw",
+             "run_parameters": {"rfsw_ohm": 324e3, "cfsw_f": 23e-12, "roff_ohm": 1e6},
+             "cycle_accounting": {"complete_valid_cycles": 10},
+-            "prescribed_edge_measurement": {"frequency_khz": 442.0},
++            "prescribed_edge_measurement": {"frequency_kHz": 442.0},
+             "cycle_statistics": {"cross_to_sw_fall_s": stat(110e-9)},
+         }
+         current = {
+             "raw_path": "fine.raw",
+             "run_parameters": {"rfsw_ohm": 324e3, "cfsw_f": 23e-12, "roff_ohm": 1e6},
+             "cycle_accounting": {"complete_valid_cycles": 10},
+-            "prescribed_edge_measurement": {"frequency_khz": 441.0},
++            "prescribed_edge_measurement": {"frequency_kHz": 441.0},
+             "cycle_statistics": {"cross_to_sw_fall_s": stat(111e-9)},
+         }
+         result = fsw.compare_summaries(current, baseline)

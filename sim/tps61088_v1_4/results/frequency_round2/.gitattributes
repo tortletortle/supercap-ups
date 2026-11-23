@@ -1,0 +1,7 @@
+* -text whitespace=cr-at-eol
+*.png binary
+*.gz binary
+ltspice_original.log -whitespace
+input_deck.cir.txt -whitespace
+raw_header.txt -whitespace
+*.diff -whitespace

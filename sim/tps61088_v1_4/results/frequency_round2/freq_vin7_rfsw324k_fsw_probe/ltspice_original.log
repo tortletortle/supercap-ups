@@ -1,0 +1,40 @@
+LTspice 26.1.1 for Windows
+Circuit: C:\Users\tortl\Documents\Codex\2026-11-20\c-users-tortl-downloads-dc-v1\work\supercap-ups-repo\sim\tps61088_v1_4\diagnostics\freq_vin7_rfsw324k_fsw_probe.cir
+Start Time: Sat Nov 21 16:51:47 2026
+Options:method=gear reltol=.003 trtol=7 gmin=1e-10 numdgt=7 threads=1 plotwinsize=0
+solver = Normal
+Maximum thread count: 1
+tnom = 27
+temp = 27
+method = Gear
+gmin = 1e-10
+reltol = 0.003
+trtol = 7
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+dd: Emission coefficient, N=0.0001, too small, this might lead to numerical problems.
+Direct Newton iteration succeeded in finding operating point.
+Total elapsed time: 220.154 seconds.
+Total iterations: 10721201
+
+Files loaded:
+C:\Users\tortl\Documents\Codex\2026-11-20\c-users-tortl-downloads-dc-v1\work\supercap-ups-repo\sim\tps61088_v1_4\diagnostics\freq_vin7_rfsw324k_fsw_probe.cir
+C:\Users\tortl\Documents\Codex\2026-11-20\c-users-tortl-downloads-dc-v1\work\supercap-ups-repo\sim\tps61088_v1_3\model\TPS61088_LT.LIB
+
+t90: V(vout)=10.8 AT 0.0102964743364
+t98: V(vout)=11.76 AT 0.0112036638144
+sw_t6001: V(sw)=10 AT 0.0228167586943
+sw_t6101: V(sw)=10 AT 0.0230428309305
+f_sw_khz: 0.1/(sw_t6101-sw_t6001)=442.336492352
+avg_vout: AVG(V(vout))=11.9987436854 FROM 0.024 TO 0.026
+ripple: PP(V(vout))=0.0347005939526 FROM 0.024 TO 0.026
+peak_i: MAX(I(L1))=2.80766432218 FROM 0.024 TO 0.026
+peak_start: MAX(I(L1))=2.86496966994 FROM 0 TO 0.026
+avg_vsw: AVG(V(sw))=6.95313223851 FROM 0.024 TO 0.026
+avg_vfsw: AVG(V(fsw))=0.551986902541 FROM 0.024 TO 0.026
+min_vfsw: MIN(V(fsw))=-9.81019421458e-05 FROM 0.024 TO 0.026
+max_vfsw: MAX(V(fsw))=1.89360577516 FROM 0.024 TO 0.026
+avg_rfsw_current: AVG(I(RFSW))=-1.97566214073e-05 FROM 0.024 TO 0.026
+pp_rfsw_current: PP(I(RFSW))=3.77977995257e-05 FROM 0.024 TO 0.026

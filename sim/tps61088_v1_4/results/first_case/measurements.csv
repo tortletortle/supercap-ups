@@ -1,0 +1,17 @@
+measurement,value,unit,definition,source
+t90,0.0102964743364,s,0–26 ms,ltspice_original.log
+t98,0.0112036638144,s,0–26 ms,ltspice_original.log
+sw_t6001,0.0228167586943,s,0–26 ms,ltspice_original.log
+sw_t6101,0.0230428309305,s,0–26 ms,ltspice_original.log
+f_sw_khz,442.336492352,kHz,0–26 ms,ltspice_original.log
+avg_vout,11.9987436854,V,24–26 ms,ltspice_original.log
+ripple,0.0347005939526,Vpp,24–26 ms,ltspice_original.log
+peak_i,2.80766432218,A,24–26 ms,ltspice_original.log
+peak_start,2.86496966994,A,0–26 ms,ltspice_original.log
+iin_avg,1.73443603801,A,24–26 ms,ltspice_original.log
+iout_avg,1,A,24–26 ms,ltspice_original.log
+pin_avg,12.1343888398,W,24–26 ms,ltspice_original.log
+pout_avg,11.9987436854,W,24–26 ms,ltspice_original.log
+eta_pct,98.8821426754,%,24–26 ms,ltspice_original.log
+theoretical_f_sw_khz,496.137217379,kHz,"TI equation, VIN=7 V VOUT=12 V RFSW=324 kohm",calculation
+frequency_error_pct,-10.8439204201,%,100*(measured/theoretical-1),derived

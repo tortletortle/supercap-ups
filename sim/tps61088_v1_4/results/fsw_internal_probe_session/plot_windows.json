@@ -1,0 +1,20 @@
+[
+  {
+    "max_step_ns": 50,
+    "raw_path": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\v14-internal-native\\freq_vin7_rfsw324k_internal_probe_50ns\\freq_vin7_rfsw324k_internal_probe_50ns.raw",
+    "cycle_start_s": 0.024508088858347186,
+    "next_cycle_start_s": 0.024510386647375974,
+    "plotted_raw_index_start": 2379152,
+    "plotted_raw_index_end_exclusive": 2379542,
+    "alignment": "Each run aligned to its own first complete cycle after 24.5 ms; illustrative overlay only."
+  },
+  {
+    "max_step_ns": 25,
+    "raw_path": "C:\\Users\\tortl\\Documents\\Codex\\2026-11-20\\c-users-tortl-downloads-dc-v1\\work\\v14-internal-native\\freq_vin7_rfsw324k_internal_probe_25ns\\freq_vin7_rfsw324k_internal_probe_25ns.raw",
+    "cycle_start_s": 0.02450030438589074,
+    "next_cycle_start_s": 0.024502578725790064,
+    "plotted_raw_index_start": 2810605,
+    "plotted_raw_index_end_exclusive": 2811029,
+    "alignment": "Each run aligned to its own first complete cycle after 24.5 ms; illustrative overlay only."
+  }
+]

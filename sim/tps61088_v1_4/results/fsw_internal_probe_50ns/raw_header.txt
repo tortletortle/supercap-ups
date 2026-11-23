@@ -1,0 +1,37 @@
+Title: C:\Users\tortl\Documents\Codex\2026-11-20\c-users-tortl-downloads-dc-v1\work\supercap-ups-repo\sim\tps61088_v1_4\diagnostics\freq_vin7_rfsw324k_internal_probe_50ns.cir
+Date: Sat Nov 21 21:42:42 2026
+Plotname: Transient Analysis
+Flags: real double forward nocompression
+No. Variables: 27
+No. Points:      2570310
+Offset:    0.0000000000000000e+00
+Command: Linear Technology Corporation LTspice
+Variables:
+	0	time	time
+	1	V(comp)	voltage
+	2	V(en)	voltage
+	3	V(fsw)	voltage
+	4	V(ss)	voltage
+	5	V(sw)	voltage
+	6	V(vin)	voltage
+	7	V(vout)	voltage
+	8	V(x1:gate_l)	voltage
+	9	V(x1:mode_ok)	voltage
+	10	V(x1:ssend)	voltage
+	11	V(x1:u5_ifsw)	voltage
+	12	V(x1:u5_n01584)	voltage
+	13	V(x1:u5_n16903113)	voltage
+	14	V(x1:u5_pvin)	voltage
+	15	V(x1:u5_sel_toff)	voltage
+	16	V(x1:u5_tdelay_sw)	voltage
+	17	V(x1:u5_tend)	voltage
+	18	V(x1:u5_toff)	voltage
+	19	V(x1:u5_toff_sel)	voltage
+	20	V(x1:u5_toff_sel_1)	voltage
+	21	V(x1:u5_tsw)	voltage
+	22	I(L1)	device_current
+	23	I(RFSW)	device_current
+	24	I(V1)	device_current
+	25	I(VLOAD)	device_current
+	26	L1:flux	voltage
+Binary:

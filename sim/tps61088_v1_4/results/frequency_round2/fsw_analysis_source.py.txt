@@ -1,0 +1,128 @@
+"""Read-only diagnostic RAW analysis; never runs or modifies a circuit."""
+import argparse
+import importlib.util
+import json
+from pathlib import Path
+import numpy as np
+
+ROOT = Path(__file__).resolve().parents[1] / 'supercap-ups-repo'
+spec = importlib.util.spec_from_file_location('first_case', ROOT / 'sim/tps61088_v1_4/scripts/analyze_first_case.py')
+m = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(m)
+
+def cross(t, y, level, rising=True):
+    if rising:
+        k = np.flatnonzero((y[:-1] < level) & (y[1:] >= level))
+    else:
+        k = np.flatnonzero((y[:-1] >= level) & (y[1:] < level))
+    return t[k] + (level-y[k])/(y[k+1]-y[k])*(t[k+1]-t[k])
+
+def stats(x):
+    return dict(min=float(np.min(x)), median=float(np.median(x)), max=float(np.max(x)), mean=float(np.mean(x)), std=float(np.std(x)))
+
+def main():
+    p=argparse.ArgumentParser()
+    p.add_argument('raw',type=Path)
+    p.add_argument('--out',type=Path,default=Path(__file__).resolve().parent)
+    args=p.parse_args()
+    header,names,a=m.load_raw(args.raw)
+    ix={n.lower():i for i,n in enumerate(names)}
+    t=a[:,ix['time']]
+    needed=['v(sw)','v(fsw)','i(rfsw)','v(vin)','v(vout)']
+    x={n:a[:,ix[n]] for n in needed}
+    sw,fsw,ir,vin,out=(x[n] for n in needed)
+    softstart=a[:,ix['v(ss)']]
+    k=(t>=.022)&(t<=.026)
+    tt=np.asarray(t[k]); ss=np.asarray(sw[k]); ff=np.asarray(fsw[k]); ii=np.asarray(ir[k])
+    # Reconstruct PVIN with U5_ON=0 (normal regulation): R5/R6 each in
+    # parallel with the corresponding switch Roff=1e9; C3=C4=5pF.
+    # Eliminate the resistive SW/4 divider node and use implicit trapezoid.
+    g3,g4,g5,g6=1/2.4e6,1/.8e6,1/3e6+1/1e9,1/3e6+1/1e9
+    c=5e-12; den=g3+g4+g5
+    mat=np.array([[(g5*g5/den-g5-g6)/c,g6/c],[g6/c,-g6/c]])
+    inp=np.array([g5*g3/den/c,0.])
+    vv=np.zeros((len(tt),2)); vv[0]=np.mean(vin[k])/4
+    eye=np.eye(2)
+    for n,dt in enumerate(np.diff(tt)):
+        vv[n+1]=np.linalg.solve(eye-dt/2*mat,(eye+dt/2*mat)@vv[n]+dt/2*inp*(ss[n]+ss[n+1]))
+    pv=vv[:,1]
+    # Discard at least 1ms initialization; analyze 24-26ms.
+    late=(tt>=.024)&(tt<=.026)
+    def avg(y):
+        q=(tt>.024)&(tt<.026)
+        tx=np.r_[.024,tt[q],.026]
+        yy=np.r_[np.interp(.024,tt,y),y[q],np.interp(.026,tt,y)]
+        return float(np.trapezoid(yy,tx)/.002)
+    up=cross(tt,ss,10); down=cross(tt,ss,10,False)
+    up=up[(up>=.024)&(up<.026)]
+    rows=[]
+    stable=np.zeros(len(tt),dtype=bool)
+    for u,v in zip(up[:-1],up[1:]):
+        d=down[(down>u)&(down<v)]
+        if len(d)!=1: continue
+        d=float(d[0]); z=(tt>=u)&(tt<=d)
+        rr=cross(tt[z],ff[z]-pv[z],0)
+        reset=cross(tt[z],ff[z],.5,False)
+        # Avoid transistor transition/ringing windows for voltage/current ratio.
+        q=(tt>=u+30e-9)&(tt<=d-30e-9)
+        stable |= q
+        charge=-ii[q]-ff[q]/1e6
+        cf=np.trapezoid(charge,tt[q])/(ff[q][-1]-ff[q][0])
+        vh=float(np.trapezoid(ss[z],tt[z])/(tt[z][-1]-tt[z][0]))
+        v0=float(np.interp(u,tt,ff))
+        vth=float(np.interp(rr[0],tt,pv)) if len(rr)==1 else None
+        req=1/(1/324e3+1/1e6); asym=vh/(1+324e3/1e6)
+        predict=-req*23e-12*np.log((asym-vth)/(asym-v0)) if vth is not None else None
+        rows.append(dict(up_s=float(u),down_s=d,next_up_s=float(v),period_s=float(v-u),
+            sw_high_s=d-u,pvin_cross_s=float(rr[0]) if len(rr)==1 else None,
+            cross_to_sw_down_s=float(d-rr[0]) if len(rr)==1 else None,
+            cross_to_fsw_reset_s=float(reset[0]-rr[0]) if len(rr)==1 and len(reset)==1 else None,
+            fsw_reset_to_sw_down_s=float(d-reset[0]) if len(reset)==1 else None,
+            sw_rise_to_pvin_cross_s=float(rr[0]-u) if len(rr)==1 else None,
+            model_RC_ramp_prediction_s=float(predict) if predict is not None else None,
+            model_RC_ramp_error_s=float(predict-(rr[0]-u)) if predict is not None else None,
+            fsw_at_sw_rise_V=float(np.interp(u,tt,ff)),
+            fsw_peak_in_cycle_V=float(np.max(ff[z])),
+            sw_high_avg_V=vh,
+            pvin_at_cross_V=float(np.interp(rr[0],tt,pv)) if len(rr)==1 else None,
+            charge_inferred_C_F=float(cf)))
+    good=(ss>11)&(ff>.05)&(-ii>1e-6)&late&stable
+    ratio=ss[good]/(-ii[good]); ohm=ii-(ff-ss)/324e3
+    # Analytical comparisons retain fixed formula conditions, not fit to result.
+    R=324e3; C=23e-12; Vl=7.; Vh=12.; td=89e-9
+    ideal_ramp=R*C*Vl/(4*Vh)
+    noleak_ramp=-R*C*np.log(1-Vl/(4*Vh))
+    req=1/(1/R+1/1e6); va=Vh/(1+R/1e6)
+    leaky_ramp=-req*C*np.log(1-(Vl/4)/va)
+    result=dict(raw=str(args.raw.resolve()),variables=names,
+        steady_window_s=[.024,.026],
+        steady_fsw_voltage_V=dict(min=float(ff[late].min()),max=float(ff[late].max()),time_avg=avg(ff)),
+        steady_resistor_current_A=dict(min=float(ii[late].min()),max=float(ii[late].max()),time_avg=avg(ii)),
+        ohm_law_max_abs_residual_A=float(abs(ohm[late]).max()),
+        valid_sw_high_R_timing_ohm=stats(ratio),
+        reconstructed_PVIN_V=dict(min=float(pv[late].min()),max=float(pv[late].max()),time_avg=avg(pv)),
+        average_SW_over_4_V=avg(ss)/4,
+        average_VIN_over_4_V=avg(vin[k])/4,
+        U5_ON_normal_regulation_condition_verified=bool(np.all(out[k]*120/1196 < np.minimum(softstart[k],1.204)+.05)),
+        U5_ON_condition_margin_min_V=float(np.min(np.minimum(softstart[k],1.204)+.05-out[k]*120/1196)),
+        cycles=len(rows),
+        cycle_summary={n:stats(np.array([r[n] for r in rows if r[n] is not None])) for n in rows[0] if n not in ['up_s','down_s','next_up_s','pvin_cross_s']},
+        formula_comparison=dict(linear_ramp_s=ideal_ramp,exponential_ramp_without_leak_s=noleak_ramp,
+            exponential_ramp_with_1Mohm_leak_s=leaky_ramp,
+            datasheet_period_s=(ideal_ramp+td)*Vh/Vl,
+            noleak_estimated_period_s=(noleak_ramp+td)*Vh/Vl,
+            leaky_estimated_period_s=(leaky_ramp+td)*Vh/Vl),
+        limitations=['PVIN reconstruction assumes U5_ON=0 in normal regulation; threshold nodes were not saved.',
+          'Analytical period assumes ideal boost duty relation, fixed 7V/12V, 89ns delay, and no switch drops.',
+          'PVIN reconstruction uses external SW; 4 parallel 1mOhm internal pin resistors are not directly probed.',
+          'Sampling excludes 30ns from either SW transition for charge/C validation.',
+          'These calculations apportion timing contributions and do not establish a model defect.'])
+    args.out.mkdir(parents=True,exist_ok=True)
+    (args.out/'fsw_analysis.json').write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
+    import csv
+    with (args.out/'fsw_cycle_analysis.csv').open('w',newline='',encoding='utf-8') as f:
+        w=csv.DictWriter(f,fieldnames=list(rows[0]));w.writeheader();w.writerows(rows)
+    np.savez_compressed(args.out/'fsw_reconstructed_steady.npz',time=tt[late],sw=ss[late],fsw=ff[late],current=ii[late],pvin=pv[late])
+    print(json.dumps(result,indent=2))
+
+if __name__=='__main__': main()

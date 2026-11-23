@@ -1,0 +1,19 @@
+{
+  "verified_utc": "2026-11-21T08:59:34.061800+00:00",
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "numpy": "2.5.3",
+  "matplotlib": "3.11.2",
+  "scripts": [
+    {
+      "path": "sim/tps61088_v1_4/scripts/analyze_first_case.py",
+      "sha256": "8be736b3a3b39e0986ff70fbd3cacc7cdf7ab64b9f0f089d96d4404bc2c93979"
+    },
+    {
+      "path": "sim/tps61088_v1_4/scripts/analyze_frequency_round2.py",
+      "sha256": "dcc2f3ee07da6c0413e833f53dbceca5b43f26874ce5c828534b9ce76842bd7f"
+    }
+  ],
+  "original_decks_model_and_first_case_unchanged_vs_source": true,
+  "native_hashes_and_logs_verified": true,
+  "note": "RAW files kept outside repository. All new runs use unchanged f24cf8e circuits and first-round executable hash."
+}

@@ -1,0 +1,75 @@
+{
+  "first_raw_sha256": "7551601fea3f7f93ca93c0c71be42ce3e743ff49fcc965abde3c9bd8ad554cf2",
+  "probe_raw_sha256": "cd5720b42e784e4cb49c1a32ccd42b79a06f18a56e610db023580fb0a60ba328",
+  "comparison": "Every stored double of every common vector including time; no resampling",
+  "all_common_vectors_exactly_equal": true,
+  "vectors": [
+    {
+      "vector": "time",
+      "point_count": 2570310,
+      "exactly_equal": true,
+      "maximum_absolute_difference": 0.0
+    },
+    {
+      "vector": "V(comp)",
+      "point_count": 2570310,
+      "exactly_equal": true,
+      "maximum_absolute_difference": 0.0
+    },
+    {
+      "vector": "V(en)",
+      "point_count": 2570310,
+      "exactly_equal": true,
+      "maximum_absolute_difference": 0.0
+    },
+    {
+      "vector": "V(ss)",
+      "point_count": 2570310,
+      "exactly_equal": true,
+      "maximum_absolute_difference": 0.0
+    },
+    {
+      "vector": "V(sw)",
+      "point_count": 2570310,
+      "exactly_equal": true,
+      "maximum_absolute_difference": 0.0
+    },
+    {
+      "vector": "V(vin)",
+      "point_count": 2570310,
+      "exactly_equal": true,
+      "maximum_absolute_difference": 0.0
+    },
+    {
+      "vector": "V(vout)",
+      "point_count": 2570310,
+      "exactly_equal": true,
+      "maximum_absolute_difference": 0.0
+    },
+    {
+      "vector": "I(L1)",
+      "point_count": 2570310,
+      "exactly_equal": true,
+      "maximum_absolute_difference": 0.0
+    },
+    {
+      "vector": "I(V1)",
+      "point_count": 2570310,
+      "exactly_equal": true,
+      "maximum_absolute_difference": 0.0
+    },
+    {
+      "vector": "I(VLOAD)",
+      "point_count": 2570310,
+      "exactly_equal": true,
+      "maximum_absolute_difference": 0.0
+    },
+    {
+      "vector": "L1:flux",
+      "point_count": 2570310,
+      "exactly_equal": true,
+      "maximum_absolute_difference": 0.0
+    }
+  ],
+  "limitation": "Deterministic repeatability of this model/solver/deck only, not statistical or hardware validation"
+}

@@ -1,0 +1,24 @@
+PASS LTspice exit zero and full 26ms RAW
+PASS original log byte identity
+PASS input deck byte identity
+PASS no failed measurements or fatal solver errors
+PASS model adapted from same official archive
+PASS RAW exact size/end
+PASS frequency_window retained every RAW point
+INFO frequency_window: 29375 points
+PASS steady_window retained every RAW point
+INFO steady_window: 256217 points
+PASS startup_peak_window retained every RAW point
+INFO startup_peak_window: 2480 points
+PASS 16 normalized deck comparisons
+PASS original matrix still exactly 16 cases
+PASS original source unchanged: sim/tps61088_v1_4/netlists/*.cir
+PASS original source unchanged: sim/tps61088_v1_4/scripts/build_matrix.py
+PASS original source unchanged: sim/tps61088_v1_3/model/TPS61088_LT.LIB
+PASS PNG readable: output_and_inductor.png
+PASS PNG readable: startup_overview.png
+PASS PNG readable: switching_frequency.png
+PASS no raw/db/pycache deliverables
+INFO LTspice warnings retained: 5
+INFO only one simulation run; other 15 decks NOT_RUN
+INFO manifest excludes itself; includes this validation record

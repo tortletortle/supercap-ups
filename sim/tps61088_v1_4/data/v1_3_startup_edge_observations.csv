@@ -1,0 +1,7 @@
+rfsw_kohm,vin_V,sw_t1_s,sw_t101_s,t98_s,early_interval_kHz,both_edges_before_t98,source_log,interpretation
+324,7.0,0.009355819462,0.009507392451,0.011201622114,659.748,true,logs/bom_first/bom_7.log,startup_only_not_steady_state
+324,8.5,0.009388941095,0.009527543724,0.011205244661,721.487,true,logs/bom_retry/bom_8p5.log,startup_only_not_steady_state
+324,9.0,0.009420158096,0.009594318053,0.011212429958,574.185,true,logs/bom_retry/bom_9.log,startup_only_not_steady_state
+324,9.4,0.009476365122,0.009807834280,0.011210171584,301.687,true,logs/bom_retry/bom_9p4.log,startup_only_not_steady_state
+267,9.4,0.009519443330,0.009850852413,0.011265071052,301.742,true,logs/parameter_scan/fs267_9p4.log,startup_only_not_steady_state
+412,9.4,0.009522756800,0.009854178216,0.011265489587,301.731,true,logs/parameter_scan/fs412_9p4.log,startup_only_not_steady_state
