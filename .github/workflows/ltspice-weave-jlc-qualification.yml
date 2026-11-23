@@ -17,8 +17,6 @@ permissions:
 jobs:
   convert-and-verify:
     runs-on: ubuntu-latest
-    env:
-      STAGE_DIR: ${{ runner.temp }}/tps61088-eol-1p2s-weave
     steps:
       - name: Check out power-stage baseline
         uses: actions/checkout@v4
@@ -38,6 +36,13 @@ jobs:
       - name: Install Weave CLI dependency
         working-directory: .tools/weave/cli
         run: npm install --no-audit --no-fund --package-lock=false
+
+      - name: Initialize isolated staging path
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "STAGE_DIR=$RUNNER_TEMP/tps61088-eol-1p2s-weave" >> "$GITHUB_ENV"
+          mkdir -p "$RUNNER_TEMP/tps61088-eol-1p2s-weave"
 
       - name: Stage immutable source inputs
         shell: bash
