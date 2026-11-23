@@ -54,6 +54,7 @@ py -3 .\hardware\ltspice-jlc-qualification\package_jlc_import.py `
 - 扫描 ASC 中的全部 `SYMBOL` 记录；
 - 优先使用 ASC 同目录下 Weave 生成的 `__block21.asy`；
 - 从本机 LTspice 库查找 `bi/cap/ind/res/voltage.asy`；
+- 从 ZIP 副本中移除 .include/.ic/.save/.options/.tran/.meas 仿真指令；原始 ASC 不改动；
 - 检查缺失和同名冲突；
 - 只有全部符号唯一匹配时才生成 ZIP；
 - 输出 ZIP SHA256 和 manifest。
