@@ -1,17 +1,17 @@
 # 4S 超级电容 UPS 电源候选图
 
-在 KiCad 9 中打开 [工程](supercap-ups-4s.kicad_pro)，进入 Schematic Editor。当前顶层工程包含八个子页；仓库中的 [原理图 PDF](supercap-ups-4s.pdf) 是上一轮七页导出，需在本轮 ERC 后重新生成。
+在 KiCad 9 中打开 [工程](supercap-ups-4s.kicad_pro)，进入 Schematic Editor。当前顶层工程包含九个子页；仓库中的 [原理图 PDF](supercap-ups-4s.pdf) 仍是旧版导出，最新九页 PDF 以本轮 CI artifact 为准。
 
 | 图页 | 电路覆盖 | 验证边界 |
 | --- | --- | --- |
 | 储能与升压 | 4S × 20 F、抽头、四路 2.2 kΩ 无源均压、TPS61088 升压 | 均压用于抑制稳态漏电差引起的偏移。失配单体快速过压时，仍需独立停充 |
 | CC/CV 充电候选 | TPS54302、外部电流检测与反馈、防回灌元件及关断接口 | 充电电流、环路稳定性、精准 CV 和单体过压联锁仍待验证 |
-| 组端欠压 | TPS3700 组端检测、硬件迟滞、PACK_UV_OK 输出 | 组端许可已接入放电隔离，BOOST_EN 仍待接入系统控制 |
+| 组端欠压 | TPS3700 组端检测、硬件迟滞、PACK_UV_OK 输出 | PACK_UV_OK 已接入新 ARM 许可链；仍需做角点和故障注入 |
 | 四串单体过压 | 四路差分采样、开漏过压停充 | CHG_OVP_OD 已接充电 EN。控制器充电许可、抽头断线和故障复位仍待验证 |
-| 放电隔离 | Si7149DP 背靠背开关，由 PACK_UV_OK 与 DISCHARGE_ARM 控制 | DISCHARGE_ARM 仍待驱动。热态通路电阻、浪涌和欠压回跳仍待验证 |
-| 四串单体欠压监测 | BQ76905、4S VC 映射、输入 RC、独立 BAT/REGSRC 供电、I²C/ALERT | 原理图候选已挂入顶层；CUV 1.05 V 精度、配置失效默认状态、硬件锁存和动态关断待验证 |
+| 放电隔离 | Si7149DP 背靠背开关，由 PACK_UV_OK 与 DISCHARGE_ARM 控制 | 新增 DFF ARM 锁存驱动 DISCHARGE_ARM；跨页网表、热态通路电阻、浪涌和欠压回跳待验证 |
+| 四串单体欠压监测 | BQ76905、4S VC 映射、输入 RC、独立 BAT/REGSRC 供电、I²C/ALERT | 原理图已挂入顶层；1.05 V CUV 精度、配置失效默认状态和动态关断待验证 |\n| 系统放电互锁 | TPS3839 REGOUT supervisor、SN74LVC1G74 ARM 锁存、三路 AND、RC/Schmitt BOOST_EN 延迟 | 原理图候选已挂入顶层；启动超时/BOOST_READY 反馈仍未实现 |
 
-此前 KiCad 9.0.2 的七页整合图 ERC 为 0 错误、0 警告，且已核对 PACK_4S/GND、VIN_BOOST 隔离及精密反馈网表。新增 BQ76905 第八子页尚未完成本轮 ERC、PDF 和层级网表复核；不得把旧七页 ERC 结果当作新八页工程的验证结果。
+八页基线在 KiCad 9.0.x 的 CI ERC 为 0 错误、4 条警告（两颗 REF5025ID 与两颗 2N7002 的嵌入式符号库版本不匹配）；BQ76905 页已通过该轮层级 ERC。第九页 System Interlock 已加入，本轮九页 ERC/网表仍在验证中。
 
 TPS61088 原功率级依据见 [V1.4 EOL 局部窗口网表](https://github.com/tortletortle/supercap-ups/blob/f3ed57162d2f10beb377a69f5ff68a8f5a07595e/sim/tps61088_v1_4/joint/eol_1p2s_130m_92pct.cir) 和 [TI 数据手册](https://www.ti.com/lit/ds/symlink/tps61088.pdf)。RILIM 仍是研究候选，输入和输出电容采用网表有效值。
 
@@ -21,7 +21,7 @@ TPS61088 原功率级依据见 [V1.4 EOL 局部窗口网表](https://github.com/
 
 ## 第二轮评审
 
-[单体过压设计](cell-ovp-design.md) · [单体欠压监测接口](cell-uv-monitor-design.md) · [BQ76905 单体欠压原理图](cell-uv-monitor.kicad_sch) · [放电隔离设计](pack-discharge-switch-design.md) · [精密恒压及独立总压截止候选](precision-cv-ovp/README.md) · [主备预启动与切换候选](backup-pre-ready-switching.md) · [充电、UVLO 与串联损耗联合计算](../../sim/charge_window/README.md) · [容量失配降流分流估算](../../sim/balance_recovery/README.md)
+[单体过压设计](cell-ovp-design.md) · [单体欠压监测接口](cell-uv-monitor-design.md) · [BQ76905 单体欠压原理图](cell-uv-monitor.kicad_sch) · [系统互锁设计](system-interlock-design.md) · [系统互锁原理图](system-interlock.kicad_sch) · [放电隔离设计](pack-discharge-switch-design.md) · [精密恒压及独立总压截止候选](precision-cv-ovp/README.md) · [主备预启动与切换候选](backup-pre-ready-switching.md) · [充电、UVLO 与串联损耗联合计算](../../sim/charge_window/README.md) · [容量失配降流分流估算](../../sim/balance_recovery/README.md)
 
 旧 10 F 基线下的 9.2825 V / 23.5 mΩ 结果已由 20 F 候选取代，不再作为当前设计门槛。当前 4×20 F EOL 联合预算采用每颗 11.2 F、106 mΩ DC ESR 压力假设、9.0 V 最低初始 OCV、85% Boost 效率及 145 mΩ 输出路径：新增输入串联路径 100 mΩ 时保持约 1.375 s，150 mΩ 时约 1.216 s。当前热态输入路径设计目标为 ≤100 mΩ；150 mΩ 仅作边界测试。详情见 [电源级收敛评审](POWER_STAGE_DESIGN_CONVERGENCE.md)、[初步 BOM](BOM_PRELIMINARY.csv) 和 [可复跑预算](../../sim/design_convergence/README.md)。
 
