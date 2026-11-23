@@ -16,6 +16,10 @@ import zipfile
 from pathlib import Path
 
 SYMBOL_RE = re.compile(r"^\s*SYMBOL\s+(\S+)", re.IGNORECASE | re.MULTILINE)
+SIM_DIRECTIVE_RE = re.compile(
+    r"^\s*TEXT\b.*!\.(include|ic|save|options|tran|meas)\b",
+    re.IGNORECASE,
+)
 
 
 def sha256(path: Path) -> str:
@@ -118,17 +122,32 @@ def main() -> int:
 
     output = args.output.resolve()
     output.parent.mkdir(parents=True, exist_ok=True)
-    # The ZIP contains only the ASC and its corresponding ASY files, as required
-    # by the documented LTspice import flow. Model libraries remain separate.
+    # JLC EDA imports the schematic, not LTspice simulation directives or model
+    # libraries. Strip only the listed TEXT directives from the ZIP copy; keep the
+    # original ASC untouched next to the source netlist and model dependency.
+    jlc_lines: list[str] = []
+    stripped_directives: list[str] = []
+    for line in asc_text.splitlines():
+        if SIM_DIRECTIVE_RE.match(line):
+            stripped_directives.append(line)
+        else:
+            jlc_lines.append(line)
+    jlc_asc_bytes = ("\n".join(jlc_lines) + "\n").encode("latin-1")
+
+    # The ZIP contains only the JLC-specific ASC copy and its corresponding ASY
+    # files, as required by the documented LTspice import flow. Model libraries
+    # and the untouched simulation ASC remain outside this import-only ZIP.
     with zipfile.ZipFile(output, "w", compression=zipfile.ZIP_DEFLATED) as zf:
-        zf.write(asc, arcname=asc.name)
+        zf.writestr(asc.name, jlc_asc_bytes)
         for symbol, source in resolved.items():
             rel = symbol_relpath(symbol)
             zf.write(source, arcname=rel.as_posix())
 
+    jlc_asc_sha = hashlib.sha256(jlc_asc_bytes).hexdigest().upper()
     manifest = {
         "format": "JLCEDA-Pro LTspice import ZIP",
-        "asc": {"file": asc.name, "sha256": sha256(asc)},
+        "asc": {"file": asc.name, "source_sha256": sha256(asc), "jlc_copy_sha256": jlc_asc_sha},
+        "stripped_simulation_directives": stripped_directives,
         "symbols": [
             {"name": name, "file": symbol_relpath(name).as_posix(),
              "source": str(resolved[name]), "sha256": sha256(resolved[name])}
@@ -143,6 +162,7 @@ def main() -> int:
     report.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"JLC_ZIP={output}")
     print(f"SYMBOL_COUNT={len(symbols)}")
+    print(f"STRIPPED_SIM_DIRECTIVES={len(stripped_directives)}")
     print(f"SHA256={sha256(output)}")
     print(f"MANIFEST={report}")
     return 0
