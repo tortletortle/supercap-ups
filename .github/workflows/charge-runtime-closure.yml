@@ -1,0 +1,26 @@
+name: P0 charge runtime closure
+
+on:
+  push:
+    branches:
+      - p0-charge-runtime-closure
+  pull_request:
+    branches:
+      - power-stage-integration
+
+jobs:
+  analytical-model:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run analytical model tests
+        working-directory: sim/charge_runtime_closure
+        run: python -m unittest -v
+      - name: Run model output
+        working-directory: sim/charge_runtime_closure
+        run: python model.py
