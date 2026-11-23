@@ -228,6 +228,21 @@ class BackupReadyFaultTests(unittest.TestCase):
             backup_ready(fully_qualified_state(startup_timeout=True))
         )
 
+    def test_boost_en_low_revokes_ready(self) -> None:
+        self.assertFalse(backup_ready(fully_qualified_state(boost_en=False)))
+
+    def test_cell_alert_asserted_revokes_ready(self) -> None:
+        self.assertFalse(backup_ready(fully_qualified_state(cell_alert_ok=False)))
+
+    def test_efuse_status_bad_revokes_ready(self) -> None:
+        self.assertFalse(backup_ready(fully_qualified_state(efuse_status_ok=False)))
+
+    def test_fault_clear_without_fresh_arm_does_not_rearm(self) -> None:
+        # Clearing the external fault does not create a new DISCHARGE_ARM edge.
+        self.assertFalse(backup_ready(fully_qualified_state(
+            fault_latched=False, discharge_armed=False
+        )))
+
     def test_boost_voltage_outside_window_blocks_ready(self) -> None:
         self.assertFalse(
             backup_ready(fully_qualified_state(boost_input_voltage_v=10.7))
