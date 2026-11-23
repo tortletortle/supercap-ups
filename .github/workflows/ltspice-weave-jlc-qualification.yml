@@ -48,11 +48,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p "$STAGE_DIR/joint" "$STAGE_DIR/model" artifacts/tps61088-weave-jlc-preflight
+          mkdir -p "$STAGE_DIR/joint" "$STAGE_DIR/model" \
+            artifacts/tps61088-weave-jlc-preflight/source/joint \
+            artifacts/tps61088-weave-jlc-preflight/source/model
           cp sim/tps61088_v1_3/joint/eol_1p2s.cir "$STAGE_DIR/joint/eol_1p2s.cir"
           cp sim/tps61088_v1_3/model/TPS61088_LT.LIB "$STAGE_DIR/model/TPS61088_LT.LIB"
-          cp sim/tps61088_v1_3/joint/eol_1p2s.cir artifacts/tps61088-weave-jlc-preflight/
-          cp sim/tps61088_v1_3/model/TPS61088_LT.LIB artifacts/tps61088-weave-jlc-preflight/
+          cp "$STAGE_DIR/joint/eol_1p2s.cir" artifacts/tps61088-weave-jlc-preflight/source/joint/
+          cp "$STAGE_DIR/model/TPS61088_LT.LIB" artifacts/tps61088-weave-jlc-preflight/source/model/
 
       - name: Convert NET to ASC and require round-trip MATCH
         shell: bash
@@ -66,8 +68,8 @@ jobs:
             "$STAGE_DIR/joint/eol_1p2s.cir" \
             "$STAGE_DIR/joint/eol_1p2s.asc" | tee "$STAGE_DIR/weave-verify.log"
           grep -Fq "MATCH" "$STAGE_DIR/weave-verify.log"
-          cp "$STAGE_DIR/joint/eol_1p2s.asc" artifacts/tps61088-weave-jlc-preflight/
-          cp "$STAGE_DIR/joint/"*.asy artifacts/tps61088-weave-jlc-preflight/ 2>/dev/null || true
+          cp "$STAGE_DIR/joint/eol_1p2s.asc" artifacts/tps61088-weave-jlc-preflight/source/joint/
+          cp "$STAGE_DIR/joint/"*.asy artifacts/tps61088-weave-jlc-preflight/source/joint/ 2>/dev/null || true
           cp "$STAGE_DIR/weave-convert.log" artifacts/tps61088-weave-jlc-preflight/
           cp "$STAGE_DIR/weave-verify.log" artifacts/tps61088-weave-jlc-preflight/
 
@@ -80,10 +82,14 @@ jobs:
           from pathlib import Path
 
           root = Path("artifacts/tps61088-weave-jlc-preflight")
-          asc = root / "eol_1p2s.asc"
+          source = root / "source"
+          joint = source / "joint"
+          asc = joint / "eol_1p2s.asc"
+          net = joint / "eol_1p2s.cir"
+          model = source / "model" / "TPS61088_LT.LIB"
           text = asc.read_text(encoding="latin-1")
           symbols = sorted(set(re.findall(r"^\s*SYMBOL\s+(\S+)", text, re.M)), key=str.lower)
-          asy_files = {p.stem.lower(): p.name for p in root.glob("*.asy")}
+          asy_files = {p.stem.lower(): p.name for p in joint.glob("*.asy")}
           report = [
             "# Weave conversion preflight",
             "",
@@ -97,7 +103,7 @@ jobs:
             *[f"- {s}" for s in symbols],
             "",
             "## ASY files generated beside ASC",
-            *([f"- {p.name}" for p in sorted(root.glob("*.asy"))] or ["- none"]),
+            *([f"- {p.name}" for p in sorted(joint.glob("*.asy"))] or ["- none"]),
             "",
             "## Standard ASY files still required from local LTspice installation",
             *([f"- {s}.asy" for s in symbols if s.lower() not in asy_files] or ["- none"]),
@@ -105,6 +111,7 @@ jobs:
             "## Engineering caveat",
             "This is the eol_1p2s.cir simulation testbench. The generated __blockN symbol is a synthetic macro-model pin carrier, not the real TPS61088 package pinout and not a PCB footprint.",
             "The existing eol_1p2s.log references work/lt_probe/TPS61088_LT.LIB; this CI run preserves the repository model file and does not claim that the old log proves this exact model copy was re-simulated.",
+            "The source/ folder preserves the relative ../model/TPS61088_LT.LIB include path for local LTspice inspection.",
           ]
           (root / "conversion-report.md").write_text("\n".join(report) + "\n", encoding="utf-8")
           (root / "required-asy-symbols.txt").write_text("\n".join(symbols) + "\n", encoding="utf-8")
@@ -118,11 +125,11 @@ jobs:
             "baseline_ref": "power-stage-integration",
             "baseline_commit": "360508c08f23f63cdd74fba7e0c201b0907d3825",
             "weave_commit": "bc9b3d3299f3d96fae3f9a1e56de2c639e40c68a",
-            "netlist": {"file": "eol_1p2s.cir", "sha256": sha(root / "eol_1p2s.cir")},
-            "model": {"file": "TPS61088_LT.LIB", "sha256": sha(root / "TPS61088_LT.LIB")},
-            "asc": {"file": asc.name, "sha256": sha(asc)},
+            "netlist": {"file": "source/joint/eol_1p2s.cir", "sha256": sha(net)},
+            "model": {"file": "source/model/TPS61088_LT.LIB", "sha256": sha(model)},
+            "asc": {"file": "source/joint/eol_1p2s.asc", "sha256": sha(asc)},
             "symbols": symbols,
-            "asy_files_generated": sorted(p.name for p in root.glob("*.asy")),
+            "asy_files_generated": sorted(p.name for p in joint.glob("*.asy")),
             "weave_connectivity": "MATCH",
             "ltspice_smoke": "NOT_RUN",
             "jlc_gui_import": "NOT_RUN",
@@ -130,7 +137,7 @@ jobs:
           }
           (root / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
-          (cd artifacts/tps61088-weave-jlc-preflight && sha256sum * > SHA256SUMS.txt)
+          (cd artifacts/tps61088-weave-jlc-preflight && find . -type f ! -name SHA256SUMS.txt -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS.txt)
 
       - name: Upload conversion and packaging preflight
         uses: actions/upload-artifact@v4
