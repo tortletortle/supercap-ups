@@ -114,15 +114,15 @@ TPS54302 的外部 CV（OPA333）与 CC（TLV9001/INA180）均通过注入 FB �
 
 | 顺序 | 文件 | 变更 |
 |---:|---|---|
-| 1 | `hardware/kicad/supercap-ups-4s.kicad_sch` | 新增 Cell UV Monitor、Power MUX/Backup eFuse、System Interlock 三个层级页；保留现有 Boost/充电/OVP/UVLO 页。 |
+| 1 | `hardware/kicad/supercap-ups-4s.kicad_sch` | 顶层工程已挂入 BQ76905 Cell UV Monitor 与 System Interlock 两页；Power MUX/Backup eFuse 仍待新增。 |
 | 2 | `hardware/kicad/cell-uv-monitor-design.md`（本轮新增） | 明确 BQ76905 4S VC 映射、短接规则、BAT/REGSRC/REGOUT、ALERT/I²C、CUV 设置和上电配置状态。 |
 | 3 | `hardware/kicad/cell-uv-monitor.kicad_sch`（本轮已新增） | BQ76905 4S 输入、VC RC、BAT/REGSRC/REGOUT、ALERT/I²C 和未使用引脚处理；待 KiCad ERC、网表和电气验证。 |
-| 3 | `hardware/kicad/system-interlock.kicad_sch`（新增） | PACK_UV_OK、CELL_UV_FAULT、CELL_PROTECT_VALID、BOOST_READY、手动 ARM、故障锁存和 DISCHARGE_ARM 输出；任何电源/参考/采样无效时默认禁止。 |
-| 4 | `hardware/kicad/power-mux.kicad_sch`（新增） | TPS2121、TPS25947、IN2 残压否决、BACKUP_READY、LOAD_12V 和反灌测点。 |
-| 5 | `hardware/kicad/pack-discharge-switch.kicad_sch` | DISCHARGE_ARM 改接锁存输出；CELL_UV_FAULT 与 PACK_UV_OK 硬件撤销许可；复核 P-MOS VGS、热态 RDS(on) 和单管短路故障。 |
-| 6 | `hardware/kicad/supercap-ups-charger.kicad_sch` / `precision-cv-ovp.kicad_sch` | 只在完成环路和故障逻辑验证后更新补偿、CV/OVP 和 Q601 门控；保留单体 OVP 独立路径。 |
-| 7 | `hardware/kicad/BOM_PRELIMINARY.csv`（本轮新增） | 记录当前 MPN/封装候选、额定值、替代料、验证状态和未关闭事项；完成样品/封装/热校核后再冻结正式 BOM。 |
-| 8 | `sim/design_convergence/`（新增） | 保持时间解析预算、联合角点、系统验收矩阵和复跑说明；后续增加 BQ76905 CUV、MUX 残压和充电环路仿真。 |
+| 4 | `hardware/kicad/system-interlock.kicad_sch`（本轮已新增） | TPS3839 REGOUT 电源监督、三路 AND 安全许可、SN74LVC1G74 上升沿 ARM 锁存、BOOST_EN RC/Schmitt 延迟；启动超时和 BOOST_READY 反馈尚未实现。 |
+| 5 | `hardware/kicad/power-mux.kicad_sch`（下一轮新增） | TPS2121、TPS25947、IN2 残压否决、BACKUP_READY、LOAD_12V 和反灌测点。 |
+| 6 | `hardware/kicad/pack-discharge-switch.kicad_sch` | 已有 DISCHARGE_ARM 网名由新锁存页驱动；仍需跨页网表确认，并复核 P-MOS VGS、热态 RDS(on) 和单管短路故障。 |
+| 7 | `hardware/kicad/supercap-ups-charger.kicad_sch` / `precision-cv-ovp.kicad_sch` | 只在完成环路和故障逻辑验证后更新补偿、CV/OVP 和 Q601 门控；保留单体 OVP 独立路径。 |
+| 8 | `hardware/kicad/BOM_PRELIMINARY.csv` | 记录当前 MPN/封装候选、额定值、替代料、验证状态和未关闭事项；完成样品/封装/热校核后再冻结正式 BOM。 |
+| 9 | `sim/design_convergence/` | 保持时间解析预算、联合角点、系统验收矩阵和复跑说明；后续增加 BQ76905 CUV、MUX 残压和充电环路仿真。 |
 
 ### 推荐测试点
 
