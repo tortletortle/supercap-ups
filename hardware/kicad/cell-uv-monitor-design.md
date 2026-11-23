@@ -84,13 +84,13 @@ BQ76905 电芯电压 ADC 是逐个差分测量，16-bit 输出单位为 1 mV，�
 
 建议增加以下逻辑信号：
 
-- `CELL_MON_PG`：REGOUT 有效且 BQ76905 BAT 电压在推荐范围。
+- `CELL_MON_PG`：由外部硬件电压监控器确认 REGOUT 有效且 BAT 电压在推荐范围；BQ76905 本身没有专用 PGOOD 引脚，不能用 MCU 软件位代替此硬件有效信号。
 - `CELL_CONFIG_VALID`：MCU 已写入 4S、CUV/COV、delay、recovery、watchdog 等寄存器，并逐项读回匹配。
 - `CELL_UV_FAULT_L`：ALERT 报告 CUV/诊断/看门狗故障时的低有效故障线。
-- `CELL_PROTECT_VALID`：硬件组合 `CELL_MON_PG AND CELL_CONFIG_VALID AND NOT CELL_UV_FAULT`，任何输入开路或掉电都必须默认低。
-- `DISCHARGE_ARM_LATCHED`：只在手动 ARM 请求、PACK_UV_OK、CELL_PROTECT_VALID 和 BOOST_READY 条件同时满足时置位；任何 UV、monitor reset、watchdog、I²C 配置错误或电源失效均异步清除。
+- `CELL_PROTECT_VALID`：硬件组合 `CELL_MON_PG AND CELL_CONFIG_VALID AND NOT CELL_ANY_FAULT`；CELL_ANY_FAULT 包括 CUV、COV、open-wire、温度、参考/ADC 诊断、host watchdog 和配置校验错误。任何输入开路或掉电都必须默认低。
+- `DISCHARGE_ARM_LATCHED`：只在手动 ARM 请求、PACK_UV_OK、CELL_PROTECT_VALID 和辅助控制电源有效时置位，用于闭合 PACK_4S→VIN_BOOST 物理路径；BOOST_READY 不是该锁存的置位条件，否则会形成“先有 Boost 才能接通 Boost 输入”的循环依赖。任何 UV、monitor reset、watchdog、I²C 配置错误或电源失效均异步清除。
 
-现有 Q503 继续由 PACK_UV_OK 控制；Q504 的控制端改由 DISCHARGE_ARM_LATCHED。BQ76905 ALERT 不直接驱动功率 P-MOS 栅极，也不允许 MCU GPIO 单独覆盖硬件故障。保护故障解除、PACK 电压回弹或主电源恢复均不得自动重新闭合放电开关。
+现有 Q503 继续由 PACK_UV_OK 控制；Q504 的控制端改由 DISCHARGE_ARM_LATCHED。闭合 PACK_4S→VIN_BOOST 后才允许 BOOST_EN 启动；若在规定启动超时内没有 BOOST_READY，应清除 DISCHARGE_ARM_LATCHED 并断开放电路径。Boost 达到有效窗口且 eFuse PG 后，另生成 BACKUP_READY，只有 BACKUP_READY 才能解除 MUX 的 OV2/备源否决。BQ76905 ALERT 不直接驱动功率 P-MOS 栅极，也不允许 MCU GPIO 单独覆盖硬件故障。保护故障解除、PACK 电压回弹或主电源恢复均不得自动重新闭合放电开关。
 
 BQ76905 的 CHG/DSG 引脚是低侧 N-MOSFET gate driver，不能直接替代当前高侧背靠背 P-MOS 控制链。若改为使用 BQ 的 DSG/CHG 输出驱动低侧 NFET，必须重新审查放电回路接地、反向电流、负载地漂移和故障短路模式。
 
@@ -100,8 +100,9 @@ BQ76905 的 CHG/DSG 引脚是低侧 N-MOSFET gate driver，不能直接替代当
 2. MCU 检查 REGOUT、PACK_4S 和 I²C 通信，写入 4S cell map、CUV/COV、delay、recovery、watchdog、温度保护设置。
 3. MCU 逐项读回并核对 CRC、cell voltage 合理性、VC5 与各单体求和一致性、open-wire 检查结果。
 4. 只有当所有监测通道有效、无 CUV/COV/诊断故障、host watchdog 已启用后，才允许 CELL_CONFIG_VALID 置位。
-5. 经过显式 ARM 低→高边沿后，才可置位 DISCHARGE_ARM_LATCHED；Boost 预启动并验证 READY 后，允许备源进入 MUX。
-6. 任一保护触发时先清除 DISCHARGE_ARM_LATCHED 并拉低 BOOST_EN；随后确认 Q501/Q502 VGS 回到关断区。故障清除后必须重新执行 ARM 低→高序列。
+5. 经过显式 ARM 低→高边沿后，若 PACK_UV_OK、CELL_PROTECT_VALID 和辅助控制电源均有效，先置位 DISCHARGE_ARM_LATCHED 以闭合 PACK_4S→VIN_BOOST。
+6. 闭合放电路径后才拉高 BOOST_EN；在启动超时内确认 Boost 输出窗口有效，再使能 eFuse 并生成 BACKUP_READY。Boost 未就绪或 eFuse 未 PG 时，TPS2121 的 IN2 继续被 OV2 否决；超时则清除 DISCHARGE_ARM_LATCHED。
+7. 任一保护触发时先清除 DISCHARGE_ARM_LATCHED 并拉低 BOOST_EN；随后确认 Q501/Q502 VGS 回到关断区。故障清除后必须重新执行 ARM 低→高序列。
 
 如果 MCU 没有完成配置，BQ76905 默认 CUV=2.5 V、COV=4.2 V 的电池默认阈值不适合本项目；因此“BQ 芯片已上电”不等于“单体保护已就绪”。上电、复位、brownout、I²C NACK/CRC 错误、VC tap 开路、REGOUT 掉电均须保持放电关闭。
 
@@ -113,3 +114,4 @@ BQ76905 的 CHG/DSG 引脚是低侧 N-MOSFET gate driver，不能直接替代当
 4. 分别断开 VC0–VC5 各抽头、短接相邻输入、断 BAT、断 REGSRC、拉低 REGOUT、复位 MCU、注入 I²C CRC 错误和 host watchdog timeout。每种情况 CELL_PROTECT_VALID 必须低，放电开关必须保持关断。
 5. 在 12 W 放电时制造弱单体初始 1.45/2.65/2.65/2.65 V，确认 CELL UV 先于单体越过 1.0 V 保护边界动作；组端 UVLO 不得掩盖弱单体。
 6. CUV 触发后卸载并观察 pack voltage rebound；不得因回弹自动恢复。必须先使 ARM 请求为低，再重新置高。
+7. 在主源有效时闭合 pack path、启动 Boost，记录启动超时和 BACKUP_READY；确认 Boost 未就绪时 TPS2121 的 IN2 仍被 OV2 否决，且超时会释放 DISCHARGE_ARM_LATCHED。
