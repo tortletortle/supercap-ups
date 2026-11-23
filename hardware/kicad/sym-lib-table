@@ -16,4 +16,5 @@
   (lib (name "UPS") (type "KiCad") (uri "${KIPRJMOD}/TPS3700DDC.kicad_sym") (options "") (descr "UPS pack undervoltage symbols"))
   (lib (name "UPS_Aux") (type "KiCad") (uri "${KIPRJMOD}/UPS_Aux.kicad_sym") (options "") (descr "UPS auxiliary power symbols"))
   (lib (name "UPS_Disconnect") (type "KiCad") (uri "${KIPRJMOD}/Si7149DP.kicad_sym") (options "") (descr "UPS discharge isolation symbols"))
+  (lib (name "Power_Interlock") (type "KiCad") (uri "${KIPRJMOD}/Power_Interlock.kicad_sym") (options "") (descr "Hardware discharge interlock logic"))
 )
