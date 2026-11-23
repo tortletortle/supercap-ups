@@ -147,7 +147,7 @@ def main() -> None:
     instances = re.findall(r'\(symbol \(lib_id "([^"]+)"\)[\s\S]*?\(property "Reference" "([^"]+)"', cell_sch)
     refs = [ref for _, ref in instances]
     require(len(refs) == len(set(refs)), "BQ76905 schematic contains duplicate component references")
-    require(len(instances) == 21, f"expected 21 BQ76905 page components, found {len(instances)}")
+    require(len(instances) == 28, f"expected 28 BQ76905 page components, found {len(instances)}")
     require(all(lib_id in lib_ids for lib_id, _ in instances),
             "BQ76905 schematic instance references a missing embedded library symbol")
 
@@ -173,6 +173,8 @@ def main() -> None:
             "VC4A/VC4B and adjacent filter network are not visibly shorted as a 4S group")
     require(len(re.findall(r'\(no_connect ', cell_sch)) == 2,
             "unused BQ76905 DSG/CHG pins must be explicitly no-connect")
+    require(len(re.findall(r'\(symbol \(lib_id "power:PWR_FLAG"\)', cell_sch)) == 7,
+            "filtered VC/BAT/REGSRC rails must carry explicit ERC source flags")
     for ref in ("R801", "R802", "R803", "R804", "R805", "R806", "R807", "R808", "R809", "R810",
                 "C801", "C802", "C803", "C804", "C805", "C806", "C807", "C808", "D801", "D802", "U801"):
         require(f'(property "Reference" "{ref}"' in cell_sch, f"missing schematic component {ref}")
