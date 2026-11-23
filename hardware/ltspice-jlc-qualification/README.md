@@ -45,7 +45,7 @@ ASC 中引用：
 
 ```powershell
 py -3 .\hardware\ltspice-jlc-qualification\package_jlc_import.py `
-  --asc .\path\to\artifact\eol_1p2s.asc `
+  --asc .\path\to\artifact\source\joint\eol_1p2s.asc `
   --output .\path\to\artifact\eol_1p2s-jlc-import.zip `
   --symbol-root "$env:LOCALAPPDATA\LTspice\lib\sym"
 ```
