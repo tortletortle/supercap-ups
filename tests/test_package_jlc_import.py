@@ -11,6 +11,13 @@ sys.path.insert(0, str(ROOT))
 import package_jlc_import as packager  # noqa: E402
 
 
+def write_asy(path: Path, pin_orders: list[int], marker: str = ""):
+    lines = ["Version 4", "SymbolType CELL", marker]
+    for i, order in enumerate(pin_orders, start=1):
+        lines.extend([f"PIN 0 {i * 16} NONE 0", f"PINATTR PinName P{i}", f"PINATTR SpiceOrder {order}"])
+    path.write_text("\n".join(lines) + "\n", encoding="latin-1")
+
+
 class PackageJlcImportTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
@@ -31,8 +38,8 @@ class PackageJlcImportTests(unittest.TestCase):
             "TEXT 0 40 Left 2 !keep-this-note\n",
             encoding="latin-1",
         )
-        (self.asc_dir / "__block21.asy").write_text("Version 4\n", encoding="latin-1")
-        (self.sym_a / "res.asy").write_text("Version 4\nresistor\n", encoding="latin-1")
+        write_asy(self.asc_dir / "__block21.asy", list(range(1, 22)))
+        write_asy(self.sym_a / "res.asy", [1, 2], "source-a")
         self.output = self.root / "out" / "fixture.zip"
         self.report = self.root / "out" / "manifest.json"
 
@@ -63,6 +70,7 @@ class PackageJlcImportTests(unittest.TestCase):
             self.assertIn("keep-this-note", imported)
         manifest = json.loads(self.report.read_text(encoding="utf-8"))
         self.assertEqual(len(manifest["stripped_simulation_directives"]), 2)
+        self.assertEqual(manifest["symbols"][0]["pin_orders"], list(range(1, 22)))
         self.assertTrue(manifest["not_production_ready"])
 
     def test_missing_symbol_fails_closed(self):
@@ -75,8 +83,14 @@ class PackageJlcImportTests(unittest.TestCase):
         self.assertFalse(self.output.exists())
 
     def test_conflicting_same_name_symbols_fail_closed(self):
-        (self.sym_b / "res.asy").write_text("Version 4\ndifferent\n", encoding="latin-1")
+        write_asy(self.sym_b / "res.asy", [1, 2], "source-b")
         code = self.run_main("--symbol-root", self.sym_a, "--symbol-root", self.sym_b)
+        self.assertEqual(code, 3)
+        self.assertFalse(self.output.exists())
+
+    def test_noncontiguous_symbol_pin_order_fails_closed(self):
+        write_asy(self.sym_a / "res.asy", [1, 3])
+        code = self.run_main("--symbol-root", self.sym_a)
         self.assertEqual(code, 3)
         self.assertFalse(self.output.exists())
 
