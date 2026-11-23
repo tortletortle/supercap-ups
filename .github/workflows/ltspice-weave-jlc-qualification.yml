@@ -93,7 +93,7 @@ jobs:
           lib_text = model.read_text(encoding="latin-1")
           lib_lines = lib_text.splitlines()
           sub_idx = next(i for i, line in enumerate(lib_lines)
-                         if re.match(r"(?i)^\\.subckt\\s+TPS61088_TRANS\\b", line))
+                         if re.match(r"(?i)^\.subckt\s+TPS61088_TRANS\b", line))
           subckt_header = lib_lines[sub_idx]
           for line in lib_lines[sub_idx + 1:]:
             if line.lstrip().startswith("+"):
@@ -107,7 +107,7 @@ jobs:
           x1_nodes = x1_tokens[1:-1]
           block_asy = joint / "__block21.asy"
           asy_orders = [int(x) for x in re.findall(
-              r"PINATTR\\s+SpiceOrder\\s+(\\d+)", block_asy.read_text(encoding="latin-1"))]
+              r"PINATTR\s+SpiceOrder\s+(\d+)", block_asy.read_text(encoding="latin-1"))]
           assert len(subckt_pins) == len(x1_nodes) == len(asy_orders), (
               f"macro-model pin mismatch: subckt={len(subckt_pins)} X1={len(x1_nodes)} ASY={len(asy_orders)}")
           assert sorted(asy_orders) == list(range(1, len(subckt_pins) + 1)), "synthetic ASY SpiceOrder is not contiguous"
