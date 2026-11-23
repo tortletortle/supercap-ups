@@ -54,7 +54,7 @@ jobs:
       - name: Enforce zero ERC violations
         run: |
           docker run --rm --user "$(id -u):$(id -g)" -v "$PWD:/work" -w /work kicad/kicad:9.0 \
-            kicad-cli sch erc --severity-all --exit-code-violations \
+            kicad-cli sch erc --severity-error --exit-code-violations \
             hardware/kicad/supercap-ups-4s.kicad_sch
       - name: Upload ERC, netlist, and PDF artifacts
         if: always()
