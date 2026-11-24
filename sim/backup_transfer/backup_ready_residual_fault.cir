@@ -112,6 +112,14 @@ SBACKUP_Q out470 load_qualified backup_sel_q 0 MUX_SW
 RLOAD_Q load_qualified 0 12
 CLOAD_Q load_qualified 0 100u
 
+* Positive control: a healthy, independently qualified backup path transfers.
+BMAIN_SEL_L main_sel_l 0 V = V(main)>11.2 ? 5 : 0
+BBACKUP_SEL_L backup_sel_l 0 V = ((V(main)<11.2) && (V(ready_live)>2.5)) ? 5 : 0
+SMAIN_L main load_qualified_live main_sel_l 0 MUX_SW
+SBACKUP_L out_live load_qualified_live backup_sel_l 0 MUX_SW
+RLOAD_L load_qualified_live 0 12
+CLOAD_L load_qualified_live 0 100u
+
 .options method=gear reltol=1e-4 abstol=1e-9 vntol=1e-6
 
 .control
