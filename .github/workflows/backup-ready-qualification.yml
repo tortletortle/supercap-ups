@@ -1,0 +1,56 @@
+name: backup-ready-qualification
+
+on:
+  push:
+    branches:
+      - agent/backup-ready-fail-safe-20261124
+    paths:
+      - "sim/backup_transfer/**"
+      - "hardware/kicad/backup-ready-interface.md"
+      - ".github/workflows/backup-ready-qualification.yml"
+  pull_request:
+    branches:
+      - power-stage-integration
+    paths:
+      - "sim/backup_transfer/**"
+      - "hardware/kicad/backup-ready-interface.md"
+      - ".github/workflows/backup-ready-qualification.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  backup-ready-python-and-spice:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run backup-ready unit tests
+        run: python3 -m unittest discover -s sim/backup_transfer -p 'test_*.py' -v
+      - name: Compile backup-ready Python sources
+        run: python3 -m py_compile sim/backup_transfer/backup_ready_supervisor.py sim/backup_transfer/test_backup_ready_supervisor.py sim/backup_transfer/check_spice_results.py
+      - name: Re-run baseline residual and OV2 checks
+        run: |
+          python3 -B sim/backup_transfer/check_residual_input.py
+          python3 -B sim/backup_transfer/check_ov2_bias.py
+      - name: Install ngspice
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ngspice
+      - name: Run behavioral SPICE and retain evidence
+        run: |
+          mkdir -p artifacts/backup-ready-spice
+          ngspice -v > artifacts/backup-ready-spice/ngspice-version.txt
+          bash sim/backup_transfer/run_backup_ready_spice.sh artifacts/backup-ready-spice
+      - name: Upload RAW, LOG, netlist, parameters, CSV, and SHA256
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backup-ready-behavioral-spice
+          path: artifacts/backup-ready-spice/
+          if-no-files-found: warn
+          retention-days: 90
