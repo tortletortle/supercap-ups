@@ -19,6 +19,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: backup-ready-qualification-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   backup-ready-python-and-spice:
     runs-on: ubuntu-latest
@@ -33,6 +37,8 @@ jobs:
         run: python3 -m unittest discover -s sim/backup_transfer -p 'test_*.py' -v
       - name: Compile backup-ready Python sources
         run: python3 -m py_compile sim/backup_transfer/backup_ready_supervisor.py sim/backup_transfer/test_backup_ready_supervisor.py sim/backup_transfer/check_spice_results.py
+      - name: Validate SPICE parameter JSON
+        run: python3 -m json.tool sim/backup_transfer/backup_ready_spice_parameters.json > /dev/null
       - name: Re-run baseline residual and OV2 checks
         run: |
           python3 -B sim/backup_transfer/check_residual_input.py
