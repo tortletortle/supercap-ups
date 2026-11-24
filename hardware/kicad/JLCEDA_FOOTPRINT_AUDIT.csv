@@ -56,7 +56,7 @@ D910,system-interlock.kicad_sch,1N4148W,Diode_SMD:D_SOD-323,YES,1N4148WS-7-F（�
 J101,supercap-ups-charger.kicad_sch,CHARGE INTERFACE,,NO,,,CRITICAL_FOOTPRINT_OR_MPN_MISSING,连接器无 footprint。
 J601,precision-cv-ovp.kicad_sch,BENCH INTERFACE,,NO,,,CRITICAL_FOOTPRINT_OR_MPN_MISSING,连接器无 footprint。
 J910,system-interlock.kicad_sch,Host / arm interface,Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical,YES,,,ASSIGNED_STATIC_ONLY,
-L1,supercap-ups-4s.kicad_sch,3.3 uH,,NO,MWSA1205S-3R3MT (候选；需 Isat 保证确认),13.45×12.6×5.0 mm for MWSA1205S candidate,CRITICAL_FOOTPRINT_OR_MPN_MISSING,现用 CKST0603 3.3uH 的 Isat 9.5A 是典型值，低于 TPS61088 RILIM=100k 的最大峰值限流；不可放行。
+L1,supercap-ups-4s.kicad_sch,3.3 uH,,NO,Bourns SRP1265A-3R3M (primary); Sunlord MWSA1206S-3R3MT; CODACA CSAB1265A-3R3M,Bourns 13.5×12.5×6.2mm; Sunlord 13.45×12.60×6.0mm; CODACA 12.8×13.8×6.3mm,CRITICAL_FOOTPRINT_MISSING; CANDIDATE_PACKAGE_REVIEW_REQUIRED,"No footprint assigned. Bourns SRP1265A-3R3M is current primary candidate; use Bourns recommended land pattern, verify pad size/thermal copper and height clearance. No .kicad_pcb exists, so no board footprint has yet been frozen."
 L101,supercap-ups-charger.kicad_sch,10uH / Isat >= 6A,,NO,MWSA1204S-100MT（候选；需 Isat 保证确认）,13.5×12.8×4.0 mm for MWSA1204S candidate,CRITICAL_FOOTPRINT_OR_MPN_MISSING,原理图仅标注 10uH / Isat≥6A，未给完整 MPN/footprint。
 Q501,pack-discharge-switch.kicad_sch,Si7149DP,Package_SO:PowerPAK_SO-8_Single,YES,Si7149DP-T1-GE3,PowerPAK SO-8 Single,ASSIGNED_STATIC_ONLY,
 Q502,pack-discharge-switch.kicad_sch,Si7149DP,Package_SO:PowerPAK_SO-8_Single,YES,Si7149DP-T1-GE3,PowerPAK SO-8 Single,ASSIGNED_STATIC_ONLY,
