@@ -296,7 +296,9 @@ ARM_PERMIT = CELL_PERMIT & PACK_UV_OK & CTRL_SUPPLY_OK
 
 ### C. BQ DSG 直接驱动低边 N-MOS
 
-BQ76905 DSG 驱动器可直接控制低边 N-MOS，是比外部 ALERT→MCU→高边 P-MOS 栅极链更短的候选路径。TI 数据手册表 6-18 给出 `t(DSG_OFF)` 最大 3µs，测试条件为 DSG 端 20nF、串联 100Ω、VDS=12V，并以 `V(FETON_DSG)` 的 80%→20% 定义 fall time；该最大值只适用于该规定负载/测试条件，不能外推到更大栅极负载。当前设计是高边背靠背 P-MOS，DSG 未接，不能套用该 3µs 数字。若改用低边 NFET、总栅极负载控制在 20nF 以内并采用约 100Ω 栅极电阻，候选估算为 `2.869ms ADSCAN + 0.024ms 输入 RC + 0.003ms DSG fall ≈ 2.896ms`；但 ADSCAN 仍是典型值而非最大保证，且 DSG fall time 不等于负载电流实际归零。还必须确认 OTP/FET_EN 自主 FET 控制已启用、CUV 对 DSG 的保护位生效，并在 7–9.4V 实际工作范围复核驱动幅度。
+BQ76905 DSG 驱动器可直接控制低边 N-MOS，是比外部 ALERT→MCU→高边 P-MOS 栅极链更短的候选路径。TI 数据手册表 6-18 给出 `t(DSG_OFF)` 最大 3µs，测试条件为 DSG 端 20nF、串联 100Ω、VDS=12V，并以 `V(FETON_DSG)` 的 80%→20% 定义 fall time；该最大值只适用于该规定负载/测试条件，不能外推到更大栅极负载。当前设计是高边背靠背 P-MOS，DSG 未接，不能套用该 3µs 数字。若改用低边 NFET、总栅极负载控制在 20nF 以内并采用约 100Ω 栅极电阻，候选估算为 `2.869ms ADSCAN + 0.024ms 输入 RC + 0.003ms DSG fall ≈ 2.896ms`；但 ADSCAN 仍是典型值而非最大保证，且 DSG fall time 不等于负载电流实际归零。还必须确认 `Settings:FET Options[FET_EN]` 已启用自主 FET 控制，并读回 BatteryStatus.FET_EN(bit 8)=1；放电使能时同时核对 BatteryStatus.DSG(bit 2) 状态、CUV 对 DSG 的保护位和 7–9.4V 实际驱动幅度。
+
+**关键时序未闭合：** TI TRM 说明 CUV Alert 在首次低于阈值的 ADSCAN 触发，而 CUV Fault/DSG 关断要等低压持续达到 CUV Delay（最小 1 ADSCAN）。资料没有给出可用于签核的 CUV Status→DSG 输出传播最大值，也没有明确给出 CUV_DLY=1 是在首次低压采样立即 Trip，还是需等下一次 ADSCAN。上面的 2.896ms 仅假设首次采样即 Trip；若需要额外一个 2.869ms ADSCAN，则约为 5.765ms，直接失败。因此 BQ DSG 路径仍是优先台架验证候选，不是 5ms 已通过方案。外部 ALERT 路径使用首次 CUV Alert，可绕过该 fault delay，但 ALERT 传播最大值仍缺失。
 
 改成低边断开会改变系统地参考，需检查：
 - 主备电源是否共地或存在旁路回流；
