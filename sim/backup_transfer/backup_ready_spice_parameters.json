@@ -1,6 +1,52 @@
 {
   "model_class": "behavioral_spice_not_vendor_macro_model",
   "baseline_commit": "360508c08f23f63cdd74fba7e0c201b0907d3825",
+  "datasheet_sources": {
+    "TPS25947": {
+      "document": "SLVSFC9C",
+      "revision_date": "2026-05",
+      "url": "https://www.ti.com/lit/ds/symlink/tps25947.pdf"
+    },
+    "TPS2121": {
+      "document": "SLVSEA3F",
+      "revision_date": "2020-08",
+      "url": "https://www.ti.com/lit/ds/symlink/tps2121.pdf"
+    }
+  },
+  "TPS25947": {
+    "package": "RPW 10-pin QFN 2mm x 2mm",
+    "operating_input_voltage_V": [2.7, 23.0],
+    "operating_temperature_C": [-40, 125],
+    "TPS259470ARPW": {
+      "fault_policy": "auto_retry",
+      "status_pins": ["AUXOFF", "FLT"],
+      "auxoff_active_high": true,
+      "flt_active_low": true,
+      "auxoff_deasserts_on_load_fault": false,
+      "output_short_circuit_auxoff": "HIGH",
+      "output_short_circuit_flt": "HIGH",
+      "retry_interval_typical_s": 0.110,
+      "retry_interval_max_guaranteed": null
+    },
+    "TPS259474LRPW": {
+      "fault_policy": "latch_off",
+      "status_pins": ["PG", "PGTH"],
+      "pg_active_high": true,
+      "output_short_circuit_pg": "depends_on_PGTH",
+      "pgth_falling_threshold_V": {"min": 1.076, "typ": 1.09, "max": 1.116},
+      "pgth_rising_threshold_V": {"min": 1.183, "typ": 1.20, "max": 1.223},
+      "pg_assert_deglitch_typical_s": 0.000012,
+      "pg_deassert_deglitch_typical_s": 0.000012,
+      "pg_deglitch_max_guaranteed": null
+    }
+  },
+  "TPS2121": {
+    "package": "RUX 12-pin VQFN-HR 2.5mm x 2.0mm",
+    "ov2_pin": 4,
+    "ov2_function": "active_low_enable_supervisor_for_IN2",
+    "vref_rising_V": {"min": 1.01, "typ": 1.06, "max": 1.10},
+    "vref_falling_V": {"min": 0.99, "typ": 1.04, "max": 1.09}
+  },
   "boost_output_voltage_V": 12.0,
   "eFuse_path_resistance_ohm": 0.045,
   "eFuse_disconnect_time_s": 0.0001,
@@ -12,8 +58,6 @@
   "proof_path_drop_limit_V": 0.1,
   "proof_output_minimum_V": 11.8,
   "illustrative_PGTH_divider_ratio": 0.105,
-  "TPS259474L_PG_falling_threshold_V": [1.076, 1.116],
-  "TPS259474L_PG_rising_threshold_V": [1.183, 1.223],
   "main_source_drop_time_s": 0.0015,
   "illustrative_main_priority_threshold_V": 11.2,
   "illustrative_TPS2121_IN2_UV_threshold_V": 2.8,
@@ -24,9 +68,10 @@
     "No TPS25947 vendor macromodel; eFuse is an ideal voltage-controlled switch.",
     "No TPS2121 vendor macromodel; MUX selection is idealized behavioral logic.",
     "No analog OV2 clamp/bias circuit is modeled; BACKUP_READY gates the logical backup selection.",
-    "AUXOFF and FLT are held high in the TPS259470A counterexample; this represents documented output-fault status behavior, not a full pin model.",
-    "PG is modeled with threshold corners only; no 12 us typical deglitch or unguaranteed maximum delay is simulated.",
-    "The 1 A / 200 us proof pulse, 100 mV path-drop threshold, 11.8 V output minimum, divider ratio, COUT values, and load are screening assumptions, not approved hardware values.",
-    "This transient is a residual-voltage/path-qualification demonstration, not the 12 W / 1.2 s EOL hold-up simulation and not hardware evidence."
+    "AUXOFF and FLT are held high in the TPS259470A counterexample, representing the documented output-short fault status, not a full pin model.",
+    "PG is modeled with PGTH threshold corners only; 12us deglitch is typical with no datasheet maximum and is not timed in this transient.",
+    "The 1A / 200us proof pulse, 100mV path-drop threshold, 11.8V output minimum, divider ratio, COUT values, and load are screening assumptions, not approved hardware values.",
+    "The path-proof maximum age is not selected; the 100ms age used in Python unit tests is only a test fixture.",
+    "This transient is a residual-voltage/path-qualification demonstration, not the 12W / 1.2s EOL hold-up simulation and not hardware evidence."
   ]
 }
