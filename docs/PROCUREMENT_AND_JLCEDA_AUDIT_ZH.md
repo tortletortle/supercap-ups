@@ -271,3 +271,37 @@ onsemi BAV199LT1G 数据手册原始保证值为 IR≤5nA（VR=70V, TA=25°C）�
 - LCSC REF3325AIDCKR：https://www.lcsc.com/category/1028.html
 - LCSC TPS3700DDCR：https://www.lcsc.com/category/1604.html
 - LCSC REF5025IDR：https://www.lcsc.com/product-detail/voltage-reference_texas-instruments-ref5025idr_C544535.html
+### G. BQ76905 采购路径与 BQ76907 替代方案（再次修订）
+
+上一节写“DigiKey 中国和 LCSC 页面均无库存”仍然成立，但不能据此说完全没有大陆供货路径。进一步核对 LCSC 分类页后发现：
+
+- LCSC 自营产品页 BQ76905RGRR（C22394458）显示 0 件，参考价 $1.0106 不是可下单报价。
+- LCSC 分类页的“其他供应商库存”入口对同一 MPN 显示 6,965 件、$5.9903 起；这不是 LCSC 自营库存。供应商身份、批次/CoC、实际发货地、订单履约和退换保障仍需报价确认。
+- DigiKey 中国 BQ76905RGRR 显示 0 件，预计 2027-07-26 到货 3,000 件，单价显示 ¥17.26（仅缺货参考价）。
+- 结论：BQ76905 不是绝对买不到，但正规自营渠道现货未确认；LCSC 伙伴渠道存在高价目录入口。样机采购可以向伙伴渠道询价，但必须要求制造商原包装、批次码、CoC/授权链和到货可退换条款。不能直接按 6,965 件视为项目可用库存。
+
+#### BQ76907RGRR 替代评估
+
+TI BQ76907 是 2S–7S 监测/保护器件，4S 在其支持范围内；同为 RGR 20-pin、3.5×3.5mm VQFN，工作温度 -40..110°C，具备 I2C、ADC、低边 CHG/DSG 驱动和保护功能。DigiKey 中国目录显示 258 件、¥17.62；LCSC 其他供应商目录显示约 1,946–2,424 件；JLCPCB PCBA 库显示约 2,122 件，但 JLC 料库仅用于 PCBA，不能散料发货。
+
+它不是 pin-to-pin 替代：
+
+| 功能 | BQ76905 | BQ76907 |
+|---|---|---|
+| 支持串数 | 2S–5S | 2S–7S |
+| 封装 | RGR 20-pin 3.5×3.5mm | RGR 20-pin 3.5×3.5mm |
+| VC 引脚 | 1/2 为 VC3A/VC3B；18/19/20 为 VC5/VC4A/VC4B | 1..5 为 VC4..VC0；18..20 为 VC7..VC5 |
+| 公共功能引脚 | SRP/SRN/TS/DSG/CHG/VSS/SCL/SDA/ALERT/REGOUT/REGSRC/BAT 位于 6..17 | 主要功能脚位于 6..17 |
+| CRC | BQ76905 可配置 I2C CRC | BQ76907 基础型号 CRC disabled；BQ7690701 为 CRC-enabled 变体 |
+
+因此替换需重新画 cell sense 网络，重新核对 VC unused-pin 处理、开线检测、均衡路径、符号 pin map 和 PCB 走线；同时重新配置 OTP/寄存器、驱动固件和保护阈值。必须重跑采样周期、滤波/判定、ALERT、DSG 关断、实际电流隔离时间，以及开线/复位/欠压/通信错误/监测电源掉电测试。不能沿用 BQ76905 的 4.06ms 或 5ms 结论。
+
+若固件依赖 CRC，需另行核实 BQ7690701RGRR；本轮未找到该 CRC 版本的可靠大陆现货快照。当前 BQ76907RGRR 只能作为非 CRC 变体候选。
+
+新增来源：
+- TI BQ76907 Rev A（2026-07 修订）数据手册：https://www.ti.com/lit/ds/symlink/bq76907.pdf
+- TI BQ76907 产品页：https://www.ti.com/product/BQ76907
+- DigiKey 中国 BQ76907RGRR：https://www.digikey.cn/zh/products/detail/texas-instruments/BQ76907RGRR/22077514
+- LCSC BQ76907RGRR / JLC PCBA 库：https://jlcpcb.com/partdetail/BQ76907RGRR/C22458649
+- LCSC BQ76905RGRR 自营产品页（0 件）：https://www.lcsc.com/product-detail/C22394458.html
+- LCSC BQ76905RGRR 其他供应商目录：https://www.lcsc.com/category/1005.html?brand=100&s_z=n_tps709
