@@ -136,7 +136,8 @@
     "PG is modeled with PGTH threshold corners only; 12us deglitch is typical with no datasheet maximum and is not timed in this transient.",
     "The 1A / 200us proof pulse, 100mV path-drop threshold, 11.8V output minimum, divider ratio, COUT values, and load are screening assumptions, not approved hardware values.",
     "The path-proof maximum age is not selected; the 100ms age used in Python unit tests is only a test fixture.",
-    "This transient is a residual-voltage/path-qualification demonstration, not the 12W / 1.2s EOL hold-up simulation and not hardware evidence."
+    "This transient is a residual-voltage/path-qualification demonstration, not the 12W / 1.2s EOL hold-up simulation and not hardware evidence.",
+    "The 45mOhm healthy-path positive control equals the TPS25947 datasheet maximum RON and excludes PCB copper, connectors, vias, and shunt resistance; it is not a worst-case assembled-path value."
   ],
   "TPS259470ARPW_candidate_ILIM": {
     "source_branch": "p0-efuse-qualification",
