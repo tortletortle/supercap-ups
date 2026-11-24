@@ -3,8 +3,9 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-OUT_DIR="$1"
-if [ -z "$OUT_DIR" ]; then
+if [ "$#" -ge 1 ]; then
+  OUT_DIR="$1"
+else
   OUT_DIR="$ROOT/artifacts/backup-ready-spice"
 fi
 NETLIST="$ROOT/sim/backup_transfer/backup_ready_residual_fault.cir"
