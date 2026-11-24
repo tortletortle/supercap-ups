@@ -138,8 +138,9 @@ meas tran ready470a_after find v(ready470a) at=2.5m
 meas tran ready474l_after find v(ready474l) at=2.5m
 meas tran load_voltage_only_after find v(load_voltage_only) at=2.5m
 meas tran load_qualified_after find v(load_qualified) at=2.5m
+meas tran load_qualified_live_after find v(load_qualified_live) at=2.5m
 write backup_ready_residual_fault.raw all
-wrdata backup_ready_residual_fault.csv v(out_live) v(out100) v(out470) v(pg100) v(pg470) v(proof100) v(proof470) v(proof_live) v(proof_latched100) v(proof_latched470) v(proof_latched_live) v(ready470a) v(ready474l) v(ready_live) v(main) v(load_voltage_only) v(load_qualified)
+wrdata backup_ready_residual_fault.csv v(out_live) v(out100) v(out470) v(pg100) v(pg470) v(proof100) v(proof470) v(proof_live) v(proof_latched100) v(proof_latched470) v(proof_latched_live) v(ready470a) v(ready474l) v(ready_live) v(main) v(load_voltage_only) v(load_qualified) v(load_qualified_live)
 quit
 .endc
 .end
