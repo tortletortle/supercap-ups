@@ -1,0 +1,100 @@
+* BACKUP_READY residual-voltage counterexample.
+* Behavioral SPICE only: idealized eFuse/MUX switches; no vendor macromodels.
+* See backup_ready_spice_parameters.json for assumptions and limits.
+
+.param VBOOST_V=12
+.param RPATH=45m
+.param COUT100=100u
+.param COUT470=470u
+.param RBLEED=10k
+.param IPROOF=1
+.param TPROOF=200u
+.param TPROOF_START=1.1m
+.param PG_RATIO=0.105
+.param VPG_FALL_MAX=1.116
+.param VPG_RISE_MAX=1.223
+.param VPATH_DROP_MAX=100m
+.param VOUT_MIN=11.8
+
+VBOOST boost 0 {VBOOST_V}
+* eFuse path is initially on, then opens at 100 us; OUT capacitors retain charge.
+VEFUSE_CTRL efuse_ctrl 0 PWL(0 5 99u 5 100u 0 3m 0)
+.model EFUSE_SW SW(Ron={RPATH} Roff=1G Vt=2.5 Vh=0.1)
+S_EFUSE100 boost out100 efuse_ctrl 0 EFUSE_SW
+S_EFUSE470 boost out470 efuse_ctrl 0 EFUSE_SW
+
+COUT_100 out100 0 {COUT100}
+COUT_470 out470 0 {COUT470}
+RBLEED_100 out100 0 {RBLEED}
+RBLEED_470 out470 0 {RBLEED}
+
+* A live path with the same 45 mOhm series resistance is the positive control.
+RPATH_LIVE boost out_live {RPATH}
+COUT_LIVE out_live 0 100u
+RBLEED_LIVE out_live 0 {RBLEED}
+
+* 1 A / 200 us diagnostic pulse while the main source still powers LOAD.
+IPROOF_100 out100 0 PULSE(0 {IPROOF} {TPROOF_START} 1n 1n {TPROOF} 10m)
+IPROOF_470 out470 0 PULSE(0 {IPROOF} {TPROOF_START} 1n 1n {TPROOF} 10m)
+IPROOF_LIVE out_live 0 PULSE(0 {IPROOF} {TPROOF_START} 1n 1n {TPROOF} 10m)
+
+* Illustrative PGTH divider. 470 uF residual remains above the guaranteed
+* PG falling-threshold upper corner; 100 uF residual falls below the lower corner.
+BPG_100 pg100 0 V = if(V(out100)*{PG_RATIO} > {VPG_FALL_MAX}, 5, 0)
+BPG_470 pg470 0 V = if(V(out470)*{PG_RATIO} > {VPG_FALL_MAX}, 5, 0)
+BPG_LIVE pg_live 0 V = if(V(out_live)*{PG_RATIO} > {VPG_RISE_MAX}, 5, 0)
+
+* 470A-style status-only counterexample: status pins remain high for this
+* modeled output-side fault, per the device fault table; not a vendor model.
+VAUXOFF_470A auxoff470a 0 5
+VFLT_470A flt470a 0 5
+
+* Independent proof-load decision: path drop <=100 mV AND OUT >=11.8 V.
+BPROOF_100 proof100 0 V = if(V(boost)-V(out100) < {VPATH_DROP_MAX}, if(V(out100) > {VOUT_MIN}, 5, 0), 0)
+BPROOF_470 proof470 0 V = if(V(boost)-V(out470) < {VPATH_DROP_MAX}, if(V(out470) > {VOUT_MIN}, 5, 0), 0)
+BPROOF_LIVE proof_live 0 V = if(V(boost)-V(out_live) < {VPATH_DROP_MAX}, if(V(out_live) > {VOUT_MIN}, 5, 0), 0)
+
+* BACKUP_READY never relies on PG or AUXOFF/FLT alone.
+BREADY_470A ready470a 0 V = if(V(auxoff470a)>2.5, if(V(flt470a)>2.5, if(V(proof470)>2.5,5,0),0),0)
+BREADY_474L ready474l 0 V = if(V(pg470)>2.5, if(V(proof470)>2.5,5,0),0)
+BREADY_LIVE ready_live 0 V = if(V(pg_live)>2.5, if(V(proof_live)>2.5,5,0),0)
+
+* Main source is removed at 1.5 ms. Compare voltage-only selection against
+* selection gated by BACKUP_READY. These are idealized logical MUX controls.
+VMAIN main 0 PWL(0 12 1.499m 12 1.5m 0 3m 0)
+.model MUX_SW SW(Ron=20m Roff=1G Vt=2.5 Vh=0.1)
+BMAIN_SEL_V main_sel_v 0 V = if(V(main)>11.2, 5, 0)
+BBACKUP_SEL_V backup_sel_v 0 V = if(V(main)<11.2, if(V(out470)>2.8, 5, 0), 0)
+SMAIN_V main load_voltage_only main_sel_v 0 MUX_SW
+SBACKUP_V out470 load_voltage_only backup_sel_v 0 MUX_SW
+RLOAD_V load_voltage_only 0 12
+CLOAD_V load_voltage_only 0 100u
+
+BMAIN_SEL_Q main_sel_q 0 V = if(V(main)>11.2, 5, 0)
+BBACKUP_SEL_Q backup_sel_q 0 V = if(V(main)<11.2, if(V(ready474l)>2.5, 5, 0), 0)
+SMAIN_Q main load_qualified main_sel_q 0 MUX_SW
+SBACKUP_Q out470 load_qualified backup_sel_q 0 MUX_SW
+RLOAD_Q load_qualified 0 12
+CLOAD_Q load_qualified 0 100u
+
+.options method=gear reltol=1e-4 abstol=1e-9 vntol=1e-6
+
+.control
+set wr_singlescale
+set wr_vecnames
+tran 1u 3m 0 1u
+meas tran live_during_proof find v(out_live) at=1.2m
+meas tran residual100_after_proof find v(out100) at=1.299m
+meas tran residual470_after_proof find v(out470) at=1.299m
+meas tran pg100_after_proof find v(pg100) at=1.299m
+meas tran pg470_after_proof find v(pg470) at=1.299m
+meas tran proof_live_after find v(proof_live) at=1.299m
+meas tran proof470_after find v(proof470) at=1.299m
+meas tran ready470a_after find v(ready470a) at=1.299m
+meas tran ready474l_after find v(ready474l) at=1.299m
+meas tran load_voltage_only_after find v(load_voltage_only) at=2.5m
+meas tran load_qualified_after find v(load_qualified) at=2.5m
+wrdata backup_ready_residual_fault.csv v(out_live) v(out100) v(out470) v(pg100) v(pg470) v(proof_live) v(proof100) v(proof470) v(ready470a) v(ready474l) v(main) v(load_voltage_only) v(load_qualified)
+quit
+.endc
+.end
