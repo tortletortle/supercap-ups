@@ -426,6 +426,29 @@ def generate_netlists(out: Path) -> None:
         "weak_cell_cuv_1p135937.cir": (11.2, 0.106, 0.85, 0.100, (1.45, 2.5166666666667, 2.5166666666667, 2.5166666666667), 14.288235294117648, 1.05),
     }
     for filename, (cap, esr, eta, rin, initial, pin, cuv) in cases.items():
+        total_voc = sum(initial)
+        total_cell_r = 4.0 * esr
+        total_r = total_cell_r + rin
+        discriminant = total_voc * total_voc - 4.0 * total_r * pin
+        if discriminant <= 0:
+            raise ValueError(f"no real initial operating point for {filename}")
+        i0 = 2.0 * pin / (total_voc + math.sqrt(discriminant))
+        cell_terminal = [v - i0 * esr for v in initial]
+        n1 = initial[0]
+        c1 = cell_terminal[0]
+        n2 = c1 + initial[1]
+        c2 = c1 + cell_terminal[1]
+        n3 = c2 + initial[2]
+        c3 = c2 + cell_terminal[2]
+        n4 = c3 + initial[3]
+        pack = c3 + cell_terminal[3]
+        vin = pack - i0 * rin
+        ic_line = (
+            f".ic V(n1)={n1:.12g} V(c1)={c1:.12g} "
+            f"V(n2)={n2:.12g} V(c2)={c2:.12g} "
+            f"V(n3)={n3:.12g} V(c3)={c3:.12g} "
+            f"V(n4)={n4:.12g} V(pack)={pack:.12g} V(vin)={vin:.12g}"
+        )
         lines = [
             f"* 4S Eaton UPS averaged storage model: {filename}",
             "* BLOAD is an averaged constant-power draw at VIN_BOOST, not a TPS61088 switching model.",
@@ -442,12 +465,13 @@ def generate_netlists(out: Path) -> None:
             f"RIN pack vin {rin:.12g}",
             f"BLOAD vin 0 I={{ {pin:.12g}/max(V(vin),0.1) }}",
             ".options method=gear reltol=1e-7 abstol=1e-10",
-            ".save V(vin) V(pack) V(c1) V(c2) V(c3) V(n4) I(BLOAD)",
+            ic_line,
+            ".save V(vin) V(pack) V(c1) V(c2) V(c3) V(n4) I(RIN)",
             ".tran 100u 2 0 100u uic",
             ".meas tran t_boost_floor when V(vin)=7 fall=1",
             ".meas tran v_boost_at_1p2 find V(vin) at=1.2",
             ".meas tran v_pack_at_1p2 find V(pack) at=1.2",
-            ".meas tran i_input_at_1p2 find I(BLOAD) at=1.2",
+            ".meas tran i_input_at_1p2 find I(RIN) at=1.2",
         ]
         if cuv is not None:
             lines.append(f".meas tran t_cell1_cuv when V(c1)={cuv:.12g} fall=1")
