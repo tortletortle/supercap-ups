@@ -12,7 +12,7 @@ EXPECTED_COLUMNS = [
     "v(pg470)", "v(proof100)", "v(proof470)", "v(proof_live)",
     "v(proof_latched100)", "v(proof_latched470)", "v(proof_latched_live)",
     "v(ready470a)", "v(ready474l)", "v(ready_live)", "v(main)",
-    "v(load_voltage_only)", "v(load_qualified)",
+    "v(load_voltage_only)", "v(load_qualified)", "v(load_qualified_live)",
 ]
 
 
@@ -73,6 +73,7 @@ def main() -> None:
         "ready_live_after_main_loss_V": sample(headers, rows, 2.5e-3, "v(ready_live)"),
         "load_voltage_only_after_main_loss_V": sample(headers, rows, 2.5e-3, "v(load_voltage_only)"),
         "load_qualified_after_main_loss_V": sample(headers, rows, 2.5e-3, "v(load_qualified)"),
+        "load_qualified_live_after_main_loss_V": sample(headers, rows, 2.5e-3, "v(load_qualified_live)"),
     }
 
     checks = {
@@ -90,6 +91,12 @@ def main() -> None:
         "voltage_only_mux_exposes_residual_false_backup": (
             points["load_voltage_only_after_main_loss_V"]
             > points["load_qualified_after_main_loss_V"] + 2.0
+        ),
+        "faulted_backup_remains_inhibited_after_main_loss": (
+            points["load_qualified_after_main_loss_V"] < 6.0
+        ),
+        "healthy_backup_transfers_after_main_loss": (
+            points["load_qualified_live_after_main_loss_V"] > 11.8
         ),
     }
     failed = [name for name, passed in checks.items() if not passed]
