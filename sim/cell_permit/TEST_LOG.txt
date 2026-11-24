@@ -1,0 +1,20 @@
+Command:
+  python3 -m unittest -v test_model
+
+Environment:
+  Python 3.13.5
+  Execution environment: analysis Python runtime
+  ngspice: not installed locally
+  Note: Python startup emitted an unrelated artifact_tool spreadsheet-warmup warning;
+  the unittest process itself completed normally.
+
+Result:
+  Ran 19 tests
+  OK
+  Exit code: 0
+
+Evidence boundary:
+  These are Python unit/behavior-model tests only. No BQ76905 silicon,
+  LTspice/ngspice, bench hardware, or MOSFET current-isolation test was run locally.
+  The branch GitHub Actions workflow separately installs ngspice and runs only
+  the simplified equivalent-C gate RC deck; it is not a vendor device model.

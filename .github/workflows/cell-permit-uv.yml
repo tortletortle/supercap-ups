@@ -1,0 +1,77 @@
+name: cell-permit-uv-validation
+
+on:
+  push:
+    branches:
+      - cell-permit-uv-protection
+    paths:
+      - "sim/cell_permit/**"
+      - "hardware/kicad/CELL_PERMIT_DESIGN.md"
+      - ".github/workflows/cell-permit-uv.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "sim/cell_permit/**"
+      - "hardware/kicad/CELL_PERMIT_DESIGN.md"
+      - ".github/workflows/cell-permit-uv.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-cell-permit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Regenerate deterministic model artifacts
+        run: python3 -B sim/cell_permit/model.py --out-dir sim/cell_permit
+
+      - name: Run CELL_PERMIT model tests
+        run: python3 -B -m unittest discover -s sim/cell_permit -p 'test_*.py' -v
+
+      - name: Verify artifact SHA256
+        run: sha256sum -c sim/cell_permit/SHA256SUMS.txt
+
+      - name: Install ngspice for the simplified RC screen
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ngspice
+
+      - name: Run simplified gate RC SPICE deck
+        working-directory: sim/cell_permit
+        run: |
+          ngspice -b gate_turnoff_rc.cir > gate_turnoff_rc.log 2>&1
+          test -s gate_turnoff_rc.raw
+          test -s gate_turnoff_rc.dat
+          sha256sum gate_turnoff_rc.cir gate_turnoff_rc.raw gate_turnoff_rc.dat gate_turnoff_rc.log > gate_turnoff_rc.sha256
+
+      - name: Upload model, RAW, LOG, netlist, parameters and hashes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cell-permit-uv-evidence
+          path: |
+            sim/cell_permit/gate_turnoff_rc.cir
+            sim/cell_permit/gate_turnoff_rc.raw
+            sim/cell_permit/gate_turnoff_rc.dat
+            sim/cell_permit/gate_turnoff_rc.log
+            sim/cell_permit/gate_turnoff_rc.sha256
+            sim/cell_permit/README.md
+            sim/cell_permit/TEST_LOG.txt
+            sim/cell_permit/SHA256SUMS.txt
+            sim/cell_permit/register_config.csv
+            sim/cell_permit/parameters.json
+            sim/cell_permit/timing_budget.csv
+            sim/cell_permit/scan_scenarios.csv
+            sim/cell_permit/fault_matrix.csv
+            sim/cell_permit/waveform_*.csv
+          if-no-files-found: warn

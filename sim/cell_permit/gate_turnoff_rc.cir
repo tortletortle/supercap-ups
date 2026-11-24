@@ -1,0 +1,16 @@
+* BQ76905 CELL_PERMIT - simplified P-MOS gate RC screen only
+* NOT a Si7149DP vendor model; NOT a BQ76905 model; validates only the RC screen.
+* Two common gates represented by Qg(max)/VGS = 2*147nC/10V = 29.4nF.
+* R501=10k+1%; R502 is disconnected when the series AO3400A pull-down opens.
+V_SRC SRC 0 DC 0
+R501 SRC GATE 10.1k
+CGATE GATE SRC 29.4n IC=-8.56
+.ic v(GATE)=-8.56
+.control
+set filetype=ascii
+tran 1u 3m uic
+write gate_turnoff_rc.raw v(GATE)
+wrdata gate_turnoff_rc.dat v(GATE)
+quit
+.endc
+.end
