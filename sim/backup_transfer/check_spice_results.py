@@ -9,8 +9,9 @@ from pathlib import Path
 
 EXPECTED_COLUMNS = [
     "time", "v(out_live)", "v(out100)", "v(out470)", "v(pg100)",
-    "v(pg470)", "v(proof_live)", "v(proof100)", "v(proof470)",
-    "v(ready470a)", "v(ready474l)", "v(main)",
+    "v(pg470)", "v(proof100)", "v(proof470)", "v(proof_live)",
+    "v(proof_latched100)", "v(proof_latched470)", "v(proof_latched_live)",
+    "v(ready470a)", "v(ready474l)", "v(ready_live)", "v(main)",
     "v(load_voltage_only)", "v(load_qualified)",
 ]
 
@@ -60,28 +61,32 @@ def main() -> None:
     headers, rows = read_wrdata(data_path)
     points = {
         "live_during_proof_V": sample(headers, rows, 1.2e-3, "v(out_live)"),
-        "residual_100uF_after_proof_V": sample(headers, rows, 1.299e-3, "v(out100)"),
-        "residual_470uF_after_proof_V": sample(headers, rows, 1.299e-3, "v(out470)"),
-        "pg_100uF_after_proof_V": sample(headers, rows, 1.299e-3, "v(pg100)"),
-        "pg_470uF_after_proof_V": sample(headers, rows, 1.299e-3, "v(pg470)"),
-        "proof_live_after_V": sample(headers, rows, 1.299e-3, "v(proof_live)"),
-        "proof_470uF_after_V": sample(headers, rows, 1.299e-3, "v(proof470)"),
-        "ready_470A_after_V": sample(headers, rows, 1.299e-3, "v(ready470a)"),
-        "ready_474L_after_V": sample(headers, rows, 1.299e-3, "v(ready474l)"),
+        "residual_100uF_after_proof_V": sample(headers, rows, 1.2995e-3, "v(out100)"),
+        "residual_470uF_after_proof_V": sample(headers, rows, 1.2995e-3, "v(out470)"),
+        "pg_100uF_after_proof_V": sample(headers, rows, 1.2995e-3, "v(pg100)"),
+        "pg_470uF_after_proof_V": sample(headers, rows, 1.2995e-3, "v(pg470)"),
+        "proof_100uF_latched_V": sample(headers, rows, 2.5e-3, "v(proof_latched100)"),
+        "proof_470uF_latched_V": sample(headers, rows, 2.5e-3, "v(proof_latched470)"),
+        "proof_live_latched_V": sample(headers, rows, 2.5e-3, "v(proof_latched_live)"),
+        "ready_470A_after_main_loss_V": sample(headers, rows, 2.5e-3, "v(ready470a)"),
+        "ready_474L_after_main_loss_V": sample(headers, rows, 2.5e-3, "v(ready474l)"),
+        "ready_live_after_main_loss_V": sample(headers, rows, 2.5e-3, "v(ready_live)"),
         "load_voltage_only_after_main_loss_V": sample(headers, rows, 2.5e-3, "v(load_voltage_only)"),
         "load_qualified_after_main_loss_V": sample(headers, rows, 2.5e-3, "v(load_qualified)"),
     }
 
     checks = {
         "live_path_drop_below_100mV": 11.90 < points["live_during_proof_V"] < 12.0,
-        "100uF_residual_drops_below_output_window": points["residual_100uF_after_proof_V"] < 10.5,
-        "470uF_residual_remains_above_11V": 11.4 < points["residual_470uF_after_proof_V"] < 11.7,
-        "100uF_PG_deasserts": points["pg_100uF_after_proof_V"] < 2.5,
+        "100uF_fault_limited_path_droops": 10.5 < points["residual_100uF_after_proof_V"] < 11.3,
+        "470uF_fault_limited_path_droops": 11.6 < points["residual_470uF_after_proof_V"] < 11.9,
+        "100uF_PG_can_remain_asserted": points["pg_100uF_after_proof_V"] > 2.5,
         "470uF_PG_can_remain_asserted": points["pg_470uF_after_proof_V"] > 2.5,
-        "live_path_proof_passes": points["proof_live_after_V"] > 2.5,
-        "residual_path_proof_fails": points["proof_470uF_after_V"] < 2.5,
-        "470A_status_only_does_not_ready": points["ready_470A_after_V"] < 2.5,
-        "474L_PG_only_does_not_ready": points["ready_474L_after_V"] < 2.5,
+        "100uF_path_proof_fails_and_latches": points["proof_100uF_latched_V"] < 2.5,
+        "470uF_path_proof_fails_and_latches": points["proof_470uF_latched_V"] < 2.5,
+        "live_path_proof_passes_and_latches": points["proof_live_latched_V"] > 2.5,
+        "470A_status_only_does_not_ready": points["ready_470A_after_main_loss_V"] < 2.5,
+        "474L_PG_only_does_not_ready": points["ready_474L_after_main_loss_V"] < 2.5,
+        "live_path_remains_ready": points["ready_live_after_main_loss_V"] > 2.5,
         "voltage_only_mux_exposes_residual_false_backup": (
             points["load_voltage_only_after_main_loss_V"]
             > points["load_qualified_after_main_loss_V"] + 2.0
