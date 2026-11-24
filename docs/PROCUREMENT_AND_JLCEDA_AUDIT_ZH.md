@@ -133,10 +133,10 @@ onsemi `BAV199LT1G` 的官方数据表给出低漏电特性（25°C 下 5nA@70V�
 
 ### 嘉立创 EDA 导入方式
 
-- JLCEDA Pro 官方 KiCad 导入指南列出的版本为 KiCad 5.1/5.9；当前工程是 KiCad 9，因此不能把直接导入视为受支持且已验证。
+- JLCEDA Pro 官方格式转换助手当前明确列出 KiCad 的 .kicad_sch、.kicad_pcb、.kicad_sym、.kicad_mod 和 .pro.kicad_pro 等导入格式；因此“只支持 KiCad 5.1/5.9”的旧说法不成立。文件类型被列为支持不等于本工程 KiCad 9 的每个图元、层级、封装和网络都能无损转换；仍需实际 GUI 导入与逐项核对。
 - 官方 EAGLE 导入流程支持 EAGLE 6+ 项目包；仓库已有候选文件 `hardware/easyeda/supercap-ups-4s-eagle.zip`。它可以作为 GUI 导入测试入口，但本轮无法读取 ZIP 内部二进制并且没有实际 JLCEDA GUI 控制能力，**没有执行真实 GUI 导入**。
 - 过去静态预检记录过 EAGLE 包 9 页、167 元件、116 nets、486 pin connections；这些计数是静态对照，不是 JLCEDA 导入成功证据。
-- Weave 的 `.asc` 不能替代 EAGLE/KiCad 原理图工程，也不能生成 PCB。
+- Weave 的 `.asc` 不能替代 EAGLE/KiCad 完整工程，也不能生成 PCB。但嘉立创 EDA 专业版官方确实支持 LTspice ASCII `.asc` + 对应 `.asy` ZIP 导入，因此 Weave NET→ASC 可作为仿真 testbench 的导入路径；它不是 KiCad→JLCEDA 的转换器。
 
 操作说明与验收清单见 [JLCEDA 导入指南](../hardware/easyeda/JLCEDA_IMPORT_GUIDE_ZH.md)。
 
@@ -168,3 +168,78 @@ onsemi `BAV199LT1G` 的官方数据表给出低漏电特性（25°C 下 5nA@70V�
 8. 使用实际 JLCEDA GUI 导入 EAGLE 包，逐页、逐网络、逐封装比对；导入成功后再做 JLC DRC 和 BOM/CPL 对照。
 
 **本轮没有购买器件、没有更改主线电路、没有运行真实板级仿真、没有通过 JLCEDA GUI 导入，也没有生成生产文件。**
+
+---
+
+## 第二轮复核修订（2026-11-24，优先于上文旧快照）
+
+本节根据制造商 2025/2026 版资料及重新检索的大陆供应商目录修订上文个别字段。库存均为网页索引快照，不是锁库存或正式报价；价格按页面币种记录，实际下单前必须刷新。
+
+### A. Eaton 超级电容：大陆渠道已找到，但订货后缀需确认
+
+- Eaton 数据手册中的基础制造商料号：HVH1230-2R7206-R。
+- DigiKey 中国 HVH 系列页面显示目录料号 HVH1230-2R7206-RCAP，库存 1,576，页面价 ¥15.71/件，MOQ 1；页面索引约 3 周前。这里的 RCAP 与 Eaton 数据手册基础料号后缀 -R 不同，采购前必须让 DigiKey/Eaton 书面确认它是包装/目录扩展还是不同的 orderable MPN。
+- 因此，修正前一条消息中“大陆价格未确认”的说法：DigiKey 中国目录确实列出大陆入口与库存快照；但该页面并非实时锁库，且完整订货后缀尚需核对。
+- 官方规格：20F ±20%、2.7V；最大 DC ESR 53mΩ@25°C、最大 AC ESR 35mΩ@1kHz、最大漏电 55µA；连续电流 1.92A（温升 15°C），脉冲电流 13A 仅按数据手册 1s 条件定义。温度 -40..70°C；扩展至 85°C 时必须线性降额至 2.5V。
+- 85°C 寿命试验条件为 1000h@2.5V：容量保持率 ≥70%，AC ESR ≤初始最大值的 300%。这不是 DC ESR 的寿命保证。模型里的 11.2F/cell 可解释为 20F×80% 初始容差下限×70%寿命保持率；模型里的 106mΩ DC/cell 仍是工程假设，不能声称 Eaton 保证了 EOL DC ESR=106mΩ。
+- 9.4V/4=2.35V 的平均单体电压低于 85°C 的 2.5V 降额值，但容量失配/串联不均衡时不能仅靠组端 9.4V 保证每个单体低于 2.5V；单体 OVP 必须保留。
+
+### B. 最新目录快照（网页索引数据，非实时承诺）
+
+| 器件 | 可核对的目录信息 | 采购判断 |
+|---|---|---|
+| TPS61088RHLR | LCSC CN 页面显示 1,494 件、$1.1702、MOQ1；其他缓存页出现 893–1,571 件 | 有大陆目录入口；库存快照不一致，购买前刷新；封装按 TI RHL drawing |
+| TPS2121RUXR | LCSC 页面显示 34,538 件、$1.0571、MOQ1 | 有大陆目录入口，但 U901 尚未进入当前层级原理图 |
+| TPS259470ARPWR | LCSC 页面/分类页约 4,487–4,562 件、$1.3874、MOQ1 | 有大陆目录入口；库存缓存差异需刷新 |
+| TPS259474LRPWR | LCSC 页面显示 1,754 件、$1.3541、MOQ1 | 有大陆目录入口；只是候选，未批准替换 |
+| TPS54302DDCR | LCSC 页面显示 9,355–16,395 件、$0.3033、MOQ5 | 有大陆目录入口；不同缓存页库存差异较大 |
+| BQ76905RGRR | DigiKey 中国库存 0，预计 2027-07-26 到货 3,000；LCSC 页面 0 件 | P0 采购阻塞未解除。LCSC $1.0106 仅为参考价，不能当成可下单价格 |
+| MWSA1205S-3R3MT | JLCPCB C408513 显示 277 件、可下单 273 件、$0.6753；但注明只进入 PCBA 料库、不可单独发货。DigiKey US 页面另显示 450 件、$1.47 cut tape、16 周标准交期 | JLC 库存不能算散料采购；若不走 JLC PCBA，需海外采购或找 Sunlord 授权代理 |
+| MWSA1204S-100MT | DigiKey US 页面显示 311 件、$1.47 cut tape、16 周标准交期；JLCPCB 有 PCBA 器件页 | 海外采购候选；未证明大陆散料现货 |
+
+### C. TPS25947 变体：必须使用 2026 年 5 月 Rev C 数据手册
+
+旧 Rev B（2022-03）比较表对部分 L 变体的显示存在缺项；TI 当前 Rev C（2026-05）明确列出：
+
+| 订货型号 | 过压响应 | 过流响应 | 状态脚 | 故障恢复 |
+|---|---|---|---|---|
+| TPS259470ARPWR | 可调 OVLO | Active current limit | AUXOFF + FLT | Auto-retry |
+| TPS259470LRPWR | 可调 OVLO | Active current limit | AUXOFF + FLT | Latch-off |
+| TPS259474ARPWR | 可调 OVLO | Circuit breaker | PG + PGTH | Auto-retry |
+| TPS259474LRPWR | 可调 OVLO | Circuit breaker | PG + PGTH | Latch-off |
+
+TPS259474LRPWR 不是“无过流保护”型号。它与当前候选 TPS259470ARPWR 同为 RPW 10-pin 2×2mm QFN-HR，但 pin 3/4 从 AUXOFF/FLT 改为 PG/PGTH，过流策略从主动限流变为断路器，故障恢复从自动重试变为锁存。必须重审 PGTH 电阻、故障锁存/清除、重新武装与 BACKUP_READY；不能只改 BOM。
+
+另一个可考虑的功能替代是 TPS259470LRPWR：保留 470A 的主动限流与 AUXOFF/FLT，只把自动重试改为锁存；同样需要重新验证复位/重新武装时序。
+
+### D. Weave 与嘉立创导入边界修订
+
+1. 嘉立创 EDA 专业版官方格式转换助手列出了 KiCad .kicad_sch、.kicad_pcb、.kicad_sym、.kicad_mod 等格式，也列出 EAGLE .zip/.lbr/.sch/.brd。因此之前“只支持 KiCad 5.1/5.9”的说法不应继续使用；但当前项目的 KiCad 9 实际 GUI 导入仍未验收。
+2. 嘉立创 EDA 专业版官方 LTspice 导入说明明确要求将 ASCII .asc 和全部对应 .asy 符号打包成 ZIP 后导入。故 Weave NET→ASC 是有效的 testbench 原理图导入路径，不是 JLCEDA 原生工程转换。
+3. test/ltspice-weave-jlc-qualification 的 README 记载：固定 Weave commit bc9b3d3299f3d96fae3f9a1e56de2c639e40c68a，输入 eol_1p2s.cir，使用 synthetic __block21.asy，网络回读为 MATCH；打包器需要从本机 LTspice 库取得 bi/cap/ind/res/voltage.asy，缺失或冲突时拒绝生成 ZIP。该 21-pin 合成符号不是 TPS61088 真实封装引脚/焊盘。
+4. 本轮 GitHub API 未取得该分支 HEAD 对应的 workflow run/check 记录（返回空列表）；所以 README 中“Actions 已成功”的描述仍是仓库文档声明，本轮没有重新拿到原始 Actions 日志/Artifact 独立复核。不能把它升级为本轮已复跑证据。
+5. 本轮没有 JLCEDA GUI 会话，无法进行实际导入。EAGLE ZIP 在基线树中存在（15,022 bytes），但二进制内容无法在当前审查环境解包检查；不能确认 ZIP 内部究竟有多少 .sch/.brd 文件。
+
+### E. 本轮新增的硬性采购放行规则
+
+- 所有库存与价格必须记录来源页面、币种、MOQ、页面索引时间；网页库存不等于锁库，报价不等于含税到货价。
+- Eaton 的 -RCAP 与基础料号 -R 需书面确认。
+- Boost/L101 电感不得把数据手册的 Isat Max 或 Typ 直接写成 Isat,min。对 TPS61088，RILIM=100kΩ 时 TI 最大峰值限流为 PFM 13A、FPWM 11.4A；实际 MODE 脚必须按原理图确认。项目采用的 0.8×Isat 裕量是项目筛选规则，不是 TI 或 Sunlord 的保证值。
+- BQ76905RGRR 无大陆现货确认前，不安排保护板投产；若转用替代监测器件，需重新做 4S 采样、阈值、延迟、失效默认状态和 5ms 关断验证。
+- 当前仍无 .kicad_pcb，因此 DRC/生产文件仍未完成。
+
+官方/供应商来源：
+- Eaton HVH 数据手册：https://www.eaton.com/content/dam/eaton/products/electronic-components/resources/data-sheet/eaton-hvh-supercapacitors-cylindrical-cells-high-density-data-sheet-elx1538-en.pdf
+- DigiKey 中国 Eaton HVH 系列：https://www.digikey.cn/zh/products/featured/hvh-series-high-density-2-7-v-radial-leaded-supercapacitors/1582341389283022
+- TI TPS61088 Rev D：https://www.ti.com/lit/ds/symlink/tps61088.pdf
+- Sunlord MWSA-S 数据手册：https://www.sunlordinc.com/uploads/files/20230303/MWSA-S%C2%A0series%C2%A0of%C2%A0SMD%C2%A0Power%C2%A0Inductor.pdf
+- TI TPS25947 Rev C：https://www.ti.com/lit/ds/symlink/tps25947.pdf
+- DigiKey 中国 BQ76905RGRR：https://www.digikey.cn/zh/products/detail/texas-instruments/BQ76905RGRR/22119523
+- LCSC TPS61088RHLR：https://www.lcsc.com/zh-CN/product-detail/DC-DC-Converters_Texas-Instruments-TPS61088RHLR_C87357.html
+- LCSC TPS2121RUXR：https://www.lcsc.com/product-detail/Battery-Management-ICs_Texas-Instruments-TPS2121RUXR_C485916.html
+- LCSC TPS259470ARPWR：https://www.lcsc.com/product-detail/C3662799.html
+- LCSC TPS259474LRPWR：https://www.lcsc.com/product-detail/surge-protection-devices-spds_texas-instruments-tps259474lrpwr_C2864845.html
+- LCSC TPS54302DDCR：https://www.lcsc.com/product-detail/C311983.html
+- JLCPCB MWSA1205S-3R3MT（PCBA only）：https://jlcpcb.com/partdetail/Sunlord-MWSA1205S3R3MT/C408513
+- JLCPCB LTspice 导入说明：https://prodocs.lceda.cn/cn/import-export/import-ltspice/
+- JLCPCB KiCad/EAGLE 格式转换支持：https://prodocs.lceda.cn/cn/import-export/easyeda-pro-format-converter/
