@@ -243,3 +243,31 @@ TPS259474LRPWR 不是“无过流保护”型号。它与当前候选 TPS259470A
 - JLCPCB MWSA1205S-3R3MT（PCBA only）：https://jlcpcb.com/partdetail/Sunlord-MWSA1205S3R3MT/C408513
 - JLCPCB LTspice 导入说明：https://prodocs.lceda.cn/cn/import-export/import-ltspice/
 - JLCPCB KiCad/EAGLE 格式转换支持：https://prodocs.lceda.cn/cn/import-export/easyeda-pro-format-converter/
+### F. 关键保护器件采购复核补充
+
+重新检索发现，上一版对部分保护器件的大陆库存判断过于保守；以下新结果覆盖上文旧表：
+
+| 器件 | 新检索结果 | 仍需注意 |
+|---|---|---|
+| LM339BIPWR（U402） | LCSC C7430196 显示 3,755 件、$0.1568、MOQ5；TI 官方中国页面显示缺货 | 以 TI 官方温度等级为准：-40..+85°C。LCSC 页面写 +125°C 与 TI 官方不一致，禁止照抄 LCSC 温度字段。该器件可从大陆目录采购，但必须核对批次与真实规格 |
+| SN74LVC1G74DCTR（U910） | LCSC C840104 显示 611 件、$0.8998；DigiKey 中国 0 件，预计 2026-11-24 到货 3,000 | LCSC 提供了大陆采购路径，但 U910 仍需补 footprint，核对 SM8/DCT 焊盘与异步 CLR/PRE 引脚映射 |
+| BAV199LT1G（D801/D802） | LCSC C145516 显示 455,220 件、$0.0285、MOQ20 | 关键风险：LCSC 页面写 5µA@70V，而 onsemi 原始数据手册写 5nA@70V、25°C，以及 80nA@70V、TJ=150°C。差异达 1000 倍；在供应商书面确认和来料测试前不得把它作为低漏电合格替代料 |
+| REF3325AIDCKR（U903 候选） | LCSC 显示约 14,903–14,955 件、$1.0109、MOQ1 | U903 仍未进入正式层级原理图；必须先验证 TPS2121 CP2 输入负载、启动与掉电状态 |
+| TPS3700DDCR（U201/U404） | LCSC 多个快照显示约 462–9,162 件，较新的分类页约 8,075 件；价格快照 $1.121–$1.4216 | 库存/价格缓存差异明显；按 TI datasheet 保证阈值和误差预算审核，不以网页的典型响应值替代最坏值 |
+| REF5025IDR（U403/U601/U603） | LCSC 显示约 2,990–3,597 件，参考价 $3.7054，MOQ1 | 需确认 SOIC-8 footprint、精度等级、漂移和噪声是否满足 OVP/CV 预算 |
+| OPA4197IPWR（U401） | LCSC C2057327 仅显示 1 件，$6.2052 | 供货风险仍高；不具备量产供货证明 |
+
+特别更正：LM339BIPWR 并非“大陆无货”。LCSC 页面有 3,755 件目录库存；TI 直销页面缺货。与此同时，LCSC 标注的温度范围与 TI 官方产品页不一致，设计签核必须采用 TI 官方 -40..+85°C 等级。
+
+onsemi BAV199LT1G 数据手册原始保证值为 IR≤5nA（VR=70V, TA=25°C）及 IR≤80nA（VR=70V, TJ=150°C）。LCSC 的 5µA 字段与此冲突。由于这是监测供电保持/低漏电路径，必须把该矛盾作为 P1 采购放行条件，而不是用“LCSC 现货多”直接批准。
+
+补充来源：
+- LCSC LM339BIPWR：https://www.lcsc.com/zh-CN/product-detail/C7430196.html
+- TI LM339BIPWR：https://www.ti.com/product/LM339B/part-details/LM339BIPWR
+- LCSC SN74LVC1G74DCTR：https://www.lcsc.com/product-image/C840104.html
+- DigiKey SN74LVC1G74DCTR：https://www.digikey.cn/en/products/detail/texas-instruments/SN74LVC1G74DCTR/2195375
+- LCSC BAV199LT1G：https://www.lcsc.com/product-detail/C145516.html
+- onsemi BAV199LT1G 数据手册：https://www.onsemi.com/pdf/datasheet/bav199lt1-d.pdf
+- LCSC REF3325AIDCKR：https://www.lcsc.com/category/1028.html
+- LCSC TPS3700DDCR：https://www.lcsc.com/category/1604.html
+- LCSC REF5025IDR：https://www.lcsc.com/product-detail/voltage-reference_texas-instruments-ref5025idr_C544535.html
