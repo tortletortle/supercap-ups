@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the averaged storage netlists with ngspice and preserve RAW/LOG/SHA256."""
+"""Run averaged storage decks with ngspice; preserve measurement log, RAW, LOG and SHA256."""
 from __future__ import annotations
 
 import argparse
@@ -26,10 +26,22 @@ def sha256(path: Path) -> str:
 
 
 def parse_measurement(log_text: str, name: str) -> float:
-    match = re.search(rf"(?im)^\s*{re.escape(name)}\s*=\s*([-+0-9.eE]+)", log_text)
+    match = re.search(rf"(?im)^\\s*{re.escape(name)}\\s*=\\s*([-+0-9.eE]+)", log_text)
     if not match:
-        raise RuntimeError(f"measurement {name!r} missing from ngspice log")
+        raise RuntimeError(f"measurement {name!r} missing from ngspice measurement log")
     return float(match.group(1))
+
+
+def run_ngspice(args: list[str], label: str, out: Path) -> subprocess.CompletedProcess:
+    completed = subprocess.run(args, capture_output=True, text=True, check=False)
+    (out / f"{label}.runner.txt").write_text(
+        f"command={' '.join(args)}\\nreturncode={completed.returncode}\\n"
+        f"stdout:\\n{completed.stdout}\\nstderr:\\n{completed.stderr}",
+        encoding="utf-8",
+    )
+    if completed.returncode != 0:
+        raise RuntimeError(f"ngspice {label} failed: {completed.stderr}")
+    return completed
 
 
 def main() -> None:
@@ -48,35 +60,45 @@ def main() -> None:
         deck = decks / filename
         if not deck.exists():
             raise FileNotFoundError(deck)
-        raw = out / filename.replace(".cir", ".raw")
-        log = out / filename.replace(".cir", ".log")
-        completed = subprocess.run(
-            [args.ngspice, "-b", "-r", str(raw), "-o", str(log), str(deck)],
-            capture_output=True, text=True, check=False,
+        stem = filename.replace(".cir", "")
+        measure_log = out / f"{stem}.measure.log"
+        raw = out / f"{stem}.raw"
+        raw_log = out / f"{stem}.raw.log"
+
+        # ngspice 45 does not execute .measure in batch mode when -r is used.
+        # Run once for measurements, then again to preserve the binary RAW.
+        measure_run = run_ngspice(
+            [args.ngspice, "-b", "-o", str(measure_log), str(deck)],
+            f"{stem}.measure", out,
         )
-        (out / filename.replace(".cir", ".runner.txt")).write_text(
-            f"returncode={completed.returncode}\nstdout:\n{completed.stdout}\nstderr:\n{completed.stderr}",
-            encoding="utf-8",
-        )
-        if completed.returncode != 0:
-            raise RuntimeError(f"ngspice failed for {filename}: {completed.stderr}")
-        log_text = log.read_text(encoding="utf-8", errors="replace")
-        if re.search(r"(?i)fatal error|timestep too small|singular matrix|no convergence", log_text):
+        measure_text = measure_log.read_text(encoding="utf-8", errors="replace")
+        if re.search(r"(?i)fatal error|timestep too small|singular matrix|no convergence", measure_text):
             raise RuntimeError(f"ngspice reported a fatal numerical issue in {filename}")
-        measured_s = parse_measurement(log_text, measure)
+        measured_s = parse_measurement(measure_text, measure)
+
+        raw_run = run_ngspice(
+            [args.ngspice, "-b", "-r", str(raw), "-o", str(raw_log), str(deck)],
+            f"{stem}.raw", out,
+        )
+        raw_text = raw_log.read_text(encoding="utf-8", errors="replace")
+        if re.search(r"(?i)fatal error|timestep too small|singular matrix|no convergence", raw_text):
+            raise RuntimeError(f"ngspice RAW run reported a fatal numerical issue in {filename}")
+        if not raw.exists() or raw.stat().st_size == 0:
+            raise RuntimeError(f"ngspice did not create a non-empty RAW for {filename}")
+
         error_ms = (measured_s - expected_s) * 1000.0
         rows.append({
             "deck": filename, "measurement": measure,
             "expected_s": expected_s, "measured_s": measured_s,
-            "error_ms": error_ms,
-            "pass": abs(error_ms) <= args.tolerance_ms,
-            "raw_sha256": sha256(raw), "log_sha256": sha256(log),
+            "error_ms": error_ms, "pass": abs(error_ms) <= args.tolerance_ms,
+            "raw_bytes": raw.stat().st_size, "raw_sha256": sha256(raw),
+            "measure_log_sha256": sha256(measure_log), "raw_log_sha256": sha256(raw_log),
         })
         if abs(error_ms) > args.tolerance_ms:
             raise AssertionError(f"{filename}: {measured_s:.9f}s differs by {error_ms:.3f}ms")
 
     with (out / "spice_summary.csv").open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=list(rows[0]), lineterminator="\n")
+        writer = csv.DictWriter(handle, fieldnames=list(rows[0]), lineterminator="\\n")
         writer.writeheader()
         writer.writerows(rows)
 
@@ -85,10 +107,10 @@ def main() -> None:
         if path.is_file() and path.name != "SHA256SUMS.csv":
             manifest.append({"path": path.name, "bytes": path.stat().st_size, "sha256": sha256(path)})
     with (out / "SHA256SUMS.csv").open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=["path", "bytes", "sha256"], lineterminator="\n")
+        writer = csv.DictWriter(handle, fieldnames=["path", "bytes", "sha256"], lineterminator="\\n")
         writer.writeheader()
         writer.writerows(manifest)
-    print(f"ngspice passed {len(rows)}/{len(rows)} decks; artifacts: {out}")
+    print(f"ngspice passed {len(rows)}/{len(rows)} averaged storage decks; artifacts: {out}")
 
 
 if __name__ == "__main__":
