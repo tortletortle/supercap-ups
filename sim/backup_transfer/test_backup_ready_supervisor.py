@@ -1,3 +1,4 @@
+import math
 import unittest
 from dataclasses import replace
 
@@ -11,13 +12,15 @@ from backup_ready_supervisor import (
 
 GOOD_470A = EfuseStatus(
     variant=EfuseVariant.TPS259470A,
-    monitor_power_ok=True,
+    input_supply_valid=True,
+    logic_supply_valid=True,
     auxoff_high=True,
     flt_high=True,
 )
 GOOD_474L = EfuseStatus(
     variant=EfuseVariant.TPS259474L,
-    monitor_power_ok=True,
+    input_supply_valid=True,
+    logic_supply_valid=True,
     pg_high=True,
 )
 GOOD = BackupInputs(
@@ -28,7 +31,8 @@ GOOD = BackupInputs(
     boost_output_window_ok=True,
     efuse_status=GOOD_470A,
     path_proof_ok=True,
-    path_proof_fresh=True,
+    path_proof_age_s=0.01,
+    path_proof_max_age_s=0.1,
 )
 
 
@@ -54,7 +58,7 @@ class BackupReadySupervisorTests(unittest.TestCase):
             replace(GOOD, boost_input_window_ok=False),
             replace(GOOD, boost_output_window_ok=False),
             replace(GOOD, path_proof_ok=False),
-            replace(GOOD, path_proof_fresh=False),
+            replace(GOOD, path_proof_age_s=0.101),
             replace(GOOD, efuse_status=EfuseStatus()),
         )
         for case in cases:
@@ -82,10 +86,25 @@ class BackupReadySupervisorTests(unittest.TestCase):
         self.assertTrue(supervisor.ov2_inhibit)
 
     def test_unpowered_open_drain_status_cannot_qualify(self):
-        floating_470a = replace(GOOD_470A, monitor_power_ok=False)
-        floating_474l = replace(GOOD_474L, monitor_power_ok=False)
-        self.assertFalse(floating_470a.status_ok)
-        self.assertFalse(floating_474l.status_ok)
+        unpowered_input_470a = replace(GOOD_470A, input_supply_valid=False)
+        unpowered_input_474l = replace(GOOD_474L, input_supply_valid=False)
+        unpowered_logic_470a = replace(GOOD_470A, logic_supply_valid=False)
+        unpowered_logic_474l = replace(GOOD_474L, logic_supply_valid=False)
+        for status in (
+            unpowered_input_470a,
+            unpowered_input_474l,
+            unpowered_logic_470a,
+            unpowered_logic_474l,
+        ):
+            with self.subTest(status=status):
+                self.assertFalse(status.status_ok)
+
+    def test_470a_active_low_fault_pin_blocks_status(self):
+        self.assertFalse(replace(GOOD_470A, flt_high=False).status_ok)
+        self.assertFalse(replace(GOOD_470A, auxoff_high=False).status_ok)
+
+    def test_474l_low_pg_blocks_status(self):
+        self.assertFalse(replace(GOOD_474L, pg_high=False).status_ok)
 
     def test_arm_high_at_reset_cannot_arm_after_safety_recovers(self):
         supervisor = BackupReadySupervisor()
@@ -158,9 +177,31 @@ class BackupReadySupervisorTests(unittest.TestCase):
         self.assertFalse(supervisor.update(arm_request=True, inputs=waiting))
         self.assertTrue(supervisor.update(arm_request=True, inputs=GOOD))
 
+    def test_path_proof_age_limit_is_inclusive(self):
+        at_limit = replace(GOOD, path_proof_age_s=GOOD.path_proof_max_age_s)
+        self.assertTrue(at_limit.path_proof_fresh)
+        supervisor = arm_ready(inputs=at_limit)
+        self.assertTrue(supervisor.ready)
+
+    def test_missing_or_invalid_path_proof_age_fails_closed(self):
+        cases = (
+            replace(GOOD, path_proof_age_s=None),
+            replace(GOOD, path_proof_max_age_s=None),
+            replace(GOOD, path_proof_age_s=-0.001),
+            replace(GOOD, path_proof_age_s=math.inf),
+            replace(GOOD, path_proof_max_age_s=math.nan),
+            replace(GOOD, path_proof_max_age_s=0.0),
+        )
+        for case in cases:
+            with self.subTest(case=case):
+                self.assertFalse(case.path_proof_fresh)
+                supervisor = arm_ready()
+                self.assertFalse(supervisor.update(arm_request=True, inputs=case))
+                self.assertTrue(supervisor.ov2_inhibit)
+
     def test_path_proof_expiry_revokes_ready_and_latches(self):
         supervisor = arm_ready()
-        stale = replace(GOOD, path_proof_fresh=False)
+        stale = replace(GOOD, path_proof_age_s=GOOD.path_proof_max_age_s + 1e-9)
         self.assertFalse(supervisor.update(arm_request=True, inputs=stale))
         self.assertTrue(supervisor.fault_latched)
 
