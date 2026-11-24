@@ -2,10 +2,11 @@
 
 ## 运行信息
 
-- GitHub Actions run：<https://github.com/tortletortle/supercap-ups/actions/runs/45306089301>
-- Job：`138150166271`，`validate-cell-permit`
+- GitHub Actions run：<https://github.com/tortletortle/supercap-ups/actions/runs/45307907066>
+- Artifact ID：`14881807336`（`cell-permit-uv-evidence`）
+- Job：`138156142987`，`validate-cell-permit`
 - 分支：`cell-permit-uv-protection`
-- 提交：`628fef20740a9a120c68f2af4123ad9acf7b0713`
+- 仿真提交：`133b92d5b6925bab060efa646f9a9b504b63cc74`
 - 仿真器：ngspice 45.2
 - 命令：`ngspice -b gate_turnoff_rc.cir`
 - 结果：退出码 0；3011 个瞬态数据点；仿真到 3ms。
@@ -21,12 +22,12 @@
 
 ## 原始证据
 
-GitHub Actions artifact：`cell-permit-uv-evidence`，对应 run `45306089301`。包含原始 RAW、ASCII DAT、LOG、网表和 SHA256。
+对应 run `45307907066` 的 GitHub Actions artifact 包含原始 RAW、ASCII DAT、LOG、网表和 SHA256。
 
 | 文件 | 大小 | SHA256 |
 |---|---:|---|
 | `gate_turnoff_rc.cir` | 503 bytes | `7d1a6e7bc0ed0e499dae65be62377958a45bdce987a105d9862586a5167443d2` |
-| `gate_turnoff_rc.raw` | 158757 bytes | `6ac3e49f29b60e5f00f4348f52a362f4de07c0923882c7cda7c59f42e83856b8` |
+| `gate_turnoff_rc.raw` | 158757 bytes | `840d8d967b5d0575c2453c3f2185e601375b96f3a3f96f5b66857ec379f8c635` |
 | `gate_turnoff_rc.dat` | 99363 bytes | `84ca70c3bdbd4f3f16314febf91feb914e006ef937e4397c2bd06a3b8fbbc3a4` |
 | `gate_turnoff_rc.log` | 377 bytes | `26e989cf7772cc61029521ea6ed6c47a07e4800d2e9ffcab7f5bb730530a4fed` |
 
