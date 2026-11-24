@@ -64,6 +64,20 @@
         "overtemperature"
       ],
       "output_short_circuit_response": "fast_trip_then_current_limit_no_internal_latch"
+    },
+    "R_ILM_profiles": {
+      "6.65k_ohm": {
+        "I_LIM_min_A": 0.425,
+        "I_LIM_typ_A": 0.5,
+        "I_LIM_max_A": 0.575,
+        "model_use": "fault_limited_SPICE_bracketing"
+      },
+      "1.65k_ohm": {
+        "I_LIM_min_A": 1.8,
+        "I_LIM_typ_A": 2.028,
+        "I_LIM_max_A": 2.2,
+        "model_use": "conditional_proof_pulse_feasibility_candidate"
+      }
     }
   },
   "TPS2121": {
@@ -133,5 +147,11 @@
     "I_LIM_max_A": 2.2,
     "proof_pulse_current_A": 1,
     "margin_below_minimum_A": 0.8
+  },
+  "SPICE_fault_limited_path": {
+    "R_ILM_ohm": 6650,
+    "ILIMITED_100uF_A": 0.425,
+    "ILIMITED_470uF_A": 0.575,
+    "note": "Two bracketing corners: low limit for 100uF maximizes droop; high limit for 470uF minimizes droop. This is a behavioral current source, not a TPS25947 macro-model."
   }
 }
