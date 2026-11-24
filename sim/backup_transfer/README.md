@@ -6,9 +6,9 @@
 
 - **backup_ready_supervisor.py**：消费 CELL_PERMIT、PACK_UV_OK、Boost 输入/输出窗口、eFuse 输入/逻辑电源有效性、变体状态脚、通路证明年龄和 ARM 请求的离散状态机。
 - **test_backup_ready_supervisor.py**：18 项状态机回归，覆盖默认禁止、资格项、470A/474L 状态脚、开漏上拉失效、复位时 ARM 高电平、故障锁存、重新武装和 proof age 超时。
-- **backup_ready_residual_fault.cir**：ngspice 行为级瞬态网表，比较 100µF/470µF 残压、PG 状态、独立通路证明，以及电压门槛 MUX 与 READY 门控 MUX。
+- **backup_ready_residual_fault.cir**：ngspice 行为级瞬态网表，比较 100µF/470µF 残压、限流故障电流、PG 状态、锁存的通路证明，以及健康/故障两种备源的 MUX 接管。
 - **backup_ready_spice_parameters.json**：筛选参数、TI 数据手册阈值和模型限制。
-- **check_spice_results.py**：检查 ngspice wrdata CSV 的 12 项断言，包括健康备源成功接管和故障备源被否决。
+- **check_spice_results.py**：检查 ngspice wrdata CSV 的 14 项断言，包括两种残压电容的限流反例、健康备源成功接管和故障备源被否决。
 - **run_backup_ready_spice.sh**：运行 ngspice，保存 RAW、LOG、CSV、网表、参数、摘要和 SHA256。
 - **hardware/kicad/backup-ready-interface.md**：U902/U901 变体语义、引脚、OV2 极性与门限、状态机和接口契约。
 
