@@ -29,8 +29,9 @@ S_PRECHARGE470 boost out470 efuse_ctrl 0 EFUSE_SW
 * Fault-state path current is bracketed at 0.425 A / 0.575 A.
 * These are the MIN/MAX limits for one TI R_ILM=6.65 kOhm setting;
 * they are not the project's selected R_ILM or a full device model.
-BLIMITED_PATH100 boost out100 I = ((V(fault_ctrl)>2.5) && (V(boost)>V(out100))) ? {ILIMITED_100} : 0
-BLIMITED_PATH470 boost out470 I = ((V(fault_ctrl)>2.5) && (V(boost)>V(out470))) ? {ILIMITED_470} : 0
+* A smooth tanh transition avoids a hard comparator discontinuity at VOUT=VIN.
+BLIMITED_PATH100 boost out100 I = V(fault_ctrl)>2.5 ? {ILIMITED_100}*tanh(100*(V(boost)-V(out100))) : 0
+BLIMITED_PATH470 boost out470 I = V(fault_ctrl)>2.5 ? {ILIMITED_470}*tanh(100*(V(boost)-V(out470))) : 0
 
 COUT_100 out100 0 {COUT100}
 COUT_470 out470 0 {COUT470}
