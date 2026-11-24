@@ -154,6 +154,8 @@ Vishay Si7149DP 数据表给出：
 
 这里的 0.1V 是“栅源接近相等”的工程关断代理判据，不等于已经实测电流为零。Qg 测试条件与实际 4S 工作点不同，等效电容是简化模型；**不能把 1.321ms 当作数据手册保证的 MOSFET 关断最大值。**
 
+2026-11-24 的 ngspice 45.2 运行对该等效 RC deck 做了数值交叉检查：3011 个瞬态点，|VGS|≤0.1V 的数值交点为 1.32196ms，解析 RC 结果为 1.32132ms。两者一致只验证等效 RC 方程，不验证 Si7149DP 实际电流关断。完整 RAW/DAT/LOG 和 SHA256 见 `sim/cell_permit/SPICE_RUN_REPORT.md` 与 GitHub Actions run [45306089301](https://github.com/tortletortle/supercap-ups/actions/runs/45306089301)。
+
 ### 4.4 估算汇总
 
 候选 Fast + COWDLY=1ms + 现有 P-MOS 栅极网络：
@@ -316,7 +318,7 @@ BQ76905 DSG 驱动器可直接控制低边 N-MOS，可能缩短驱动链，但�
 | ALERT 断线/卡高硬件监督 | 未实现 |
 | 外部 heartbeat watchdog | 候选方案，未实现 |
 | P-MOS 实际电流隔离 | 未实测 |
-| ngspice/SPICE | 本机未运行；分支 CI 已配置运行简化 RC deck，尚待取得 Actions 实际运行证据 |
+| ngspice/SPICE | 简化等效 RC deck 已在 ngspice 45.2 运行通过；不是器件级或整机 SPICE |
 | 实物测试 | 未进行 |
 
 ## 10. 下一步必须完成

@@ -69,6 +69,7 @@ jobs:
             sim/cell_permit/gate_turnoff_rc.log
             sim/cell_permit/gate_turnoff_rc.sha256
             sim/cell_permit/README.md
+            sim/cell_permit/SPICE_RUN_REPORT.md
             sim/cell_permit/TEST_LOG.txt
             sim/cell_permit/SHA256SUMS.txt
             sim/cell_permit/register_config.csv
