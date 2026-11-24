@@ -305,3 +305,20 @@ TI BQ76907 是 2S–7S 监测/保护器件，4S 在其支持范围内；同为 R
 - LCSC BQ76907RGRR / JLC PCBA 库：https://jlcpcb.com/partdetail/BQ76907RGRR/C22458649
 - LCSC BQ76905RGRR 自营产品页（0 件）：https://www.lcsc.com/product-detail/C22394458.html
 - LCSC BQ76905RGRR 其他供应商目录：https://www.lcsc.com/category/1005.html?brand=100&s_z=n_tps709
+### H. D101 充电反灌二极管：补充热态漏电证据
+
+对前文的 D101 候选进一步核对制造商数据手册后，结论仍然是没有可直接批准的 drop-in：
+
+- STPS140A（ST，SMA，40V/1A）：数据手册保证 IR≤12µA@40V、Tj=25°C，但在 Tj=100°C、VR=40V 时最大值为 2mA。DigiKey 香港有库存目录，ST eStore 标为有货；没有确认大陆散料现货。它的 1A 额定电流需按 0.5A 连续充电和实际 PCB 热阻降额，且 SMA footprint 与现有封装要核对。
+- ES3A-13-F（Diodes Inc.，SMC，50V/3A）：25°C、50V 下 IR=10µA；数据手册高温条件下可达 500µA@125°C、50V。DigiKey 美国显示约 6,360 件、制造商标准交期 32 周；JLCPCB PCBA 库显示 15 件，但不能散料发货。SMC footprint 与当前封装不同。
+- STPS3L40（ST，SMC，40V/3A）：数据手册典型曲线在 Tj=125°C、VR≈10V 时反向漏电已约 5mA；不适合把它作为低漏电反灌隔离替代。
+- 这些数据都是规定反压条件下的最大值或典型曲线，不可直接线性缩放到 9.4V。必须在实际 9.4V 反压、最高环境温度和目标寿命条件下做漏电验证，并把充电 CV 余量、二极管 VF、启动和故障状态一起重仿真。
+
+目前较合理的架构方向是评估受控 MOSFET 反向阻断/理想二极管，而不是继续在 SS34 家族中盲选。该方案属于拓扑修改，需重新审核默认关断、反向电流、控制器启动/失电状态、单故障模式和充电环路；本轮没有批准具体 MOSFET 控制器。
+
+补充来源：
+- ST STPS140 官方数据手册（IR 12µA@40V/25°C、2mA@40V/100°C）：https://www.st.com/resource/en/datasheet/stps140.pdf
+- ST STPS140A DigiKey 香港目录：https://www.digikey.hk/en/products/detail/stmicroelectronics/STPS140A/603478
+- Diodes Inc. ES3A-13-F DigiKey：https://www.digikey.com/en/products/detail/diodes-incorporated/ES3A-13-F/815136
+- JLCPCB ES3A-13-F PCBA 库：https://jlcpcb.com/partdetail/DiodesIncorporated-ES3A_13F/C5126681
+- ST STPS3L40 官方数据手册：https://www.st.com/content/ccc/resource/technical/document/datasheet/group1/48/52/98/4d/1d/c7/40/65/CD00002082/files/CD00002082.pdf/jcr%3Acontent/translations/en.CD00002082.pdf
