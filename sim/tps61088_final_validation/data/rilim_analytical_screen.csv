@@ -1,0 +1,7 @@
+rilim_kohm,fpwm_typical_limit_a,fpwm_min_screen_a,fpwm_resistor_only_upper_typ_a,required_peak_7v_a,required_rms_7v_a,required_peak_9p4v_a,headroom_7v_a,headroom_pct,disposition,scope
+100,10.300000,8.882178,10.420202,4.324002,2.644604,3.263611,4.558176,105.416,HIGH_LIMIT_INDUCTOR_SATURATION_RISK,"analytical screen only; 1% RILIM, 1.3 A TI delta, 75% eta, 350 kHz, Lmin=2.31 uH; not guaranteed or approved"
+160,5.837500,4.463861,5.912626,4.324002,2.644604,3.263611,0.139859,3.234,BEST_OF_TESTED_LOW_MARGIN_NOT_APPROVED,"analytical screen only; 1% RILIM, 1.3 A TI delta, 75% eta, 350 kHz, Lmin=2.31 uH; not guaranteed or approved"
+174,5.239080,3.871367,5.308162,4.324002,2.644604,3.263611,-0.452635,-10.468,INSUFFICIENT_SCREEN_MARGIN,"analytical screen only; 1% RILIM, 1.3 A TI delta, 75% eta, 350 kHz, Lmin=2.31 uH; not guaranteed or approved"
+180,5.011111,3.645655,5.077890,4.324002,2.644604,3.263611,-0.678347,-15.688,INSUFFICIENT_SCREEN_MARGIN,"analytical screen only; 1% RILIM, 1.3 A TI delta, 75% eta, 350 kHz, Lmin=2.31 uH; not guaranteed or approved"
+200,4.350000,2.991089,4.410101,4.324002,2.644604,3.263611,-1.332913,-30.826,INSUFFICIENT_SCREEN_MARGIN,"analytical screen only; 1% RILIM, 1.3 A TI delta, 75% eta, 350 kHz, Lmin=2.31 uH; not guaranteed or approved"
+220,3.809091,2.455536,3.863728,4.324002,2.644604,3.263611,-1.868466,-43.212,INSUFFICIENT_SCREEN_MARGIN,"analytical screen only; 1% RILIM, 1.3 A TI delta, 75% eta, 350 kHz, Lmin=2.31 uH; not guaranteed or approved"

@@ -1,0 +1,47 @@
+name: TPS61088 final validation pack
+
+on:
+  push:
+    branches:
+      - specialist/tps61088-final-verification
+  pull_request:
+    branches:
+      - power-stage-integration
+      - main
+    paths:
+      - "sim/tps61088_final_validation/**"
+      - ".github/workflows/tps61088-final-validation.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  python-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install analysis dependency
+        run: python -m pip install -r sim/tps61088_final_validation/requirements.txt
+      - name: Compile validation scripts
+        run: python -m py_compile sim/tps61088_final_validation/scripts/*.py
+      - name: Run unit tests
+        run: python -m unittest discover -s sim/tps61088_final_validation/tests -p 'test_*.py' -v
+      - name: Generate isolated deck and analytical artifacts
+        shell: bash
+        run: |
+          tmpdir="$(mktemp -d)"
+          python sim/tps61088_final_validation/scripts/generate_rilim_matrix.py --out-dir "$tmpdir/rilim" --max-step-ns 25
+          python sim/tps61088_final_validation/scripts/generate_dynamic_cases.py --out-dir "$tmpdir/dynamic"
+          python sim/tps61088_final_validation/scripts/gate_and_screen.py \
+            --screen-out "$tmpdir/rilim_screen.csv" \
+            --parameter-sweep-out "$tmpdir/parameter_sensitivity.csv"
+          python sim/tps61088_final_validation/scripts/eol_efficiency_budget_sweep.py --out "$tmpdir/eol_budget.csv"
+          test "$(find "$tmpdir/rilim" -name '*.cir' | wc -l)" -eq 12
+          test "$(find "$tmpdir/dynamic" -name '*.cir' | wc -l)" -eq 24
+          test "$(wc -l < "$tmpdir/parameter_sensitivity.csv")" -eq 5185
