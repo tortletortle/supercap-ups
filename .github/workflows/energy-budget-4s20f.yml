@@ -1,0 +1,58 @@
+name: 4Sx20F energy-budget validation
+
+on:
+  push:
+    branches:
+      - energy-budget-4s20f-reconciliation
+    paths:
+      - "sim/energy_budget_4s20f/**"
+      - ".github/workflows/energy-budget-4s20f.yml"
+  pull_request:
+    paths:
+      - "sim/energy_budget_4s20f/**"
+      - ".github/workflows/energy-budget-4s20f.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  model-and-spice:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Python regression tests
+        run: python -m unittest discover -s sim/energy_budget_4s20f -p 'test_model.py' -v
+
+      - name: Generate scans, waveforms and SPICE decks
+        run: python sim/energy_budget_4s20f/run_study.py --out /tmp/energy-budget-study
+
+      - name: Install ngspice
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ngspice
+
+      - name: Run averaged ngspice cross-checks
+        run: |
+          python sim/energy_budget_4s20f/run_spice.py \
+            --ngspice ngspice \
+            --decks /tmp/energy-budget-study/netlists \
+            --out /tmp/energy-budget-spice
+
+      - name: Upload study evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: energy-budget-4s20f-evidence
+          path: |
+            /tmp/energy-budget-study/**
+            /tmp/energy-budget-spice/**
+          if-no-files-found: warn
+          retention-days: 30
