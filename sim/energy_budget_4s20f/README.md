@@ -85,6 +85,6 @@ Sources:
 
 - Python analytical/RK4 behavior model: implemented; regression tests in `test_model.py`.
 - Generated scan tables and CSV waveforms: produced by `run_study.py`.
-- ngspice cross-check: generated decks and runner are provided; SPICE pass is claimed only after CI/local ngspice completes.
+- ngspice cross-check: GitHub Actions run 45301330500 passed 4/4 averaged storage decks; maximum timing error was 0.00327 ms. Four RAW files, measurement/raw LOGs and SHA256 manifests are retained in the Actions artifact.
 - Continuous switching-level 1.2 s simulation: not demonstrated.
 - Bench runtime, cell ESR(T), thermal rise, physical CUV-to-isolation delay, load-voltage window and load-side hold-up: not tested.
