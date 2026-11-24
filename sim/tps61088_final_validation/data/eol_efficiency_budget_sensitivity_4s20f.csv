@@ -1,0 +1,22 @@
+boost_efficiency_pct,hold_s_at_100mohm_input_path,margin_ms_at_100mohm,hold_s_at_150mohm_input_path,margin_ms_at_150mohm,model_scope
+75,1.017365,-182.6,0.860961,-339.0,4Sx20F EOL constant-power budget; not TPS61088 device-level measurement
+76,1.052953,-147.0,0.896241,-303.8,4Sx20F EOL constant-power budget; not TPS61088 device-level measurement
+77,1.088580,-111.4,0.931570,-268.4,4Sx20F EOL constant-power budget; not TPS61088 device-level measurement
+78,1.124243,-75.8,0.966946,-233.1,4Sx20F EOL constant-power budget; not TPS61088 device-level measurement
+79,1.159943,-40.1,1.002366,-197.6,4Sx20F EOL constant-power budget; not TPS61088 device-level measurement
+80,1.195676,-4.3,1.037830,-162.2,4Sx20F EOL constant-power budget; not TPS61088 device-level measurement
+81,1.231441,31.4,1.073334,-126.7,4Sx20F EOL constant-power budget; not TPS61088 device-level measurement
+82,1.267238,67.2,1.108876,-91.1,4Sx20F EOL constant-power budget; not TPS61088 device-level measurement
+83,1.303065,103.1,1.144457,-55.5,4Sx20F EOL constant-power budget; not TPS61088 device-level measurement
+84,1.338920,138.9,1.180073,-19.9,4Sx20F EOL constant-power budget; not TPS61088 device-level measurement
+85,1.374803,174.8,1.215724,15.7,4Sx20F EOL constant-power budget; not TPS61088 device-level measurement
+86,1.410712,210.7,1.251407,51.4,4Sx20F EOL constant-power budget; not TPS61088 device-level measurement
+87,1.446646,246.6,1.287122,87.1,4Sx20F EOL constant-power budget; not TPS61088 device-level measurement
+88,1.482605,282.6,1.322868,122.9,4Sx20F EOL constant-power budget; not TPS61088 device-level measurement
+89,1.518587,318.6,1.358643,158.6,4Sx20F EOL constant-power budget; not TPS61088 device-level measurement
+90,1.554591,354.6,1.394446,194.4,4Sx20F EOL constant-power budget; not TPS61088 device-level measurement
+91,1.590618,390.6,1.430276,230.3,4Sx20F EOL constant-power budget; not TPS61088 device-level measurement
+92,1.626665,426.7,1.466132,266.1,4Sx20F EOL constant-power budget; not TPS61088 device-level measurement
+93,1.662733,462.7,1.502013,302.0,4Sx20F EOL constant-power budget; not TPS61088 device-level measurement
+94,1.698819,498.8,1.537918,337.9,4Sx20F EOL constant-power budget; not TPS61088 device-level measurement
+95,1.734925,534.9,1.573847,373.8,4Sx20F EOL constant-power budget; not TPS61088 device-level measurement
