@@ -440,7 +440,7 @@ def generate_netlists(out: Path) -> None:
             f"C4 n4 c3 {cap:.12g} IC={initial[3]:.12g}",
             f"R4 n4 pack {esr:.12g}",
             f"RIN pack vin {rin:.12g}",
-            f"BLOAD vin 0 I={pin:.12g}/max(V(vin),0.1)",
+            f"BLOAD vin 0 I={{ {pin:.12g}/max(V(vin),0.1) }}",
             ".options method=gear reltol=1e-7 abstol=1e-10",
             ".save V(vin) V(pack) V(c1) V(c2) V(c3) V(n4) I(BLOAD)",
             ".tran 100u 2 0 100u uic",
