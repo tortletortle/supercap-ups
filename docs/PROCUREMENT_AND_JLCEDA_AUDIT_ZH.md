@@ -322,3 +322,46 @@ TI BQ76907 是 2S–7S 监测/保护器件，4S 在其支持范围内；同为 R
 - Diodes Inc. ES3A-13-F DigiKey：https://www.digikey.com/en/products/detail/diodes-incorporated/ES3A-13-F/815136
 - JLCPCB ES3A-13-F PCBA 库：https://jlcpcb.com/partdetail/DiodesIncorporated-ES3A_13F/C5126681
 - ST STPS3L40 官方数据手册：https://www.st.com/content/ccc/resource/technical/document/datasheet/group1/48/52/98/4d/1d/c7/40/65/CD00002082/files/CD00002082.pdf/jcr%3Acontent/translations/en.CD00002082.pdf
+### I. Boost 电感新增优先候选：Bourns SRP1265A-3R3M
+
+进一步检索到比 Sunlord MWSA1205S-3R3MT 更有吸引力的器件候选：Bourns SRP1265A-3R3M。
+
+| 参数 | Bourns SRP1265A-3R3M | 当前 CENKER CKST0603-3.3uH/M |
+|---|---:|---:|
+| 电感量 | 3.3µH ±20% | 3.3µH ±20% |
+| DCR 最大值 | 6.8mΩ | 26mΩ |
+| Isat | 30A，Bourns 定义为电感下降20%时的电流 | 9.5A Typ，CENKER 定义为电感下降约30%时的典型值 |
+| Irms | 18A，额定温升40°C | 6A Typ，额定温升约40°C |
+| 温度范围 | -55..+150°C（含温升） | -40..+125°C（含自温升） |
+| 认证 | AEC-Q200 | 消费级目录标识 |
+| 本体尺寸 | 13.5×12.5×6.2mm | 约 7.4×6.6mm 级别 |
+
+Bourns 官方数据手册写明 Rated Current 的定义为“电感量下降20%时的 Isat”，并列出 SRP1265A-3R3M 的 Isat=30A、Irms=18A、DCR max=6.8mΩ。它的 Isat 不是与 Sunlord/CENKER 的 30% L-drop 定义完全同口径；但 20% L-drop 是更严格的电感下降阈值。数据手册表格没有明确标注 Isat min/typ，也没有给出批次容差，因此采购前仍应向 Bourns 取得 30A 的保证属性或批次数据。
+
+**大陆采购证据：** DigiKey 中国页面显示 36,391 件目录库存，cut tape 单价 ¥11.50，页面注明含13%增值税，MOQ 1；制造商标准补货交期 22 周。当前目录库存与补货交期必须区分，且不能把搜索页库存当作锁库。
+
+**工程判断：**
+
+- 在 TPS61088 RILIM=100kΩ 的最大峰值限流 13A（PFM）/11.4A（FPWM）下，Bourns 30A 的额定 Isat 有较大名义裕量；若采用项目内部 0.8×Isat 筛选规则，0.8×30A=24A，高于 13A。
+- 18A Irms 仍需与最坏工况下的电感 RMS 电流、环境温度和 PCB 热阻比较，不能只看峰值限流。
+- DCR 从 26mΩ 降到 6.8mΩ，有利于降低铜损，但必须在真实电流波形下重算效率与温升。
+- 本体从约 7.4×6.6mm 增至 13.5×12.5×6.2mm；Bourns 推荐 land pattern 约 14.2mm 级别，需检查高度、周边器件间距和开关节点回路面积。
+- 当前 KiCad L1 footprint 属性为空，且仓库没有 PCB，因此尚未存在必须迁移的既有封装；但需要建立并审核新的 footprint，不能沿用 CKST0603 焊盘。
+- JLCPCB Bourns 库目前可见 SRP1265A 其他电感值，但未看到 SRP1265A-3R3M 的可用 PCBA 库存；LCSC 相关替代页显示 0 件。若由嘉立创贴装，需要向其确认客户自备料/特殊采购方案，不能把 DigiKey CN 库存当成 JLC PCBA 库存。
+
+**推荐顺序（尚未批准）：**
+
+1. 第一候选：Bourns SRP1265A-3R3M（大陆 DigiKey 目录可采购，性能余量最好；先确认 Isat 保证属性和 JLC 贴装可行性）。
+2. 第二候选：Sunlord MWSA1206S-3R3MT（HQEW 深圳商家声称 12,000 件、批次 26+、更新 2026-11-23；但不是已确认授权代理，且 Isat Max/Typ 的保证含义需 Sunlord 书面解释）。
+3. 第三候选：CODACA CSAB1265A-3R3M（深圳厂商；3.3µH、DCR max5.8mΩ、Isat 26A Typ@30% L drop、Irms18.5A Typ；DigiKey 日本目录 350 件、¥227；尚无大陆零售现货确认）。
+4. 原 CENKER CKST0603-3.3uH/M 不再建议按当前 TPS61088 限流配置放行：其 Isat 9.5A Typ、Irms6A Typ，且 DCR max26mΩ。
+
+任何候选替换都必须重新运行 TPS61088 的启动、7–9.4V 输入扫描、12组 RILIM 矩阵、峰值电流/纹波、短路、负载阶跃、效率和热测试。仅因电感量同为 3.3µH 不代表动态性能可直接继承。
+
+新增来源：
+- Bourns SRP1265A 官方数据手册（Isat定义、20% L-drop、DCR/Irms/尺寸）：https://bourns.com/docs/Product-Datasheets/SRP1265A.pdf
+- DigiKey 中国 SRP1265A-3R3M（36,391件、¥11.50含税、22周补货交期）：https://www.digikey.cn/en/products/detail/bourns-inc/SRP1265A-3R3M/4876627
+- Sunlord MWSA1206S-3R3MT 数据手册及 HQEW 商家库存页：https://www.sunlordinc.com/uploads/files/20230303/MWSA-S%C2%A0series%C2%A0of%C2%A0SMD%C2%A0Power%C2%A0Inductor.pdf ; https://xygkdz.hqew.com/
+- CODACA CSAB1265A 官方数据手册：https://www.codaca.com/Private/pdf/CSAB1265A.pdf
+- CODACA DigiKey 日本库存页：https://www.digikey.jp/en/products/detail/codaca/CSAB1265A-3R3M/21190989
+- JLCPCB Bourns 电感库存分类页（未看到 SRP1265A-3R3M 现货）：https://jlcpcb.com/parts/2nd/Inductors_Coils_Chokes/Power_Inductors_3050?Manufacturer=BOURNS
