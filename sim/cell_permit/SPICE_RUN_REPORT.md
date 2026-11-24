@@ -22,7 +22,7 @@
 
 ## 原始证据
 
-对应 run `45307907066` 的 GitHub Actions artifact 包含原始 RAW、ASCII DAT、LOG、网表和 SHA256。
+对应 run `45307907066` 的 GitHub Actions artifact 包含原始 RAW、ASCII DAT、LOG、网表和 SHA256。表中 RAW SHA256 固定指向该 run 的参考 RAW；不同成功运行的二进制 RAW 文件哈希可能不同（本轮重复运行观察到这一点），每个 artifact 内的 `gate_turnoff_rc.sha256` 才是该次 RAW 的权威校验值。ASCII DAT 与 LOG 的哈希在重复运行中保持一致。
 
 | 文件 | 大小 | SHA256 |
 |---|---:|---|
