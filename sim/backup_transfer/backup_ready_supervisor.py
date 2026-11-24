@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum
+from math import isfinite
 
 
 class EfuseVariant(str, Enum):
@@ -17,26 +18,35 @@ class EfuseVariant(str, Enum):
 
 @dataclass(frozen=True)
 class EfuseStatus:
-    """Variant-specific status pins plus validity of their monitor rail.
+    """Variant-specific open-drain status pins and independently monitored rails.
 
-    470A AUXOFF/FLT and 474L PG are necessary status indications, but neither
-    proves that the OUT power path can still deliver load current.
+    The TPS25947 datasheet warns that AUXOFF/PG have no active pull-down when
+    the device is unpowered. A high pin level is therefore accepted only when
+    both the eFuse IN rail and the external status pull-up/receiver rail are
+    independently known valid.
+
+    470A AUXOFF/FLT and 474L PG remain necessary status indications only;
+    neither proves that the OUT power path can still deliver load current.
     """
 
     variant: EfuseVariant = EfuseVariant.TPS259470A
-    monitor_power_ok: bool = False
+    input_supply_valid: bool = False
+    logic_supply_valid: bool = False
     auxoff_high: bool | None = None
     flt_high: bool | None = None
     pg_high: bool | None = None
 
     @property
     def status_ok(self) -> bool:
-        if not self.monitor_power_ok:
-            # Do not interpret a floating open-drain output as READY.
+        if not self.input_supply_valid or not self.logic_supply_valid:
+            # An unpowered open-drain output can be pulled high externally.
             return False
         if self.variant is EfuseVariant.TPS259470A:
+            # AUXOFF high means IN is valid and inrush completed; FLT is
+            # active-low. Output short-circuit can still leave both high.
             return self.auxoff_high is True and self.flt_high is True
         if self.variant is EfuseVariant.TPS259474L:
+            # PG is open-drain and depends on PGTH and internal device state.
             return self.pg_high is True
         return False
 
@@ -47,6 +57,10 @@ class BackupInputs:
 
     CELL_PERMIT is consumed as one upstream safety interface. This module
     must not bypass or recreate the cell-level protection logic.
+
+    path_proof_age_s and path_proof_max_age_s are supplied by an upstream
+    monotonic timer/supervisor. The maximum age is a system requirement and
+    intentionally has no default/approved value in this behavioral model.
     """
 
     cell_permit: bool = False
@@ -56,10 +70,26 @@ class BackupInputs:
     boost_output_window_ok: bool = False
     efuse_status: EfuseStatus = EfuseStatus()
     path_proof_ok: bool = False
-    path_proof_fresh: bool = False
+    path_proof_age_s: float | None = None
+    path_proof_max_age_s: float | None = None
     efuse_fault_active: bool = False
     external_fault: bool = False
     startup_timeout: bool = False
+
+    @property
+    def path_proof_fresh(self) -> bool:
+        """Return false for missing, negative, non-finite, or expired age data."""
+        age = self.path_proof_age_s
+        maximum = self.path_proof_max_age_s
+        return (
+            age is not None
+            and maximum is not None
+            and isfinite(age)
+            and isfinite(maximum)
+            and age >= 0
+            and maximum > 0
+            and age <= maximum
+        )
 
     @property
     def rearm_safe(self) -> bool:
