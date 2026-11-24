@@ -38,6 +38,9 @@ jobs:
       - name: Run CELL_PERMIT model tests
         run: python3 -B -m unittest discover -s sim/cell_permit -p 'test_*.py' -v
 
+      - name: Print report checksum for manifest correction
+        run: sha256sum hardware/kicad/CELL_PERMIT_DESIGN.md
+
       - name: Verify artifact SHA256
         run: sha256sum -c sim/cell_permit/SHA256SUMS.txt
 
