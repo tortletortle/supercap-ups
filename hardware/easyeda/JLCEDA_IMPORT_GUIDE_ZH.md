@@ -1,42 +1,86 @@
-# JLCEDA 导入指南与验收状态
+# 嘉立创 EDA 导入指南与验收状态（修订版）
 
-## 当前可用入口
+## 1. 当前有三条不同导入路径
 
-- 候选 EAGLE 包：[`supercap-ups-4s-eagle.zip`](./supercap-ups-4s-eagle.zip)
-- KiCad 原工程：[`hardware/kicad/`](../kicad/)
-- Weave 预检分支：[`test/ltspice-weave-jlc-qualification`](https://github.com/tortletortle/supercap-ups/tree/test/ltspice-weave-jlc-qualification)
+### A. KiCad 原工程直接转换
 
-## 重要限制
+嘉立创 EDA 专业版官方格式转换助手列出的 KiCad 支持格式包括：
+- .kicad_sch
+- .kicad_pcb
+- .kicad_sym
+- .kicad_mod
+- .pro.kicad_pro
+- 以及 KiCad 旧版相关文件/库格式。
 
-1. 当前 KiCad 工程使用 KiCad 9。JLCEDA Pro 官方 KiCad 导入指南列出的兼容版本是 KiCad 5.1 / 5.9；KiCad 9 直导没有在本项目中验证。
-2. 官方 EAGLE 导入指南支持 EAGLE 6+ 项目。当前仓库有 EAGLE ZIP 候选包，但本轮未能解包检查其内部文件，也没有实际 JLCEDA GUI 导入。
-3. Weave 的 NET→ASC 输出是 LTspice `.asc`，不是 JLCEDA 原理图工程，不会生成封装或 PCB。
-4. 当前仓库没有 `.kicad_pcb`，所以不存在可导入并验收的完整 PCB 布局；DRC 与生产文件均未完成。
+因此不再沿用“只支持 KiCad 5.1/5.9”的旧说法。官方列出文件扩展名并不等于承诺所有 KiCad 9 图元/层级/自定义符号都无损；当前工程必须实际转换后核对。官方文档也提示第三方格式转换可能存在差异，必须在目标 EDA 中检查。
 
-## GUI 导入步骤（需在本机 JLCEDA Pro 执行）
+官方入口文档：https://prodocs.lceda.cn/cn/import-export/easyeda-pro-format-converter/
 
-1. 在 JLCEDA Pro 中选择 EAGLE 导入入口，导入 `supercap-ups-4s-eagle.zip`。
-2. 如果导入器要求 EAGLE 工程同时包含原理图和 PCB，请先检查 ZIP 是否包含 `.sch` 与 `.brd`；若只有 `.sch`，只能验收原理图导入，不能声称 PCB 已导入。
-3. 导入后核对层级页数量、元件数量、网络数量和引脚连接数量。历史静态预检记录：9 页、167 元件、116 nets、486 pin connections；这些是对照基准，不是 GUI 通过证据。
-4. 逐个检查高风险器件：TPS61088 RHL、BQ76905 RGR、Si7149DP PowerPAK SO-8、TPS3839 DQN X2SON、TPS2121 RUX、TPS25947 RPW。
-5. 对照 `JLCEDA_FOOTPRINT_AUDIT.csv` 核对 footprint、pad number、pin number、极性、thermal pad、丝印和阻焊开窗。
-6. 检查 PACK_4S、VIN_BOOST、BOOST_12V、LOAD_12V、CELL1–CELL4、CHG_ALLOW、CHG_OVP_OD、DISCHARGE_ARM、BACKUP_READY 等网络名及电源符号。
-7. 在元件库中核对真实制造商料号和封装，不得只凭同名符号/封装自动匹配。
-8. 只有在完整原理图、BOM、封装映射和 PCB 都确认后，才执行 JLC DRC 并生成 Gerber、Drill、BOM、CPL。
+### B. EAGLE 工程 ZIP 导入
 
-## 当前验收状态
+官方格式转换助手列出 EAGLE .zip、.lbr、.sch、.brd。基线仓库中有候选文件：
+hardware/easyeda/supercap-ups-4s-eagle.zip
+
+该 ZIP 在本轮未能解包检查内部文件，不能确认它是否同时包含原理图和 PCB。文件存在不等于 GUI 导入成功。
+
+### C. Weave NET → LTspice ASC → 嘉立创 LTspice 导入
+
+嘉立创 EDA 专业版官方支持导入 LTspice ASCII 文件，但要求：
+1. ASC 必须为 ASCII 格式；
+2. ASC 所引用的每个符号 ASY 都必须提供；
+3. 将 ASC 和对应 ASY 文件一起打包成 ZIP；
+4. 通过“开始页 → 快速开始 → 导入其他 → 导入 LTspice”，或“文件 → 导入 → LTspice”导入。
+
+官方说明：https://prodocs.lceda.cn/cn/import-export/import-ltspice/
+
+项目已有隔离资格测试分支：https://github.com/tortletortle/supercap-ups/tree/test/ltspice-weave-jlc-qualification
+
+其输入为 sim/tps61088_v1_3/joint/eol_1p2s.cir，不是整机生产原理图。Weave 生成的 __block21.asy 是宏模型 21-pin 合成符号，不是 TPS61088 真实芯片引脚图，也没有 PCB footprint。打包脚本还要求本机 LTspice 标准符号 bi/cap/ind/res/voltage.asy；缺失、冲突或 pin order 错误时拒绝生成 ZIP。
+
+Weave round-trip MATCH 只证明网表与 ASC 的网络连接分区一致，不证明电气行为、视觉布局、真实器件 pin map 或 PCB 生产可行性。
+
+## 2. 本机 GUI 验收流程
+
+### KiCad 工程导入
+1. 在嘉立创 EDA 专业版打开格式转换助手，选择 KiCad 工程文件。
+2. 导入顶层 .kicad_sch，同时导入层级子页及自定义符号/封装库。
+3. 对照原始 KiCad 页数、元件位号、网络名、pin number 和电源网络。
+4. 特别检查 TPS61088 RHL、BQ76905 RGR、TPS2121 RUX、TPS25947 RPW、TPS3839 DQN、Si7149DP PowerPAK。
+5. 检查所有 exposed pad、thermal pad、NC、极性和封装焊盘编号。
+6. 核对 BOM 的 167 个原理图位号；不得把 101 个漏入初步 BOM 的位号忽略。
+7. 只有转换后原理图、BOM、器件库、封装映射逐项一致，才继续 PCB。
+
+### LTspice/Weave 导入
+1. 运行隔离分支的 Weave NET→ASC 转换。
+2. 对 ASC 执行 round-trip verifier，保存原始 NET、ASC、LOG、ASY、manifest 和 SHA256。
+3. 从本机 LTspice 库补齐全部 ASY；运行 package_jlc_import.py，缺符号/冲突/pin order 不连续时必须失败关闭。
+4. 将生成的 ZIP 导入嘉立创 LTspice。
+5. 检查符号是否缺失、引脚是否错位、导线是否真正连接。
+6. 只把该路径用于仿真 testbench 的可视化/检查，不得把 synthetic 21-pin macro symbol 当成生产器件符号。
+
+## 3. 当前实际验收状态
 
 | 项目 | 状态 |
 |---|---|
-| EAGLE ZIP 存在 | 是 |
-| ZIP 内部文件结构复核 | 未完成 |
-| JLCEDA GUI 实际导入 | 未验证 |
-| 原理图网络对照 | 只有历史静态计数，无 GUI 证据 |
-| 关键器件 footprint/pad map | 未完成 |
-| PCB 导入 | 无 PCB 文件 |
-| JLC DRC | 未运行 |
+| KiCad 文件格式被官方列为支持 | 是 |
+| 当前 KiCad 9 层级工程 GUI 导入 | 未验证 |
+| EAGLE ZIP 文件存在 | 是 |
+| EAGLE ZIP 内部结构已复核 | 未验证 |
+| EAGLE ZIP GUI 导入 | 未验证 |
+| Weave NET→ASC 测试工程与脚本存在 | 是 |
+| Weave round-trip MATCH | 分支 README 声明；本轮未取得对应 Actions run/log 独立复核 |
+| Weave ASC+ASY ZIP 已完整生成 | 未确认；CI 预检缺本机 LTspice 标准 ASY |
+| Weave LTspice ZIP GUI 导入 | 未验证 |
+| TPS61088 synthetic 21-pin 符号为真实 IC footprint | 否 |
+| PCB 文件 | 不存在 |
+| DRC | 不可运行 |
 | Gerber/Drill/BOM/CPL | 不存在 |
 
-## Weave 结果边界
+## 4. 打板前不可跳过
 
-Weave 的 NET→ASC 用于 LTspice 测试网表转为 ASC 原理图。已存在的预检工程对 `eol_1p2s.cir` 进行转换与回读一致性检查，TPS61088 宏模型使用 synthetic 21-pin symbol。它不是 JLCEDA 导入流程，也不是 TPS61088 真实封装/焊盘验证。请勿把 NET↔ASC MATCH 标记为 JLCEDA GUI import PASS。
+- 将 U901/U902/U903 的实际器件和外围网络加入正式层级原理图。
+- 补齐全部 167 位号 BOM、制造商料号和封装。
+- 补齐空 footprint；按数据手册封装图校验 pad number 和 exposed pad。
+- 生成真实 .kicad_pcb 并完成布局。
+- 在嘉立创 GUI 中完成导入检查；输出网络对照记录和差异清单。
+- 运行 ERC/DRC；输出 Gerber、Drill、BOM、CPL、装配图。
