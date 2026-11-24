@@ -40,9 +40,9 @@ IPROOF_LIVE out_live 0 PULSE(0 {IPROOF} {TPROOF_START} 1n 1n {TPROOF} 10m)
 
 * Illustrative PGTH divider. 470 uF residual remains above the guaranteed
 * PG falling-threshold upper corner; 100 uF residual falls below the lower corner.
-BPG_100 pg100 0 V = if(V(out100)*{PG_RATIO} > {VPG_FALL_MAX}, 5, 0)
-BPG_470 pg470 0 V = if(V(out470)*{PG_RATIO} > {VPG_FALL_MAX}, 5, 0)
-BPG_LIVE pg_live 0 V = if(V(out_live)*{PG_RATIO} > {VPG_RISE_MAX}, 5, 0)
+BPG_100 pg100 0 V = V(out100)*{PG_RATIO} > {VPG_FALL_MAX} ? 5 : 0
+BPG_470 pg470 0 V = V(out470)*{PG_RATIO} > {VPG_FALL_MAX} ? 5 : 0
+BPG_LIVE pg_live 0 V = V(out_live)*{PG_RATIO} > {VPG_RISE_MAX} ? 5 : 0
 
 * 470A-style status-only counterexample: status pins remain high for this
 * modeled output-side fault, per the device fault table; not a vendor model.
@@ -50,28 +50,28 @@ VAUXOFF_470A auxoff470a 0 5
 VFLT_470A flt470a 0 5
 
 * Independent proof-load decision: path drop <=100 mV AND OUT >=11.8 V.
-BPROOF_100 proof100 0 V = if(V(boost)-V(out100) < {VPATH_DROP_MAX}, if(V(out100) > {VOUT_MIN}, 5, 0), 0)
-BPROOF_470 proof470 0 V = if(V(boost)-V(out470) < {VPATH_DROP_MAX}, if(V(out470) > {VOUT_MIN}, 5, 0), 0)
-BPROOF_LIVE proof_live 0 V = if(V(boost)-V(out_live) < {VPATH_DROP_MAX}, if(V(out_live) > {VOUT_MIN}, 5, 0), 0)
+BPROOF_100 proof100 0 V = ((V(boost)-V(out100) < {VPATH_DROP_MAX}) && (V(out100) > {VOUT_MIN})) ? 5 : 0
+BPROOF_470 proof470 0 V = ((V(boost)-V(out470) < {VPATH_DROP_MAX}) && (V(out470) > {VOUT_MIN})) ? 5 : 0
+BPROOF_LIVE proof_live 0 V = ((V(boost)-V(out_live) < {VPATH_DROP_MAX}) && (V(out_live) > {VOUT_MIN})) ? 5 : 0
 
 * BACKUP_READY never relies on PG or AUXOFF/FLT alone.
-BREADY_470A ready470a 0 V = if(V(auxoff470a)>2.5, if(V(flt470a)>2.5, if(V(proof470)>2.5,5,0),0),0)
-BREADY_474L ready474l 0 V = if(V(pg470)>2.5, if(V(proof470)>2.5,5,0),0)
-BREADY_LIVE ready_live 0 V = if(V(pg_live)>2.5, if(V(proof_live)>2.5,5,0),0)
+BREADY_470A ready470a 0 V = ((V(auxoff470a)>2.5) && (V(flt470a)>2.5) && (V(proof470)>2.5)) ? 5 : 0
+BREADY_474L ready474l 0 V = ((V(pg470)>2.5) && (V(proof470)>2.5)) ? 5 : 0
+BREADY_LIVE ready_live 0 V = ((V(pg_live)>2.5) && (V(proof_live)>2.5)) ? 5 : 0
 
 * Main source is removed at 1.5 ms. Compare voltage-only selection against
 * selection gated by BACKUP_READY. These are idealized logical MUX controls.
 VMAIN main 0 PWL(0 12 1.499m 12 1.5m 0 3m 0)
 .model MUX_SW SW(Ron=20m Roff=1G Vt=2.5 Vh=0.1)
-BMAIN_SEL_V main_sel_v 0 V = if(V(main)>11.2, 5, 0)
-BBACKUP_SEL_V backup_sel_v 0 V = if(V(main)<11.2, if(V(out470)>2.8, 5, 0), 0)
+BMAIN_SEL_V main_sel_v 0 V = V(main)>11.2 ? 5 : 0
+BBACKUP_SEL_V backup_sel_v 0 V = ((V(main)<11.2) && (V(out470)>2.8)) ? 5 : 0
 SMAIN_V main load_voltage_only main_sel_v 0 MUX_SW
 SBACKUP_V out470 load_voltage_only backup_sel_v 0 MUX_SW
 RLOAD_V load_voltage_only 0 12
 CLOAD_V load_voltage_only 0 100u
 
-BMAIN_SEL_Q main_sel_q 0 V = if(V(main)>11.2, 5, 0)
-BBACKUP_SEL_Q backup_sel_q 0 V = if(V(main)<11.2, if(V(ready474l)>2.5, 5, 0), 0)
+BMAIN_SEL_Q main_sel_q 0 V = V(main)>11.2 ? 5 : 0
+BBACKUP_SEL_Q backup_sel_q 0 V = ((V(main)<11.2) && (V(ready474l)>2.5)) ? 5 : 0
 SMAIN_Q main load_qualified main_sel_q 0 MUX_SW
 SBACKUP_Q out470 load_qualified backup_sel_q 0 MUX_SW
 RLOAD_Q load_qualified 0 12
