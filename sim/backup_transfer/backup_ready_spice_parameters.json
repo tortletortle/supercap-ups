@@ -35,10 +35,11 @@
       "output_short_circuit_auxoff": "HIGH",
       "output_short_circuit_flt": "HIGH",
       "retry_interval_typical_s": 0.11,
-      "retry_interval_max_guaranteed": null
+      "retry_interval_max_guaranteed": null,
+      "output_short_circuit_response": "fast_trip_then_active_current_limit"
     },
     "TPS259474LRPW": {
-      "fault_policy": "latch_off",
+      "fault_policy": "selective_latch_off",
       "status_pins": [
         "PG",
         "PGTH"
@@ -57,7 +58,12 @@
       },
       "pg_assert_deglitch_typical_s": 0.000012,
       "pg_deassert_deglitch_typical_s": 0.000012,
-      "pg_deglitch_max_guaranteed": null
+      "pg_deglitch_max_guaranteed": null,
+      "latches_on": [
+        "persistent_overload",
+        "overtemperature"
+      ],
+      "output_short_circuit_response": "fast_trip_then_current_limit_no_internal_latch"
     }
   },
   "TPS2121": {
