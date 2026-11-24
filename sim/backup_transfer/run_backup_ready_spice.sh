@@ -21,8 +21,9 @@ cp "$NETLIST" "$PARAMS" "$CHECKER" "$OUT_DIR/"
 (
   cd "$OUT_DIR"
   ngspice -v > ngspice-version.txt
-  ngspice -b -r backup_ready_residual_fault.raw \
-    -o backup_ready_residual_fault.log backup_ready_residual_fault.cir
+  ngspice -b -o backup_ready_residual_fault.log backup_ready_residual_fault.cir
+  test -s backup_ready_residual_fault.raw
+  test -s backup_ready_residual_fault.csv
   python3 check_spice_results.py backup_ready_residual_fault.csv summary.json
   sha256sum backup_ready_residual_fault.cir \
     backup_ready_spice_parameters.json \
