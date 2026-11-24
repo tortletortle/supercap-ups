@@ -466,12 +466,12 @@ def generate_netlists(out: Path) -> None:
             f"BLOAD vin 0 I={{ {pin:.12g}/max(V(vin),0.1) }}",
             ".options method=gear reltol=1e-7 abstol=1e-10",
             ic_line,
-            ".save V(vin) V(pack) V(c1) V(c2) V(c3) V(n4) I(RIN)",
+            ".save V(vin) V(pack) V(c1) V(c2) V(c3) V(n4)",
             ".tran 100u 2 0 100u uic",
             ".meas tran t_boost_floor when V(vin)=7 fall=1",
             ".meas tran v_boost_at_1p2 find V(vin) at=1.2",
             ".meas tran v_pack_at_1p2 find V(pack) at=1.2",
-            ".meas tran i_input_at_1p2 find I(RIN) at=1.2",
+
         ]
         if cuv is not None:
             lines.append(f".meas tran t_cell1_cuv when V(c1)={cuv:.12g} fall=1")
