@@ -15,26 +15,46 @@
   },
   "TPS25947": {
     "package": "RPW 10-pin QFN 2mm x 2mm",
-    "operating_input_voltage_V": [2.7, 23.0],
-    "operating_temperature_C": [-40, 125],
+    "operating_input_voltage_V": [
+      2.7,
+      23
+    ],
+    "operating_temperature_C": [
+      -40,
+      125
+    ],
     "TPS259470ARPW": {
       "fault_policy": "auto_retry",
-      "status_pins": ["AUXOFF", "FLT"],
+      "status_pins": [
+        "AUXOFF",
+        "FLT"
+      ],
       "auxoff_active_high": true,
       "flt_active_low": true,
       "auxoff_deasserts_on_load_fault": false,
       "output_short_circuit_auxoff": "HIGH",
       "output_short_circuit_flt": "HIGH",
-      "retry_interval_typical_s": 0.110,
+      "retry_interval_typical_s": 0.11,
       "retry_interval_max_guaranteed": null
     },
     "TPS259474LRPW": {
       "fault_policy": "latch_off",
-      "status_pins": ["PG", "PGTH"],
+      "status_pins": [
+        "PG",
+        "PGTH"
+      ],
       "pg_active_high": true,
       "output_short_circuit_pg": "depends_on_PGTH",
-      "pgth_falling_threshold_V": {"min": 1.076, "typ": 1.09, "max": 1.116},
-      "pgth_rising_threshold_V": {"min": 1.183, "typ": 1.20, "max": 1.223},
+      "pgth_falling_threshold_V": {
+        "min": 1.076,
+        "typ": 1.09,
+        "max": 1.116
+      },
+      "pgth_rising_threshold_V": {
+        "min": 1.183,
+        "typ": 1.2,
+        "max": 1.223
+      },
       "pg_assert_deglitch_typical_s": 0.000012,
       "pg_deassert_deglitch_typical_s": 0.000012,
       "pg_deglitch_max_guaranteed": null
@@ -44,15 +64,39 @@
     "package": "RUX 12-pin VQFN-HR 2.5mm x 2.0mm",
     "ov2_pin": 4,
     "ov2_function": "active_low_enable_supervisor_for_IN2",
-    "vref_rising_V": {"min": 1.01, "typ": 1.06, "max": 1.10},
-    "vref_falling_V": {"min": 0.99, "typ": 1.04, "max": 1.09}
+    "vref_rising_V": {
+      "min": 1.01,
+      "typ": 1.06,
+      "max": 1.1
+    },
+    "vref_falling_V": {
+      "min": 0.99,
+      "typ": 1.04,
+      "max": 1.09
+    },
+    "orderable_mpn_options": {
+      "TPS2121RUXR": {
+        "status": "Active",
+        "package_quantity": 3000,
+        "carrier": "large_tape_and_reel"
+      },
+      "TPS2121RUXT": {
+        "status": "Active",
+        "package_quantity": 250,
+        "carrier": "small_tape_and_reel"
+      },
+      "source_addendum_date": "2025-10-31"
+    }
   },
-  "boost_output_voltage_V": 12.0,
+  "boost_output_voltage_V": 12,
   "eFuse_path_resistance_ohm": 0.045,
   "eFuse_disconnect_time_s": 0.0001,
-  "residual_output_capacitance_F": [0.0001, 0.00047],
-  "output_bleed_resistance_ohm": 10000.0,
-  "proof_load_current_A": 1.0,
+  "residual_output_capacitance_F": [
+    0.0001,
+    0.00047
+  ],
+  "output_bleed_resistance_ohm": 10000,
+  "proof_load_current_A": 1,
   "proof_load_duration_s": 0.0002,
   "proof_load_start_s": 0.0011,
   "proof_path_drop_limit_V": 0.1,
@@ -62,7 +106,7 @@
   "illustrative_main_priority_threshold_V": 11.2,
   "illustrative_TPS2121_IN2_UV_threshold_V": 2.8,
   "idealized_mux_switch_Ron_ohm": 0.02,
-  "load_resistance_ohm": 12.0,
+  "load_resistance_ohm": 12,
   "load_capacitance_F": 0.0001,
   "limitations": [
     "No TPS25947 vendor macromodel; eFuse is an ideal voltage-controlled switch.",
@@ -73,5 +117,15 @@
     "The 1A / 200us proof pulse, 100mV path-drop threshold, 11.8V output minimum, divider ratio, COUT values, and load are screening assumptions, not approved hardware values.",
     "The path-proof maximum age is not selected; the 100ms age used in Python unit tests is only a test fixture.",
     "This transient is a residual-voltage/path-qualification demonstration, not the 12W / 1.2s EOL hold-up simulation and not hardware evidence."
-  ]
+  ],
+  "TPS259470ARPW_candidate_ILIM": {
+    "source_branch": "p0-efuse-qualification",
+    "status": "candidate_model_only_not_current_schematic",
+    "R_ILM_ohm": 1650,
+    "I_LIM_min_A": 1.8,
+    "I_LIM_typ_A": 2.028,
+    "I_LIM_max_A": 2.2,
+    "proof_pulse_current_A": 1,
+    "margin_below_minimum_A": 0.8
+  }
 }
